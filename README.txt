@@ -11,4 +11,4 @@ This repository will be consisting of Compilers-II Project made with collaberati
       b. Nigam Niraula {CS24BTKMU11005}
   5.System Testers :
       a. Shaswot Paudel {CS24BTKMU11003}
-      b. Dheeraj Dudukela {CS22BTECH11019}
+      b. Dheeraj Dudekela {CS22BTECH11019}
