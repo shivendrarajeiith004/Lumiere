@@ -10,8 +10,9 @@ int yylex();
 %token GPU CPU OS RETURN TRY CATCH TYPEOF CLASS EXTENDS INHERITS HIDDEN DEG
 %token ADD_OP SUB_OP DIV_OP MULT_OP POW_OP MOD_OP ABS_OP COMP_ASSIGN_DIV
 %token COMP_ASSIGN_SUBTRACT COMP_ASSIGN_MUL LESS_THAN LESS_THAN_EQ
-%token GREAT_THAN GREAT_THAN_EQ VAR ASSIGN COMP_ASSIGN_ADD EOL LEFT_PAREN STRING  
-%token RIGHT_PAREN LEFT_PAREN LEFT_CURLY_BRACE RIGHT_CURLY_BRACE LEFT_BRACE RIGHT_BRACE
+%token GREAT_THAN GREAT_THAN_EQ VAR ASSIGN COMP_ASSIGN_ADD EOL LEFT_PAREN  
+%token RIGHT_PAREN  LEFT_CURLY_BRACE RIGHT_CURLY_BRACE LEFT_BRACE RIGHT_BRACE
+%token MAIN SINGLE_LINE_COMMENT MULTI_LINE_COMMENT CONST MASS
 %%
 
 input:
@@ -20,7 +21,7 @@ input:
 
 statement:
     INTEGER { printf("Token: INTEGER, Value: %d\n", $1); }
-    | DOUBLE { printf("Token: DOUBLE, Value: %f\n", $1); }
+    | DOUBLE { printf("Token: DOUBLE, Value: %d\n", $1); }
     | INT { printf("Token: INT\n"); }
     | FLOAT { printf("Token: FLOAT\n"); }
     | CHAR { printf("Token: CHAR\n"); }
@@ -77,6 +78,11 @@ statement:
     | RIGHT_BRACE {printf("RIGHT_BRACE\n");}
     | LEFT_CURLY_BRACE {printf("LEFT_CURLY_BRACE\n");}
     | RIGHT_CURLY_BRACE {printf("RIGHT_CURLY_BRACE\n");}
+    | MAIN {printf("MAIN (sim) function\n");}
+    | SINGLE_LINE_COMMENT {printf("Single Line Comment\n");}
+    | MULTI_LINE_COMMENT {printf("Multi Line Comment\n");}
+    | CONST {printf("Constant data type\n");}
+    |MASS {printf("Token: Mass\n");}
     ;
 
 %%

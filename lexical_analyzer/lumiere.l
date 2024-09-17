@@ -10,10 +10,9 @@ number    [0-9]
 %%
 [0-9]+ {  yylval = atoi(yytext); return INTEGER; };
 ([0-9]+\.[0-9]+) { yylval= atof(yytext); return DOUBLE;};
-
-
-
 \".*\" { return STRING;}
+
+const {return CONST;};
 int { return INT;};
 float { return FLOAT;};
 char { return CHAR;};
@@ -31,8 +30,10 @@ void { return VOID;};
 body { return BODY;};
 basic { return BASIC;};
 force { return FORCE;};
+mass {return MASS;};
 
 
+sim {return MAIN;};
 if { return IF;};
 else { return ELSE;};
 check_until { return CHECK_UNTIL;};
@@ -55,7 +56,6 @@ extends { return EXTENDS;};
 inherit { return INHERITS;};
 hidden { return HIDDEN;};
 deg {  return DEG;}
-= { return ASSIGN;}
 \+ { return ADD_OP;}
 - { return SUB_OP;}
 \/ { return DIV_OP;}
@@ -66,14 +66,17 @@ deg {  return DEG;}
 \+= { return COMP_ASSIGN_ADD;}
 -= { return COMP_ASSIGN_SUBTRACT;}
 \*= { return COMP_ASSIGN_MUL;}
-\= { return COMP_ASSIGN_DIV;}
+\/= { return COMP_ASSIGN_DIV;}
+= { return ASSIGN;}
 \< { return LESS_THAN;}
 \<= { return LESS_THAN_EQ;}
 \> { return GREAT_THAN;}
 \>= { return GREAT_THAN_EQ;}
+"~".*\n            { return SINGLE_LINE_COMMENT ;};
+"/~"([^~]|\~[^/])*"~/"  { return MULTI_LINE_COMMENT; };
 [ \t]+ {  /* Ignore whitespace */ }
 [\n] { printf("New line detected\n");}
-(_)*({ alphabet})({ alphabet}|{ number}|(_))*  { return VAR;}
+(_)*({alphabet})({alphabet}|{number}|(_))*  { return VAR;}
 ; {  return EOL;}
 . { };
 %%

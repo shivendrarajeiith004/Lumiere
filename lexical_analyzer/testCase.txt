@@ -1,2 +1,12 @@
 int a = 10; vec _c = <10>; 
 string = "asdfs"; 
+/~ This is 
+multi line 
+comment ~/
+int function () {
+    int dfds= 10;
+}
+~This is single line comment
+int sim(){
+    print("Hello")
+}
