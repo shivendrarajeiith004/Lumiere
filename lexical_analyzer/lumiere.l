@@ -1,11 +1,16 @@
+alphabet  [a-zA-Z]
+underscore [_]
+number    [0-9]
 %{
 #include <stdio.h>
-#include "parser.tab.h"
+#include "y.tab.h"
+
 %}
 
 %%
 [0-9]+ { yylval = atoi(yytext); return INTEGER; };
 ([0-9]+\.[0-9]+) {yylval= atof(yytext); return DOUBLE;};
+
 
 
 
@@ -33,6 +38,7 @@ __FIX__ {return FIX;};
 __USE__ {return USE;};
 __HARDWARE__ {return HARDWARE;};
 __GPU__ {return GPU;};
+__CPU__ {return CPU;};
 __OS__ {return OS;};
 
 fix {return FIX;};
@@ -61,14 +67,14 @@ deg { return DEG;}
 \<= {return LESS_THAN_EQ;}
 \> {return GREAT_THAN;}
 \>= {return GREAT_THAN_EQ;}
-
-
-
+[ \n\t]+ ;
+(_)*({alphabet})({alphabet}|{number}|(_))*  {ECHO;return VAR;}
+. {printf("Invalid Character\n");};
 %%
 
-
-
-
+int yywrap(){
+    
+}
 
 
 

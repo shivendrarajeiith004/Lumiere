@@ -51,6 +51,7 @@ int yylex();
 %token LESS_THAN_EQ
 %token GREAT_THAN
 %token GREAT_THAN_EQ
+%token VAR
 
 %%
 
@@ -86,13 +87,13 @@ statement:
   | EXTENDS      { printf("Got an 'Extends' keyword\n"); }
   | INHERITS     { printf("Got an 'Inherit' keyword\n"); }
   | HIDDEN       { printf("Got a 'hidden' keyword\n"); }
+  | VAR          { printf("Got a variable \n"); }
   ;
 
 %%
 
 void yyerror(char *s) {
-fprintf(stderr, "%s\n", s);
-
+printf("%s\n", s);
 }
 
 
