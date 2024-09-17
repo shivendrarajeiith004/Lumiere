@@ -13,7 +13,7 @@ number    [0-9]
 
 
 
-
+\".*\" {return STRING;}
 int {return INT;};
 float {return FLOAT;};
 char {return CHAR;};
@@ -51,7 +51,7 @@ extends {return EXTENDS;};
 inherit {return INHERITS;};
 hidden {return HIDDEN;};
 deg { return DEG;}
-
+= {return ASSIGN;}
 \+ {return ADD_OP;}
 - {return SUB_OP;}
 \/ {return DIV_OP;}
@@ -62,18 +62,20 @@ deg { return DEG;}
 \+= {return COMP_ASSIGN_ADD;}
 -= {return COMP_ASSIGN_SUBTRACT;}
 \*= {return COMP_ASSIGN_MUL;}
-\= {return COMP_ASSIGN_ADD;}
+\= {return COMP_ASSIGN_DIV;}
 \< {return LESS_THAN;}
 \<= {return LESS_THAN_EQ;}
 \> {return GREAT_THAN;}
 \>= {return GREAT_THAN_EQ;}
-[ \n\t]+ ;
-(_)*({alphabet})({alphabet}|{number}|(_))*  {ECHO;return VAR;}
-. {printf("Invalid Character\n");};
+[ \t]+ { /* Ignore whitespace */ }
+[\n] {printf("New line detected\n");}
+(_)*({alphabet})({alphabet}|{number}|(_))*  {return VAR;}
+; {return EOL;}
+. {};
 %%
 
 int yywrap(){
-    
+    return 1;
 }
 
 

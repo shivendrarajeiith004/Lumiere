@@ -70,10 +70,11 @@
 #line 1 "parser.y"
 
 #include <stdio.h>
+#include <stdbool.h>
 void yyerror(char *);
 int yylex();
 
-#line 77 "y.tab.c"
+#line 78 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -157,14 +158,17 @@ extern int yydebug;
     POW_OP = 295,                  /* POW_OP  */
     MOD_OP = 296,                  /* MOD_OP  */
     ABS_OP = 297,                  /* ABS_OP  */
-    COMP_ASSIGN_ADD = 298,         /* COMP_ASSIGN_ADD  */
+    COMP_ASSIGN_DIV = 298,         /* COMP_ASSIGN_DIV  */
     COMP_ASSIGN_SUBTRACT = 299,    /* COMP_ASSIGN_SUBTRACT  */
     COMP_ASSIGN_MUL = 300,         /* COMP_ASSIGN_MUL  */
     LESS_THAN = 301,               /* LESS_THAN  */
     LESS_THAN_EQ = 302,            /* LESS_THAN_EQ  */
     GREAT_THAN = 303,              /* GREAT_THAN  */
     GREAT_THAN_EQ = 304,           /* GREAT_THAN_EQ  */
-    VAR = 305                      /* VAR  */
+    VAR = 305,                     /* VAR  */
+    ASSIGN = 306,                  /* ASSIGN  */
+    COMP_ASSIGN_ADD = 307,         /* COMP_ASSIGN_ADD  */
+    EOL = 308                      /* EOL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -213,7 +217,7 @@ extern int yydebug;
 #define POW_OP 295
 #define MOD_OP 296
 #define ABS_OP 297
-#define COMP_ASSIGN_ADD 298
+#define COMP_ASSIGN_DIV 298
 #define COMP_ASSIGN_SUBTRACT 299
 #define COMP_ASSIGN_MUL 300
 #define LESS_THAN 301
@@ -221,6 +225,9 @@ extern int yydebug;
 #define GREAT_THAN 303
 #define GREAT_THAN_EQ 304
 #define VAR 305
+#define ASSIGN 306
+#define COMP_ASSIGN_ADD 307
+#define EOL 308
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -284,7 +291,7 @@ enum yysymbol_kind_t
   YYSYMBOL_POW_OP = 40,                    /* POW_OP  */
   YYSYMBOL_MOD_OP = 41,                    /* MOD_OP  */
   YYSYMBOL_ABS_OP = 42,                    /* ABS_OP  */
-  YYSYMBOL_COMP_ASSIGN_ADD = 43,           /* COMP_ASSIGN_ADD  */
+  YYSYMBOL_COMP_ASSIGN_DIV = 43,           /* COMP_ASSIGN_DIV  */
   YYSYMBOL_COMP_ASSIGN_SUBTRACT = 44,      /* COMP_ASSIGN_SUBTRACT  */
   YYSYMBOL_COMP_ASSIGN_MUL = 45,           /* COMP_ASSIGN_MUL  */
   YYSYMBOL_LESS_THAN = 46,                 /* LESS_THAN  */
@@ -292,8 +299,12 @@ enum yysymbol_kind_t
   YYSYMBOL_GREAT_THAN = 48,                /* GREAT_THAN  */
   YYSYMBOL_GREAT_THAN_EQ = 49,             /* GREAT_THAN_EQ  */
   YYSYMBOL_VAR = 50,                       /* VAR  */
-  YYSYMBOL_YYACCEPT = 51,                  /* $accept  */
-  YYSYMBOL_statement = 52                  /* statement  */
+  YYSYMBOL_ASSIGN = 51,                    /* ASSIGN  */
+  YYSYMBOL_COMP_ASSIGN_ADD = 52,           /* COMP_ASSIGN_ADD  */
+  YYSYMBOL_EOL = 53,                       /* EOL  */
+  YYSYMBOL_YYACCEPT = 54,                  /* $accept  */
+  YYSYMBOL_input = 55,                     /* input  */
+  YYSYMBOL_statement = 56                  /* statement  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -619,21 +630,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  33
+#define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   45
+#define YYLAST   53
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  51
+#define YYNTOKENS  54
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  2
+#define YYNNTS  3
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  33
+#define YYNRULES  55
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  34
+#define YYNSTATES  56
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   305
+#define YYMAXUTOK   308
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -677,17 +688,19 @@ static const yytype_int8 yytranslate[] =
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      45,    46,    47,    48,    49,    50
+      45,    46,    47,    48,    49,    50,    51,    52,    53
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    59,    59,    60,    61,    62,    63,    64,    65,    66,
-      67,    68,    69,    70,    71,    72,    73,    74,    75,    76,
-      77,    78,    79,    80,    81,    82,    83,    84,    85,    86,
-      87,    88,    89,    90
+       0,    18,    18,    19,    23,    24,    25,    26,    27,    28,
+      29,    30,    31,    32,    33,    34,    35,    36,    37,    38,
+      39,    40,    41,    42,    43,    44,    45,    46,    47,    48,
+      49,    50,    51,    52,    53,    54,    55,    56,    57,    58,
+      59,    60,    61,    62,    63,    64,    65,    66,    67,    68,
+      69,    70,    71,    72,    73,    74
 };
 #endif
 
@@ -709,9 +722,9 @@ static const char *const yytname[] =
   "CONTINUE", "FIX", "USE", "HARDWARE", "GPU", "CPU", "OS", "RETURN",
   "TRY", "CATCH", "TYPEOF", "CLASS", "EXTENDS", "INHERITS", "HIDDEN",
   "DEG", "ADD_OP", "SUB_OP", "DIV_OP", "MULT_OP", "POW_OP", "MOD_OP",
-  "ABS_OP", "COMP_ASSIGN_ADD", "COMP_ASSIGN_SUBTRACT", "COMP_ASSIGN_MUL",
+  "ABS_OP", "COMP_ASSIGN_DIV", "COMP_ASSIGN_SUBTRACT", "COMP_ASSIGN_MUL",
   "LESS_THAN", "LESS_THAN_EQ", "GREAT_THAN", "GREAT_THAN_EQ", "VAR",
-  "$accept", "statement", YY_NULLPTR
+  "ASSIGN", "COMP_ASSIGN_ADD", "EOL", "$accept", "input", "statement", YY_NULLPTR
 };
 
 static const char *
@@ -721,7 +734,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-6)
+#define YYPACT_NINF (-1)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -735,10 +748,12 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -5,    -6,    -6,    -6,    -6,    -6,    -6,    -6,    -6,    -6,
-      -6,    -6,    -6,    -6,    -6,    -6,    -6,    -6,    -6,    -6,
-      -6,    -6,    -6,    -6,    -6,    -6,    -6,    -6,    -6,    -6,
-      -6,    -6,    30,    -6
+      -1,     0,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -746,22 +761,24 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     2,     3,     4,     5,     6,     7,     8,     9,    10,
-      11,    12,    13,    14,    15,    16,    17,    18,    19,    20,
-      21,    22,    23,    25,    26,    27,    28,    29,    30,    31,
-      32,    33,     0,     1
+       2,     0,     1,    54,     4,     5,     6,     7,     8,     9,
+      10,    11,    12,    13,    14,    15,    16,    17,    18,    19,
+      20,    21,    22,    23,    24,    25,    26,    27,    28,    29,
+      30,    31,    32,    33,    34,    35,    37,    38,    39,    40,
+      41,    42,    43,    44,    46,    47,    48,    49,    50,    51,
+      52,    53,    36,    45,    55,     3
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -6,    -6
+      -1,    -1,    -1
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,    32
+       0,     1,    55
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -769,48 +786,56 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       1,     2,     3,     4,     5,     6,     7,     8,     9,    10,
+       2,     3,     0,     4,     5,     6,     7,     8,     9,    10,
       11,    12,    13,    14,    15,    16,    17,    18,    19,    20,
       21,    22,    23,    24,    25,    26,    27,    28,    29,    30,
-      33,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,    31
+      31,    32,    33,    34,    35,    36,    37,    38,    39,    40,
+      41,    42,    43,    44,    45,    46,    47,    48,    49,    50,
+      51,    52,    53,    54
 };
 
 static const yytype_int8 yycheck[] =
 {
-       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-       0,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    50
+       0,     1,    -1,     3,     4,     5,     6,     7,     8,     9,
+      10,    11,    12,    13,    14,    15,    16,    17,    18,    19,
+      20,    21,    22,    23,    24,    25,    26,    27,    28,    29,
+      30,    31,    32,    33,    34,    35,    36,    37,    38,    39,
+      40,    41,    42,    43,    44,    45,    46,    47,    48,    49,
+      50,    51,    52,    53
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     5,     6,     7,     8,     9,    10,    11,    12,    13,
-      14,    15,    16,    17,    18,    19,    20,    21,    22,    23,
-      24,    25,    26,    27,    28,    29,    30,    31,    32,    33,
-      34,    50,    52,     0
+       0,    55,     0,     1,     3,     4,     5,     6,     7,     8,
+       9,    10,    11,    12,    13,    14,    15,    16,    17,    18,
+      19,    20,    21,    22,    23,    24,    25,    26,    27,    28,
+      29,    30,    31,    32,    33,    34,    35,    36,    37,    38,
+      39,    40,    41,    42,    43,    44,    45,    46,    47,    48,
+      49,    50,    51,    52,    53,    56
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    51,    52,    52,    52,    52,    52,    52,    52,    52,
-      52,    52,    52,    52,    52,    52,    52,    52,    52,    52,
-      52,    52,    52,    52,    52,    52,    52,    52,    52,    52,
-      52,    52,    52,    52
+       0,    54,    55,    55,    56,    56,    56,    56,    56,    56,
+      56,    56,    56,    56,    56,    56,    56,    56,    56,    56,
+      56,    56,    56,    56,    56,    56,    56,    56,    56,    56,
+      56,    56,    56,    56,    56,    56,    56,    56,    56,    56,
+      56,    56,    56,    56,    56,    56,    56,    56,    56,    56,
+      56,    56,    56,    56,    56,    56
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     1,     1,     1,     1,     1,     1,     1,
+       0,     2,     0,     2,     1,     1,     1,     1,     1,     1,
        1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
        1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1
 };
 
 
@@ -1273,200 +1298,320 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 2: /* statement: INT  */
+  case 4: /* statement: INTEGER  */
+#line 23 "parser.y"
+            { printf("Token: INTEGER, Value: %d\n", yyvsp[0]); }
+#line 1305 "y.tab.c"
+    break;
+
+  case 5: /* statement: DOUBLE  */
+#line 24 "parser.y"
+             { printf("Token: DOUBLE, Value: %f\n", yyvsp[0]); }
+#line 1311 "y.tab.c"
+    break;
+
+  case 6: /* statement: INT  */
+#line 25 "parser.y"
+          { printf("Token: INT\n"); }
+#line 1317 "y.tab.c"
+    break;
+
+  case 7: /* statement: FLOAT  */
+#line 26 "parser.y"
+            { printf("Token: FLOAT\n"); }
+#line 1323 "y.tab.c"
+    break;
+
+  case 8: /* statement: CHAR  */
+#line 27 "parser.y"
+           { printf("Token: CHAR\n"); }
+#line 1329 "y.tab.c"
+    break;
+
+  case 9: /* statement: BOOLEAN  */
+#line 28 "parser.y"
+              { printf("Token: BOOLEAN\n"); }
+#line 1335 "y.tab.c"
+    break;
+
+  case 10: /* statement: STRING  */
+#line 29 "parser.y"
+             { printf("Token: STRING\n"); }
+#line 1341 "y.tab.c"
+    break;
+
+  case 11: /* statement: VECTOR  */
+#line 30 "parser.y"
+             { printf("Token: VECTOR\n"); }
+#line 1347 "y.tab.c"
+    break;
+
+  case 12: /* statement: CLUSTER  */
+#line 31 "parser.y"
+              { printf("Token: CLUSTER\n"); }
+#line 1353 "y.tab.c"
+    break;
+
+  case 13: /* statement: VOID  */
+#line 32 "parser.y"
+           { printf("Token: VOID\n"); }
+#line 1359 "y.tab.c"
+    break;
+
+  case 14: /* statement: BODY  */
+#line 33 "parser.y"
+           { printf("Token: BODY\n"); }
+#line 1365 "y.tab.c"
+    break;
+
+  case 15: /* statement: BASIC  */
+#line 34 "parser.y"
+            { printf("Token: BASIC\n"); }
+#line 1371 "y.tab.c"
+    break;
+
+  case 16: /* statement: FORCE  */
+#line 35 "parser.y"
+            { printf("Token: FORCE\n"); }
+#line 1377 "y.tab.c"
+    break;
+
+  case 17: /* statement: IF  */
+#line 36 "parser.y"
+         { printf("Token: IF\n"); }
+#line 1383 "y.tab.c"
+    break;
+
+  case 18: /* statement: ELSE  */
+#line 37 "parser.y"
+           { printf("Token: ELSE\n"); }
+#line 1389 "y.tab.c"
+    break;
+
+  case 19: /* statement: CHECK_UNTIL  */
+#line 38 "parser.y"
+                  { printf("Token: CHECK_UNTIL\n"); }
+#line 1395 "y.tab.c"
+    break;
+
+  case 20: /* statement: BREAK  */
+#line 39 "parser.y"
+            { printf("Token: BREAK\n"); }
+#line 1401 "y.tab.c"
+    break;
+
+  case 21: /* statement: CONTINUE  */
+#line 40 "parser.y"
+               { printf("Token: CONTINUE\n"); }
+#line 1407 "y.tab.c"
+    break;
+
+  case 22: /* statement: FIX  */
+#line 41 "parser.y"
+          { printf("Token: FIX\n"); }
+#line 1413 "y.tab.c"
+    break;
+
+  case 23: /* statement: USE  */
+#line 42 "parser.y"
+          { printf("Token: USE\n"); }
+#line 1419 "y.tab.c"
+    break;
+
+  case 24: /* statement: HARDWARE  */
+#line 43 "parser.y"
+               { printf("Token: HARDWARE\n"); }
+#line 1425 "y.tab.c"
+    break;
+
+  case 25: /* statement: GPU  */
+#line 44 "parser.y"
+          { printf("Token: GPU\n"); }
+#line 1431 "y.tab.c"
+    break;
+
+  case 26: /* statement: CPU  */
+#line 45 "parser.y"
+          { printf("Token: CPU\n"); }
+#line 1437 "y.tab.c"
+    break;
+
+  case 27: /* statement: OS  */
+#line 46 "parser.y"
+         { printf("Token: OS\n"); }
+#line 1443 "y.tab.c"
+    break;
+
+  case 28: /* statement: RETURN  */
+#line 47 "parser.y"
+             { printf("Token: RETURN\n"); }
+#line 1449 "y.tab.c"
+    break;
+
+  case 29: /* statement: TRY  */
+#line 48 "parser.y"
+          { printf("Token: TRY\n"); }
+#line 1455 "y.tab.c"
+    break;
+
+  case 30: /* statement: CATCH  */
+#line 49 "parser.y"
+            { printf("Token: CATCH\n"); }
+#line 1461 "y.tab.c"
+    break;
+
+  case 31: /* statement: TYPEOF  */
+#line 50 "parser.y"
+             { printf("Token: TYPEOF\n"); }
+#line 1467 "y.tab.c"
+    break;
+
+  case 32: /* statement: CLASS  */
+#line 51 "parser.y"
+            { printf("Token: CLASS\n"); }
+#line 1473 "y.tab.c"
+    break;
+
+  case 33: /* statement: EXTENDS  */
+#line 52 "parser.y"
+              { printf("Token: EXTENDS\n"); }
+#line 1479 "y.tab.c"
+    break;
+
+  case 34: /* statement: INHERITS  */
+#line 53 "parser.y"
+               { printf("Token: INHERITS\n"); }
+#line 1485 "y.tab.c"
+    break;
+
+  case 35: /* statement: HIDDEN  */
+#line 54 "parser.y"
+             { printf("Token: HIDDEN\n"); }
+#line 1491 "y.tab.c"
+    break;
+
+  case 36: /* statement: ASSIGN  */
+#line 55 "parser.y"
+             { printf("Token: ASSIGN\n"); }
+#line 1497 "y.tab.c"
+    break;
+
+  case 37: /* statement: DEG  */
+#line 56 "parser.y"
+          { printf("Token: DEG\n"); }
+#line 1503 "y.tab.c"
+    break;
+
+  case 38: /* statement: ADD_OP  */
+#line 57 "parser.y"
+             { printf("Token: ADD_OP\n"); }
+#line 1509 "y.tab.c"
+    break;
+
+  case 39: /* statement: SUB_OP  */
+#line 58 "parser.y"
+             { printf("Token: SUB_OP\n"); }
+#line 1515 "y.tab.c"
+    break;
+
+  case 40: /* statement: DIV_OP  */
 #line 59 "parser.y"
-                 { printf("Got an 'int' keyword\n"); }
-#line 1280 "y.tab.c"
+             { printf("Token: DIV_OP\n"); }
+#line 1521 "y.tab.c"
     break;
 
-  case 3: /* statement: FLOAT  */
+  case 41: /* statement: MULT_OP  */
 #line 60 "parser.y"
-                 { printf("Got a 'float' keyword\n"); }
-#line 1286 "y.tab.c"
+              { printf("Token: MULT_OP\n"); }
+#line 1527 "y.tab.c"
     break;
 
-  case 4: /* statement: CHAR  */
+  case 42: /* statement: POW_OP  */
 #line 61 "parser.y"
-                 { printf("Got a 'char' keyword\n"); }
-#line 1292 "y.tab.c"
+             { printf("Token: POW_OP\n"); }
+#line 1533 "y.tab.c"
     break;
 
-  case 5: /* statement: BOOLEAN  */
+  case 43: /* statement: MOD_OP  */
 #line 62 "parser.y"
-                 { printf("Got a 'boolean' keyword\n"); }
-#line 1298 "y.tab.c"
+             { printf("Token: MOD_OP\n"); }
+#line 1539 "y.tab.c"
     break;
 
-  case 6: /* statement: STRING  */
+  case 44: /* statement: ABS_OP  */
 #line 63 "parser.y"
-                 { printf("Got a 'string' keyword\n"); }
-#line 1304 "y.tab.c"
+             { printf("Token: ABS_OP\n"); }
+#line 1545 "y.tab.c"
     break;
 
-  case 7: /* statement: VECTOR  */
+  case 45: /* statement: COMP_ASSIGN_ADD  */
 #line 64 "parser.y"
-                 { printf("Got a 'vec' keyword\n"); }
-#line 1310 "y.tab.c"
+                      { printf("Token: COMP_ASSIGN_ADD\n"); }
+#line 1551 "y.tab.c"
     break;
 
-  case 8: /* statement: CLUSTER  */
+  case 46: /* statement: COMP_ASSIGN_DIV  */
 #line 65 "parser.y"
-                 { printf("Got a 'Cluster' keyword\n"); }
-#line 1316 "y.tab.c"
+                      { printf("Token: COMP_ASSIGN_DIV\n"); }
+#line 1557 "y.tab.c"
     break;
 
-  case 9: /* statement: VOID  */
+  case 47: /* statement: COMP_ASSIGN_SUBTRACT  */
 #line 66 "parser.y"
-                 { printf("Got a 'void' keyword\n"); }
-#line 1322 "y.tab.c"
+                           { printf("Token: COMP_ASSIGN_SUBTRACT\n"); }
+#line 1563 "y.tab.c"
     break;
 
-  case 10: /* statement: BODY  */
+  case 48: /* statement: COMP_ASSIGN_MUL  */
 #line 67 "parser.y"
-                 { printf("Got a 'Body' keyword\n"); }
-#line 1328 "y.tab.c"
+                      { printf("Token: COMP_ASSIGN_MUL\n"); }
+#line 1569 "y.tab.c"
     break;
 
-  case 11: /* statement: BASIC  */
+  case 49: /* statement: LESS_THAN  */
 #line 68 "parser.y"
-                 { printf("Got a 'Basic' keyword\n"); }
-#line 1334 "y.tab.c"
+                { printf("Token: LESS_THAN\n"); }
+#line 1575 "y.tab.c"
     break;
 
-  case 12: /* statement: FORCE  */
+  case 50: /* statement: LESS_THAN_EQ  */
 #line 69 "parser.y"
-                 { printf("Got a 'force' keyword\n"); }
-#line 1340 "y.tab.c"
+                   { printf("Token: LESS_THAN_EQ\n"); }
+#line 1581 "y.tab.c"
     break;
 
-  case 13: /* statement: IF  */
+  case 51: /* statement: GREAT_THAN  */
 #line 70 "parser.y"
-                 { printf("Got an 'if' keyword\n"); }
-#line 1346 "y.tab.c"
+                 { printf("Token: GREAT_THAN\n"); }
+#line 1587 "y.tab.c"
     break;
 
-  case 14: /* statement: ELSE  */
+  case 52: /* statement: GREAT_THAN_EQ  */
 #line 71 "parser.y"
-                 { printf("Got an 'else' keyword\n"); }
-#line 1352 "y.tab.c"
+                    { printf("Token: GREAT_THAN_EQ\n"); }
+#line 1593 "y.tab.c"
     break;
 
-  case 15: /* statement: CHECK_UNTIL  */
+  case 53: /* statement: VAR  */
 #line 72 "parser.y"
-                 { printf("Got a 'check_until' keyword\n"); }
-#line 1358 "y.tab.c"
+          { printf("Token: VAR\n"); }
+#line 1599 "y.tab.c"
     break;
 
-  case 16: /* statement: BREAK  */
+  case 54: /* statement: error  */
 #line 73 "parser.y"
-                 { printf("Got a 'break' keyword\n"); }
-#line 1364 "y.tab.c"
+            { yyerror("Syntax error\n"); }
+#line 1605 "y.tab.c"
     break;
 
-  case 17: /* statement: CONTINUE  */
+  case 55: /* statement: EOL  */
 #line 74 "parser.y"
-                 { printf("Got a 'Continue' keyword\n"); }
-#line 1370 "y.tab.c"
-    break;
-
-  case 18: /* statement: FIX  */
-#line 75 "parser.y"
-                 { printf("Got a '__FIX__' keyword\n"); }
-#line 1376 "y.tab.c"
-    break;
-
-  case 19: /* statement: USE  */
-#line 76 "parser.y"
-                 { printf("Got a '__USE__' keyword\n"); }
-#line 1382 "y.tab.c"
-    break;
-
-  case 20: /* statement: HARDWARE  */
-#line 77 "parser.y"
-                 { printf("Got a '__HARDWARE__' keyword\n"); }
-#line 1388 "y.tab.c"
-    break;
-
-  case 21: /* statement: GPU  */
-#line 78 "parser.y"
-                 { printf("Got a '__GPU__' keyword\n"); }
-#line 1394 "y.tab.c"
-    break;
-
-  case 22: /* statement: CPU  */
-#line 79 "parser.y"
-                 { printf("Got a '__CPU__' keyword\n"); }
-#line 1400 "y.tab.c"
-    break;
-
-  case 23: /* statement: OS  */
-#line 80 "parser.y"
-                 { printf("Got an 'OS' keyword\n"); }
-#line 1406 "y.tab.c"
-    break;
-
-  case 24: /* statement: FIX  */
-#line 81 "parser.y"
-                 { printf("Got a 'fix' keyword\n"); }
-#line 1412 "y.tab.c"
-    break;
-
-  case 25: /* statement: RETURN  */
-#line 82 "parser.y"
-                 { printf("Got a 'return' keyword\n"); }
-#line 1418 "y.tab.c"
-    break;
-
-  case 26: /* statement: TRY  */
-#line 83 "parser.y"
-                 { printf("Got a 'try' keyword\n"); }
-#line 1424 "y.tab.c"
-    break;
-
-  case 27: /* statement: CATCH  */
-#line 84 "parser.y"
-                 { printf("Got a 'Catch' keyword\n"); }
-#line 1430 "y.tab.c"
-    break;
-
-  case 28: /* statement: TYPEOF  */
-#line 85 "parser.y"
-                 { printf("Got a 'typeof' keyword\n"); }
-#line 1436 "y.tab.c"
-    break;
-
-  case 29: /* statement: CLASS  */
-#line 86 "parser.y"
-                 { printf("Got a 'Class' keyword\n"); }
-#line 1442 "y.tab.c"
-    break;
-
-  case 30: /* statement: EXTENDS  */
-#line 87 "parser.y"
-                 { printf("Got an 'Extends' keyword\n"); }
-#line 1448 "y.tab.c"
-    break;
-
-  case 31: /* statement: INHERITS  */
-#line 88 "parser.y"
-                 { printf("Got an 'Inherit' keyword\n"); }
-#line 1454 "y.tab.c"
-    break;
-
-  case 32: /* statement: HIDDEN  */
-#line 89 "parser.y"
-                 { printf("Got a 'hidden' keyword\n"); }
-#line 1460 "y.tab.c"
-    break;
-
-  case 33: /* statement: VAR  */
-#line 90 "parser.y"
-                 { printf("Got a variable \n"); }
-#line 1466 "y.tab.c"
+          {printf("Semi Colon\n");}
+#line 1611 "y.tab.c"
     break;
 
 
-#line 1470 "y.tab.c"
+#line 1615 "y.tab.c"
 
       default: break;
     }
@@ -1659,7 +1804,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 93 "parser.y"
+#line 77 "parser.y"
 
 
 void yyerror(char *s) {
@@ -1667,9 +1812,28 @@ printf("%s\n", s);
 }
 
 
-int main(void) {
-yyparse();
-return 0;
+
+extern FILE *yyin;  // Declare the external yyin variable
+
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <input_file>\n", argv[0]);
+        return 1;
+    }
+
+    // Open the input file
+    yyin = fopen(argv[1], "r");
+    if (yyin == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    do {
+        yyparse();  // Call the parser
+    } while (!feof(yyin));
+
+    fclose(yyin);  // Close the input file
+    return 0;
 }
 
 

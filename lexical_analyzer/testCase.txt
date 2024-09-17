@@ -1,0 +1,2 @@
+int a = 10; vec _c = <10>; 
+string = "asdfs"; 

@@ -1,94 +1,78 @@
 %{
 #include <stdio.h>
+#include <stdbool.h>
 void yyerror(char *);
 int yylex();
 %}
 
-%token INTEGER
-%token DOUBLE
-%token INT
-%token FLOAT
-%token CHAR
-%token BOOLEAN
-%token STRING
-%token VECTOR
-%token CLUSTER
-%token VOID
-%token BODY
-%token BASIC
-%token FORCE
-%token IF
-%token ELSE
-%token CHECK_UNTIL
-%token BREAK
-%token CONTINUE
-%token FIX
-%token USE
-%token HARDWARE
-%token GPU
-%token CPU
-%token OS
-%token RETURN
-%token TRY
-%token CATCH
-%token TYPEOF
-%token CLASS
-%token EXTENDS
-%token INHERITS
-%token HIDDEN
-%token DEG
-%token ADD_OP
-%token SUB_OP
-%token DIV_OP
-%token MULT_OP
-%token POW_OP
-%token MOD_OP
-%token ABS_OP
-%token COMP_ASSIGN_ADD
-%token COMP_ASSIGN_SUBTRACT
-%token COMP_ASSIGN_MUL
-%token LESS_THAN
-%token LESS_THAN_EQ
-%token GREAT_THAN
-%token GREAT_THAN_EQ
-%token VAR
+%token INTEGER DOUBLE INT FLOAT CHAR BOOLEAN STRING VECTOR CLUSTER VOID
+%token BODY BASIC FORCE IF ELSE CHECK_UNTIL BREAK CONTINUE FIX USE HARDWARE
+%token GPU CPU OS RETURN TRY CATCH TYPEOF CLASS EXTENDS INHERITS HIDDEN DEG
+%token ADD_OP SUB_OP DIV_OP MULT_OP POW_OP MOD_OP ABS_OP COMP_ASSIGN_DIV
+%token COMP_ASSIGN_SUBTRACT COMP_ASSIGN_MUL LESS_THAN LESS_THAN_EQ
+%token GREAT_THAN GREAT_THAN_EQ VAR ASSIGN COMP_ASSIGN_ADD EOL STRING
 
 %%
 
+// Define grammar rules
+input:
+    | input statement
+    ;
+
 statement:
-    INT          { printf("Got an 'int' keyword\n"); }
-  | FLOAT        { printf("Got a 'float' keyword\n"); }
-  | CHAR         { printf("Got a 'char' keyword\n"); }
-  | BOOLEAN      { printf("Got a 'boolean' keyword\n"); }
-  | STRING       { printf("Got a 'string' keyword\n"); }
-  | VECTOR       { printf("Got a 'vec' keyword\n"); }
-  | CLUSTER      { printf("Got a 'Cluster' keyword\n"); }
-  | VOID         { printf("Got a 'void' keyword\n"); }
-  | BODY         { printf("Got a 'Body' keyword\n"); }
-  | BASIC        { printf("Got a 'Basic' keyword\n"); }
-  | FORCE        { printf("Got a 'force' keyword\n"); }
-  | IF           { printf("Got an 'if' keyword\n"); }
-  | ELSE         { printf("Got an 'else' keyword\n"); }
-  | CHECK_UNTIL  { printf("Got a 'check_until' keyword\n"); }
-  | BREAK        { printf("Got a 'break' keyword\n"); }
-  | CONTINUE     { printf("Got a 'Continue' keyword\n"); }
-  | FIX          { printf("Got a '__FIX__' keyword\n"); }
-  | USE          { printf("Got a '__USE__' keyword\n"); }
-  | HARDWARE     { printf("Got a '__HARDWARE__' keyword\n"); }
-  | GPU          { printf("Got a '__GPU__' keyword\n"); }
-  | CPU          { printf("Got a '__CPU__' keyword\n"); }
-  | OS           { printf("Got an 'OS' keyword\n"); }
-  | FIX          { printf("Got a 'fix' keyword\n"); }
-  | RETURN       { printf("Got a 'return' keyword\n"); }
-  | TRY          { printf("Got a 'try' keyword\n"); }
-  | CATCH        { printf("Got a 'Catch' keyword\n"); }
-  | TYPEOF       { printf("Got a 'typeof' keyword\n"); }
-  | CLASS        { printf("Got a 'Class' keyword\n"); }
-  | EXTENDS      { printf("Got an 'Extends' keyword\n"); }
-  | INHERITS     { printf("Got an 'Inherit' keyword\n"); }
-  | HIDDEN       { printf("Got a 'hidden' keyword\n"); }
-  | VAR          { printf("Got a variable \n"); }
-  ;
+    INTEGER { printf("Token: INTEGER, Value: %d\n", $1); }
+    | DOUBLE { printf("Token: DOUBLE, Value: %f\n", $1); }
+    | INT { printf("Token: INT\n"); }
+    | FLOAT { printf("Token: FLOAT\n"); }
+    | CHAR { printf("Token: CHAR\n"); }
+    | BOOLEAN { printf("Token: BOOLEAN\n"); }
+    | STRING { printf("Token: STRING\n"); }
+    | VECTOR { printf("Token: VECTOR\n"); }
+    | CLUSTER { printf("Token: CLUSTER\n"); }
+    | VOID { printf("Token: VOID\n"); }
+    | BODY { printf("Token: BODY\n"); }
+    | BASIC { printf("Token: BASIC\n"); }
+    | FORCE { printf("Token: FORCE\n"); }
+    | IF { printf("Token: IF\n"); }
+    | ELSE { printf("Token: ELSE\n"); }
+    | CHECK_UNTIL { printf("Token: CHECK_UNTIL\n"); }
+    | BREAK { printf("Token: BREAK\n"); }
+    | CONTINUE { printf("Token: CONTINUE\n"); }
+    | FIX { printf("Token: FIX\n"); }
+    | USE { printf("Token: USE\n"); }
+    | HARDWARE { printf("Token: HARDWARE\n"); }
+    | GPU { printf("Token: GPU\n"); }
+    | CPU { printf("Token: CPU\n"); }
+    | OS { printf("Token: OS\n"); }
+    | RETURN { printf("Token: RETURN\n"); }
+    | TRY { printf("Token: TRY\n"); }
+    | CATCH { printf("Token: CATCH\n"); }
+    | TYPEOF { printf("Token: TYPEOF\n"); }
+    | CLASS { printf("Token: CLASS\n"); }
+    | EXTENDS { printf("Token: EXTENDS\n"); }
+    | INHERITS { printf("Token: INHERITS\n"); }
+    | HIDDEN { printf("Token: HIDDEN\n"); }
+    | ASSIGN { printf("Token: ASSIGN\n"); }
+    | DEG { printf("Token: DEG\n"); }
+    | ADD_OP { printf("Token: ADD_OP\n"); }
+    | SUB_OP { printf("Token: SUB_OP\n"); }
+    | DIV_OP { printf("Token: DIV_OP\n"); }
+    | MULT_OP { printf("Token: MULT_OP\n"); }
+    | POW_OP { printf("Token: POW_OP\n"); }
+    | MOD_OP { printf("Token: MOD_OP\n"); }
+    | ABS_OP { printf("Token: ABS_OP\n"); }
+    | COMP_ASSIGN_ADD { printf("Token: COMP_ASSIGN_ADD\n"); }
+    | COMP_ASSIGN_DIV { printf("Token: COMP_ASSIGN_DIV\n"); }
+    | COMP_ASSIGN_SUBTRACT { printf("Token: COMP_ASSIGN_SUBTRACT\n"); }
+    | COMP_ASSIGN_MUL { printf("Token: COMP_ASSIGN_MUL\n"); }
+    | LESS_THAN { printf("Token: LESS_THAN\n"); }
+    | LESS_THAN_EQ { printf("Token: LESS_THAN_EQ\n"); }
+    | GREAT_THAN { printf("Token: GREAT_THAN\n"); }
+    | GREAT_THAN_EQ { printf("Token: GREAT_THAN_EQ\n"); }
+    | VAR { printf("Token: VAR\n"); }
+    | error { yyerror("Syntax error\n"); }
+    | EOL {printf("Semi Colon\n");}
+    ;
 
 %%
 
@@ -97,9 +81,28 @@ printf("%s\n", s);
 }
 
 
-int main(void) {
-yyparse();
-return 0;
+
+extern FILE *yyin;  // Declare the external yyin variable
+
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <input_file>\n", argv[0]);
+        return 1;
+    }
+
+    // Open the input file
+    yyin = fopen(argv[1], "r");
+    if (yyin == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    do {
+        yyparse();  // Call the parser
+    } while (!feof(yyin));
+
+    fclose(yyin);  // Close the input file
+    return 0;
 }
 
 

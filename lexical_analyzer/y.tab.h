@@ -94,14 +94,17 @@ extern int yydebug;
     POW_OP = 295,                  /* POW_OP  */
     MOD_OP = 296,                  /* MOD_OP  */
     ABS_OP = 297,                  /* ABS_OP  */
-    COMP_ASSIGN_ADD = 298,         /* COMP_ASSIGN_ADD  */
+    COMP_ASSIGN_DIV = 298,         /* COMP_ASSIGN_DIV  */
     COMP_ASSIGN_SUBTRACT = 299,    /* COMP_ASSIGN_SUBTRACT  */
     COMP_ASSIGN_MUL = 300,         /* COMP_ASSIGN_MUL  */
     LESS_THAN = 301,               /* LESS_THAN  */
     LESS_THAN_EQ = 302,            /* LESS_THAN_EQ  */
     GREAT_THAN = 303,              /* GREAT_THAN  */
     GREAT_THAN_EQ = 304,           /* GREAT_THAN_EQ  */
-    VAR = 305                      /* VAR  */
+    VAR = 305,                     /* VAR  */
+    ASSIGN = 306,                  /* ASSIGN  */
+    COMP_ASSIGN_ADD = 307,         /* COMP_ASSIGN_ADD  */
+    EOL = 308                      /* EOL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -150,7 +153,7 @@ extern int yydebug;
 #define POW_OP 295
 #define MOD_OP 296
 #define ABS_OP 297
-#define COMP_ASSIGN_ADD 298
+#define COMP_ASSIGN_DIV 298
 #define COMP_ASSIGN_SUBTRACT 299
 #define COMP_ASSIGN_MUL 300
 #define LESS_THAN 301
@@ -158,6 +161,9 @@ extern int yydebug;
 #define GREAT_THAN 303
 #define GREAT_THAN_EQ 304
 #define VAR 305
+#define ASSIGN 306
+#define COMP_ASSIGN_ADD 307
+#define EOL 308
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
