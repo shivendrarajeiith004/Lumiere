@@ -1,14 +1,14 @@
-/* A Bison parser, made by GNU Bison 3.8.2.  */
+/* A Bison parser, made by GNU Bison 2.3.  */
 
-/* Bison interface for Yacc-like parsers in C
+/* Skeleton interface for Bison's Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
-   Inc.
+   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
+   Free Software Foundation, Inc.
 
-   This program is free software: you can redistribute it and/or modify
+   This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,9 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -31,88 +33,66 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
-   especially those whose name start with YY_ or yy_.  They are
-   private implementation details that can be changed or removed.  */
-
-#ifndef YY_YY_Y_TAB_H_INCLUDED
-# define YY_YY_Y_TAB_H_INCLUDED
-/* Debug traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 0
-#endif
-#if YYDEBUG
-extern int yydebug;
-#endif
-
-/* Token kinds.  */
+/* Tokens.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-  enum yytokentype
-  {
-    YYEMPTY = -2,
-    YYEOF = 0,                     /* "end of file"  */
-    YYerror = 256,                 /* error  */
-    YYUNDEF = 257,                 /* "invalid token"  */
-    INTEGER = 258,                 /* INTEGER  */
-    DOUBLE = 259,                  /* DOUBLE  */
-    INT = 260,                     /* INT  */
-    FLOAT = 261,                   /* FLOAT  */
-    CHAR = 262,                    /* CHAR  */
-    BOOLEAN = 263,                 /* BOOLEAN  */
-    STRING = 264,                  /* STRING  */
-    VECTOR = 265,                  /* VECTOR  */
-    CLUSTER = 266,                 /* CLUSTER  */
-    VOID = 267,                    /* VOID  */
-    BODY = 268,                    /* BODY  */
-    BASIC = 269,                   /* BASIC  */
-    FORCE = 270,                   /* FORCE  */
-    IF = 271,                      /* IF  */
-    ELSE = 272,                    /* ELSE  */
-    CHECK_UNTIL = 273,             /* CHECK_UNTIL  */
-    BREAK = 274,                   /* BREAK  */
-    CONTINUE = 275,                /* CONTINUE  */
-    FIX = 276,                     /* FIX  */
-    USE = 277,                     /* USE  */
-    HARDWARE = 278,                /* HARDWARE  */
-    GPU = 279,                     /* GPU  */
-    CPU = 280,                     /* CPU  */
-    OS = 281,                      /* OS  */
-    RETURN = 282,                  /* RETURN  */
-    TRY = 283,                     /* TRY  */
-    CATCH = 284,                   /* CATCH  */
-    TYPEOF = 285,                  /* TYPEOF  */
-    CLASS = 286,                   /* CLASS  */
-    EXTENDS = 287,                 /* EXTENDS  */
-    INHERITS = 288,                /* INHERITS  */
-    HIDDEN = 289,                  /* HIDDEN  */
-    DEG = 290,                     /* DEG  */
-    ADD_OP = 291,                  /* ADD_OP  */
-    SUB_OP = 292,                  /* SUB_OP  */
-    DIV_OP = 293,                  /* DIV_OP  */
-    MULT_OP = 294,                 /* MULT_OP  */
-    POW_OP = 295,                  /* POW_OP  */
-    MOD_OP = 296,                  /* MOD_OP  */
-    ABS_OP = 297,                  /* ABS_OP  */
-    COMP_ASSIGN_DIV = 298,         /* COMP_ASSIGN_DIV  */
-    COMP_ASSIGN_SUBTRACT = 299,    /* COMP_ASSIGN_SUBTRACT  */
-    COMP_ASSIGN_MUL = 300,         /* COMP_ASSIGN_MUL  */
-    LESS_THAN = 301,               /* LESS_THAN  */
-    LESS_THAN_EQ = 302,            /* LESS_THAN_EQ  */
-    GREAT_THAN = 303,              /* GREAT_THAN  */
-    GREAT_THAN_EQ = 304,           /* GREAT_THAN_EQ  */
-    VAR = 305,                     /* VAR  */
-    ASSIGN = 306,                  /* ASSIGN  */
-    COMP_ASSIGN_ADD = 307,         /* COMP_ASSIGN_ADD  */
-    EOL = 308                      /* EOL  */
-  };
-  typedef enum yytokentype yytoken_kind_t;
+   /* Put the tokens into the symbol table, so that GDB and other debuggers
+      know about them.  */
+   enum yytokentype {
+     INTEGER = 258,
+     DOUBLE = 259,
+     INT = 260,
+     FLOAT = 261,
+     CHAR = 262,
+     BOOLEAN = 263,
+     STRING = 264,
+     VECTOR = 265,
+     CLUSTER = 266,
+     VOID = 267,
+     BODY = 268,
+     BASIC = 269,
+     FORCE = 270,
+     IF = 271,
+     ELSE = 272,
+     CHECK_UNTIL = 273,
+     BREAK = 274,
+     CONTINUE = 275,
+     FIX = 276,
+     USE = 277,
+     HARDWARE = 278,
+     GPU = 279,
+     CPU = 280,
+     OS = 281,
+     RETURN = 282,
+     TRY = 283,
+     CATCH = 284,
+     TYPEOF = 285,
+     CLASS = 286,
+     EXTENDS = 287,
+     INHERITS = 288,
+     HIDDEN = 289,
+     DEG = 290,
+     ADD_OP = 291,
+     SUB_OP = 292,
+     DIV_OP = 293,
+     MULT_OP = 294,
+     POW_OP = 295,
+     MOD_OP = 296,
+     ABS_OP = 297,
+     COMP_ASSIGN_DIV = 298,
+     COMP_ASSIGN_SUBTRACT = 299,
+     COMP_ASSIGN_MUL = 300,
+     LESS_THAN = 301,
+     LESS_THAN_EQ = 302,
+     GREAT_THAN = 303,
+     GREAT_THAN_EQ = 304,
+     VAR = 305,
+     ASSIGN = 306,
+     COMP_ASSIGN_ADD = 307,
+     EOL = 308
+   };
 #endif
-/* Token kinds.  */
-#define YYEMPTY -2
-#define YYEOF 0
-#define YYerror 256
-#define YYUNDEF 257
+/* Tokens.  */
 #define INTEGER 258
 #define DOUBLE 259
 #define INT 260
@@ -165,18 +145,15 @@ extern int yydebug;
 #define COMP_ASSIGN_ADD 307
 #define EOL 308
 
-/* Value type.  */
+
+
+
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef int YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
+# define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
+# define YYSTYPE_IS_TRIVIAL 1
 #endif
-
 
 extern YYSTYPE yylval;
 
-
-int yyparse (void);
-
-
-#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
