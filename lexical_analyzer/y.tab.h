@@ -41,127 +41,150 @@
    enum yytokentype {
      INTEGER = 258,
      DOUBLE = 259,
-     INT = 260,
-     FLOAT = 261,
-     CHAR = 262,
-     BOOLEAN = 263,
-     STRING = 264,
-     VECTOR = 265,
-     CLUSTER = 266,
-     VOID = 267,
-     BODY = 268,
-     BASIC = 269,
-     FORCE = 270,
-     IF = 271,
-     ELSE = 272,
-     CHECK_UNTIL = 273,
-     BREAK = 274,
-     CONTINUE = 275,
-     FIX = 276,
-     USE = 277,
-     HARDWARE = 278,
-     GPU = 279,
-     CPU = 280,
-     OS = 281,
-     RETURN = 282,
-     TRY = 283,
-     CATCH = 284,
-     TYPEOF = 285,
-     CLASS = 286,
-     EXTENDS = 287,
-     INHERITS = 288,
-     HIDDEN = 289,
-     DEG = 290,
-     ADD_OP = 291,
-     SUB_OP = 292,
-     DIV_OP = 293,
-     MULT_OP = 294,
-     POW_OP = 295,
-     MOD_OP = 296,
-     ABS_OP = 297,
-     COMP_ASSIGN_DIV = 298,
-     COMP_ASSIGN_SUBTRACT = 299,
-     COMP_ASSIGN_MUL = 300,
-     LESS_THAN = 301,
-     LESS_THAN_EQ = 302,
-     GREAT_THAN = 303,
-     GREAT_THAN_EQ = 304,
-     VAR = 305,
-     ASSIGN = 306,
-     COMP_ASSIGN_ADD = 307,
-     EOL = 308,
-     LEFT_PAREN = 309,
-     RIGHT_PAREN = 310,
-     LEFT_CURLY_BRACE = 311,
-     RIGHT_CURLY_BRACE = 312,
-     LEFT_BRACE = 313,
-     RIGHT_BRACE = 314
+     STRING_VALUE = 260,
+     BOOL_VALUE = 261,
+     INT = 262,
+     FLOAT = 263,
+     CHAR = 264,
+     BOOLEAN = 265,
+     STRING = 266,
+     VECTOR = 267,
+     CLUSTER = 268,
+     VOID = 269,
+     BODY = 270,
+     BASIC = 271,
+     FORCE = 272,
+     IF = 273,
+     ELSE = 274,
+     CHECK_UNTIL = 275,
+     BREAK = 276,
+     CONTINUE = 277,
+     FIX = 278,
+     USE = 279,
+     HARDWARE = 280,
+     GPU = 281,
+     CPU = 282,
+     OS = 283,
+     RETURN = 284,
+     TRY = 285,
+     CATCH = 286,
+     TYPEOF = 287,
+     CLASS = 288,
+     EXTENDS = 289,
+     INHERITS = 290,
+     HIDDEN = 291,
+     DEG = 292,
+     ADD_OP = 293,
+     SUB_OP = 294,
+     DIV_OP = 295,
+     MULT_OP = 296,
+     POW_OP = 297,
+     MOD_OP = 298,
+     ABS_OP = 299,
+     COMP_ASSIGN_DIV = 300,
+     COMP_ASSIGN_SUBTRACT = 301,
+     COMP_ASSIGN_MUL = 302,
+     LESS_THAN = 303,
+     LESS_THAN_EQ = 304,
+     GREAT_THAN = 305,
+     GREAT_THAN_EQ = 306,
+     VAR = 307,
+     ASSIGN = 308,
+     COMP_ASSIGN_ADD = 309,
+     EOL = 310,
+     LEFT_PAREN = 311,
+     RIGHT_PAREN = 312,
+     LEFT_CURLY_BRACE = 313,
+     RIGHT_CURLY_BRACE = 314,
+     LEFT_BRACE = 315,
+     RIGHT_BRACE = 316,
+     MAIN = 317,
+     SINGLE_LINE_COMMENT = 318,
+     MULTI_LINE_COMMENT = 319,
+     CONST = 320,
+     MASS = 321
    };
 #endif
 /* Tokens.  */
 #define INTEGER 258
 #define DOUBLE 259
-#define INT 260
-#define FLOAT 261
-#define CHAR 262
-#define BOOLEAN 263
-#define STRING 264
-#define VECTOR 265
-#define CLUSTER 266
-#define VOID 267
-#define BODY 268
-#define BASIC 269
-#define FORCE 270
-#define IF 271
-#define ELSE 272
-#define CHECK_UNTIL 273
-#define BREAK 274
-#define CONTINUE 275
-#define FIX 276
-#define USE 277
-#define HARDWARE 278
-#define GPU 279
-#define CPU 280
-#define OS 281
-#define RETURN 282
-#define TRY 283
-#define CATCH 284
-#define TYPEOF 285
-#define CLASS 286
-#define EXTENDS 287
-#define INHERITS 288
-#define HIDDEN 289
-#define DEG 290
-#define ADD_OP 291
-#define SUB_OP 292
-#define DIV_OP 293
-#define MULT_OP 294
-#define POW_OP 295
-#define MOD_OP 296
-#define ABS_OP 297
-#define COMP_ASSIGN_DIV 298
-#define COMP_ASSIGN_SUBTRACT 299
-#define COMP_ASSIGN_MUL 300
-#define LESS_THAN 301
-#define LESS_THAN_EQ 302
-#define GREAT_THAN 303
-#define GREAT_THAN_EQ 304
-#define VAR 305
-#define ASSIGN 306
-#define COMP_ASSIGN_ADD 307
-#define EOL 308
-#define LEFT_PAREN 309
-#define RIGHT_PAREN 310
-#define LEFT_CURLY_BRACE 311
-#define RIGHT_CURLY_BRACE 312
-#define LEFT_BRACE 313
-#define RIGHT_BRACE 314
+#define STRING_VALUE 260
+#define BOOL_VALUE 261
+#define INT 262
+#define FLOAT 263
+#define CHAR 264
+#define BOOLEAN 265
+#define STRING 266
+#define VECTOR 267
+#define CLUSTER 268
+#define VOID 269
+#define BODY 270
+#define BASIC 271
+#define FORCE 272
+#define IF 273
+#define ELSE 274
+#define CHECK_UNTIL 275
+#define BREAK 276
+#define CONTINUE 277
+#define FIX 278
+#define USE 279
+#define HARDWARE 280
+#define GPU 281
+#define CPU 282
+#define OS 283
+#define RETURN 284
+#define TRY 285
+#define CATCH 286
+#define TYPEOF 287
+#define CLASS 288
+#define EXTENDS 289
+#define INHERITS 290
+#define HIDDEN 291
+#define DEG 292
+#define ADD_OP 293
+#define SUB_OP 294
+#define DIV_OP 295
+#define MULT_OP 296
+#define POW_OP 297
+#define MOD_OP 298
+#define ABS_OP 299
+#define COMP_ASSIGN_DIV 300
+#define COMP_ASSIGN_SUBTRACT 301
+#define COMP_ASSIGN_MUL 302
+#define LESS_THAN 303
+#define LESS_THAN_EQ 304
+#define GREAT_THAN 305
+#define GREAT_THAN_EQ 306
+#define VAR 307
+#define ASSIGN 308
+#define COMP_ASSIGN_ADD 309
+#define EOL 310
+#define LEFT_PAREN 311
+#define RIGHT_PAREN 312
+#define LEFT_CURLY_BRACE 313
+#define RIGHT_CURLY_BRACE 314
+#define LEFT_BRACE 315
+#define RIGHT_BRACE 316
+#define MAIN 317
+#define SINGLE_LINE_COMMENT 318
+#define MULTI_LINE_COMMENT 319
+#define CONST 320
+#define MASS 321
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+typedef union YYSTYPE
+#line 11 "parser.y"
+{
+    int intval;
+    float floatval;
+    char * stringval;
+}
+/* Line 1529 of yacc.c.  */
+#line 187 "y.tab.h"
+	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
