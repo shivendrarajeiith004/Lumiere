@@ -1,6 +1,7 @@
-alphabet  [a-zA-Z]
+alphabet  [a-zA-Z] 
 underscore [_]
 number    [0-9]
+
 %{ 
 #include <stdio.h>
 #include "y.tab.h"
@@ -10,8 +11,6 @@ number    [0-9]
 %%
 [0-9]+ {  yylval = atoi(yytext); return INTEGER; };
 ([0-9]+\.[0-9]+) { yylval= atof(yytext); return DOUBLE;};
-
-
 
 \".*\" { return STRING;}
 int { return INT;};
@@ -23,15 +22,14 @@ vec { return VECTOR;};
 cluster { return CLUSTER;};
 void { return VOID;};
 \(  {return LEFT_PAREN;}
- \)  {return RIGHT_PAREN;}
- \{  {return LEFT_CURLY_BRACE;}
- \}  {return RIGHT_CURLY_BRACE;}
- \[  {return LEFT_BRACE;}
- \]  {return RIGHT_BRACE;}
+\)  {return RIGHT_PAREN;}
+\{  {return LEFT_CURLY_BRACE;}
+\}  {return RIGHT_CURLY_BRACE;}
+\[  {return LEFT_BRACE;}
+\]  {return RIGHT_BRACE;}
 body { return BODY;};
 basic { return BASIC;};
 force { return FORCE;};
-
 
 if { return IF;};
 else { return ELSE;};
@@ -66,15 +64,16 @@ deg {  return DEG;}
 \+= { return COMP_ASSIGN_ADD;}
 -= { return COMP_ASSIGN_SUBTRACT;}
 \*= { return COMP_ASSIGN_MUL;}
-\= { return COMP_ASSIGN_DIV;}
+\\= { return COMP_ASSIGN_DIV;}
 \< { return LESS_THAN;}
 \<= { return LESS_THAN_EQ;}
 \> { return GREAT_THAN;}
 \>= { return GREAT_THAN_EQ;}
 [ \t]+ {  /* Ignore whitespace */ }
 [\n] { printf("New line detected\n");}
-(_)*({ alphabet})({ alphabet}|{ number}|(_))*  { return VAR;}
-; {  return EOL;}
+
+(_)*({alphabet})({alphabet}|{number}|(_))*  { return VAR;}
+
 . { };
 %%
 

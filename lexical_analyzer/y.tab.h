@@ -89,7 +89,13 @@
      VAR = 305,
      ASSIGN = 306,
      COMP_ASSIGN_ADD = 307,
-     EOL = 308
+     EOL = 308,
+     LEFT_PAREN = 309,
+     RIGHT_PAREN = 310,
+     LEFT_CURLY_BRACE = 311,
+     RIGHT_CURLY_BRACE = 312,
+     LEFT_BRACE = 313,
+     RIGHT_BRACE = 314
    };
 #endif
 /* Tokens.  */
@@ -144,6 +150,12 @@
 #define ASSIGN 306
 #define COMP_ASSIGN_ADD 307
 #define EOL 308
+#define LEFT_PAREN 309
+#define RIGHT_PAREN 310
+#define LEFT_CURLY_BRACE 311
+#define RIGHT_CURLY_BRACE 312
+#define LEFT_BRACE 313
+#define RIGHT_BRACE 314
 
 
 
