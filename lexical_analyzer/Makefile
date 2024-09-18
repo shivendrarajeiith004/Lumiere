@@ -3,7 +3,7 @@
 
 # Compile the lexer and parser
 
-INPUT_FILE = testCase.txt
+INPUT_FILE = testCase2.txt
 
 # Build the executable
 all: lum

@@ -1,14 +1,14 @@
-/* A Bison parser, made by GNU Bison 2.3.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
-/* Skeleton interface for Bison's Yacc-like parsers in C
+/* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
+   Inc.
 
-   This program is free software; you can redistribute it and/or modify
+   This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,9 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -33,79 +31,101 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Tokens.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
+
+#ifndef YY_YY_Y_TAB_H_INCLUDED
+# define YY_YY_Y_TAB_H_INCLUDED
+/* Debug traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+#if YYDEBUG
+extern int yydebug;
+#endif
+
+/* Token kinds.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
-   enum yytokentype {
-     INTEGER = 258,
-     DOUBLE = 259,
-     STRING_VALUE = 260,
-     BOOL_VALUE = 261,
-     INT = 262,
-     FLOAT = 263,
-     CHAR = 264,
-     BOOLEAN = 265,
-     STRING = 266,
-     VECTOR = 267,
-     CLUSTER = 268,
-     VOID = 269,
-     BODY = 270,
-     BASIC = 271,
-     FORCE = 272,
-     IF = 273,
-     ELSE = 274,
-     CHECK_UNTIL = 275,
-     BREAK = 276,
-     CONTINUE = 277,
-     FIX = 278,
-     USE = 279,
-     HARDWARE = 280,
-     GPU = 281,
-     CPU = 282,
-     OS = 283,
-     RETURN = 284,
-     TRY = 285,
-     CATCH = 286,
-     TYPEOF = 287,
-     CLASS = 288,
-     EXTENDS = 289,
-     INHERITS = 290,
-     HIDDEN = 291,
-     DEG = 292,
-     ADD_OP = 293,
-     SUB_OP = 294,
-     DIV_OP = 295,
-     MULT_OP = 296,
-     POW_OP = 297,
-     MOD_OP = 298,
-     ABS_OP = 299,
-     COMP_ASSIGN_DIV = 300,
-     COMP_ASSIGN_SUBTRACT = 301,
-     COMP_ASSIGN_MUL = 302,
-     LESS_THAN = 303,
-     LESS_THAN_EQ = 304,
-     GREAT_THAN = 305,
-     GREAT_THAN_EQ = 306,
-     VAR = 307,
-     ASSIGN = 308,
-     COMP_ASSIGN_ADD = 309,
-     EOL = 310,
-     LEFT_PAREN = 311,
-     RIGHT_PAREN = 312,
-     LEFT_CURLY_BRACE = 313,
-     RIGHT_CURLY_BRACE = 314,
-     LEFT_BRACE = 315,
-     RIGHT_BRACE = 316,
-     MAIN = 317,
-     SINGLE_LINE_COMMENT = 318,
-     MULTI_LINE_COMMENT = 319,
-     CONST = 320,
-     MASS = 321
-   };
+  enum yytokentype
+  {
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    INTEGER = 258,                 /* INTEGER  */
+    DOUBLE = 259,                  /* DOUBLE  */
+    STRING_VALUE = 260,            /* STRING_VALUE  */
+    BOOL_VALUE = 261,              /* BOOL_VALUE  */
+    INT = 262,                     /* INT  */
+    FLOAT = 263,                   /* FLOAT  */
+    CHAR = 264,                    /* CHAR  */
+    BOOLEAN = 265,                 /* BOOLEAN  */
+    STRING = 266,                  /* STRING  */
+    VECTOR = 267,                  /* VECTOR  */
+    CLUSTER = 268,                 /* CLUSTER  */
+    VOID = 269,                    /* VOID  */
+    BODY = 270,                    /* BODY  */
+    BASIC = 271,                   /* BASIC  */
+    FORCE = 272,                   /* FORCE  */
+    IF = 273,                      /* IF  */
+    ELSE = 274,                    /* ELSE  */
+    CHECK_UNTIL = 275,             /* CHECK_UNTIL  */
+    BREAK = 276,                   /* BREAK  */
+    CONTINUE = 277,                /* CONTINUE  */
+    FIX = 278,                     /* FIX  */
+    USE = 279,                     /* USE  */
+    HARDWARE = 280,                /* HARDWARE  */
+    GPU = 281,                     /* GPU  */
+    CPU = 282,                     /* CPU  */
+    OS = 283,                      /* OS  */
+    RETURN = 284,                  /* RETURN  */
+    TRY = 285,                     /* TRY  */
+    CATCH = 286,                   /* CATCH  */
+    TYPEOF = 287,                  /* TYPEOF  */
+    CLASS = 288,                   /* CLASS  */
+    EXTENDS = 289,                 /* EXTENDS  */
+    INHERITS = 290,                /* INHERITS  */
+    HIDDEN = 291,                  /* HIDDEN  */
+    DEG = 292,                     /* DEG  */
+    ADD_OP = 293,                  /* ADD_OP  */
+    SUB_OP = 294,                  /* SUB_OP  */
+    DIV_OP = 295,                  /* DIV_OP  */
+    MULT_OP = 296,                 /* MULT_OP  */
+    POW_OP = 297,                  /* POW_OP  */
+    MOD_OP = 298,                  /* MOD_OP  */
+    ABS_OP = 299,                  /* ABS_OP  */
+    COMP_ASSIGN_DIV = 300,         /* COMP_ASSIGN_DIV  */
+    COMP_ASSIGN_SUBTRACT = 301,    /* COMP_ASSIGN_SUBTRACT  */
+    COMP_ASSIGN_MUL = 302,         /* COMP_ASSIGN_MUL  */
+    LESS_THAN = 303,               /* LESS_THAN  */
+    LESS_THAN_EQ = 304,            /* LESS_THAN_EQ  */
+    GREAT_THAN = 305,              /* GREAT_THAN  */
+    GREAT_THAN_EQ = 306,           /* GREAT_THAN_EQ  */
+    VAR = 307,                     /* VAR  */
+    ASSIGN = 308,                  /* ASSIGN  */
+    COMP_ASSIGN_ADD = 309,         /* COMP_ASSIGN_ADD  */
+    EOL = 310,                     /* EOL  */
+    LEFT_PAREN = 311,              /* LEFT_PAREN  */
+    RIGHT_PAREN = 312,             /* RIGHT_PAREN  */
+    LEFT_CURLY_BRACE = 313,        /* LEFT_CURLY_BRACE  */
+    RIGHT_CURLY_BRACE = 314,       /* RIGHT_CURLY_BRACE  */
+    LEFT_BRACE = 315,              /* LEFT_BRACE  */
+    RIGHT_BRACE = 316,             /* RIGHT_BRACE  */
+    MAIN = 317,                    /* MAIN  */
+    SINGLE_LINE_COMMENT = 318,     /* SINGLE_LINE_COMMENT  */
+    MULTI_LINE_COMMENT = 319,      /* MULTI_LINE_COMMENT  */
+    CONST = 320,                   /* CONST  */
+    MASS = 321                     /* MASS  */
+  };
+  typedef enum yytokentype yytoken_kind_t;
 #endif
-/* Tokens.  */
+/* Token kinds.  */
+#define YYEMPTY -2
+#define YYEOF 0
+#define YYerror 256
+#define YYUNDEF 257
 #define INTEGER 258
 #define DOUBLE 259
 #define STRING_VALUE 260
@@ -171,24 +191,29 @@
 #define CONST 320
 #define MASS 321
 
-
-
-
+/* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
-#line 11 "parser.y"
+union YYSTYPE
 {
+#line 11 "parser.y"
+
     int intval;
     float floatval;
     char * stringval;
-}
-/* Line 1529 of yacc.c.  */
-#line 187 "y.tab.h"
-	YYSTYPE;
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
-# define YYSTYPE_IS_DECLARED 1
+
+#line 205 "y.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
 #endif
+
 
 extern YYSTYPE yylval;
 
+
+int yyparse (void);
+
+
+#endif /* !YY_YY_Y_TAB_H_INCLUDED  */

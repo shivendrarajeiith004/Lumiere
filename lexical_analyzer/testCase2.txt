@@ -1,0 +1,41 @@
+int _x1_ = 42; vec _data_vec = <42>; 
+string _randomStr = "example"; 
+/~ Another multi
+line comment 
+goes here ~/
+float calculate_45(){
+    float _val = 21.3;
+    return _val;
+}
+~ This is a single line comment 
+bool _flagCheck(){
+    print("Flag is set");
+}
+
+int _123abc = 5; vec __vecList = <5>; 
+string nameVar = "variableName"; 
+/~ Multi-line
+comment starts ~/
+double area_of_circle(){
+    double pi_value = 3.14159;
+    return pi_value;
+}
+~ Single line comment
+void display_text(){
+    print("Displaying text");
+}
+
+int var_000 = 100; vec __counter = <100>;
+string _str_new_ = "testString"; 
+/~ Multi-line
+comments here ~/
+int add_two_nums(){
+    int a_1 = 5;
+    int b_2 = 10;
+    return a_1 + b_2;
+}
+~ This is another single line comment
+char first_char(){
+    char letter = 'A';
+    return letter;
+}
