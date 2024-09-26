@@ -8,9 +8,16 @@ int addtoken(char *s,char*token_value);
 
 %}
 
+
+%union {
+    int intval;
+    float floatval;
+    char * stringval;
+}
+
 %token INTEGER
-%token  DOUBLE 
-%token STRING_VALUE,BOOL_VALUE
+%token DOUBLE 
+%token STRING_VALUE BOOL_VALUE
 %token INT FLOAT CHAR BOOLEAN STRING VECTOR CLUSTER VOID
 %token BODY BASIC FORCE IF ELSE CHECK_UNTIL BREAK CONTINUE FIX USE HARDWARE
 %token GPU CPU OS RETURN TRY CATCH TYPEOF CLASS EXTENDS INHERITS HIDDEN DEG
@@ -20,3 +27,10 @@ int addtoken(char *s,char*token_value);
 %token RIGHT_PAREN  LEFT_CURLY_BRACE RIGHT_CURLY_BRACE LEFT_BRACE RIGHT_BRACE
 %token MAIN SINGLE_LINE_COMMENT MULTI_LINE_COMMENT CONST MASS
 %%
+%%
+void yyerror(char *s) {
+  printf("%s\n", s);
+}
+int main() {
+yyparse();
+}

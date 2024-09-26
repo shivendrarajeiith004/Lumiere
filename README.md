@@ -12,3 +12,11 @@ This repository will be consisting of Compilers-II Project made with collaberati
   5.System Testers :
       a. Shaswot Paudel {CS24BTKMU11003}
       b. Dheeraj Dudekula {CS22BTECH11019}
+### Run parser
+Please Put your inputs in "testCase.txt"
+
+Then in terminal Execute : make run
+`make lum`
+
+To make a clean start:
+`make clean`

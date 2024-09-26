@@ -8,8 +8,8 @@ INPUT_FILE = testCase2.txt
 # Build the executable
 
 lum: 
-	lex lumiere.l
-	yacc -d parser.y
+	lex lexical_analyzer/lumiere.l
+	yacc -d parser/parser.y
 	gcc -o lumiere lex.yy.c y.tab.c -ll
 
 run: lum
