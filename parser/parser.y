@@ -20,3 +20,40 @@ int addtoken(char *s,char*token_value);
 %token RIGHT_PAREN  LEFT_CURLY_BRACE RIGHT_CURLY_BRACE LEFT_BRACE RIGHT_BRACE
 %token MAIN SINGLE_LINE_COMMENT MULTI_LINE_COMMENT CONST MASS
 %%
+
+program : program  loop |
+
+loop : CHECK_UNTIL "(" ASSIGNMENT_STATEMENT ";" CONDITIONAL_STATEMENT ";" Ternary_Assi | Unary_Assignment  ")" 
+
+
+loop : 
+
+
+%%
+
+
+int main(int argc, char **argv) {
+    
+    smt_file = fopen("statement.txt", "w");
+    if (!smt_file) {
+        fprintf(stderr, "Could not open smt.txt for writing.\n");
+        return 1;
+    }
+    
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <input_file>\n", argv[0]);
+        return 1;
+    }
+
+    yyin = fopen(argv[1], "r");
+    if (yyin == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    do {
+        yyparse();  
+    } while (!feof(yyin));
+    fclose(smt_file);
+    fclose(yyin); 
+}
