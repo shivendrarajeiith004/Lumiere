@@ -6,7 +6,6 @@
 INPUT_FILE = testCase2.txt
 
 # Build the executable
-all: lum
 
 lum: 
 	lex ./lexical_analyzer/lumiere.l

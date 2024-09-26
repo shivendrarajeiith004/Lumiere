@@ -8,9 +8,16 @@ int addtoken(char *s,char*token_value);
 
 %}
 
+
+%union {
+    int intval;
+    float floatval;
+    char * stringval;
+}
+
 %token INTEGER
-%token  DOUBLE 
-%token STRING_VALUE,BOOL_VALUE
+%token DOUBLE 
+%token STRING_VALUE BOOL_VALUE
 %token INT FLOAT CHAR BOOLEAN STRING VECTOR CLUSTER VOID
 %token BODY BASIC FORCE IF ELSE CHECK_UNTIL BREAK CONTINUE FIX USE HARDWARE
 %token GPU CPU OS RETURN TRY CATCH TYPEOF CLASS EXTENDS INHERITS HIDDEN DEG
@@ -32,28 +39,9 @@ loop :
 %%
 
 
-int main(int argc, char **argv) {
-    
-    smt_file = fopen("statement.txt", "w");
-    if (!smt_file) {
-        fprintf(stderr, "Could not open smt.txt for writing.\n");
-        return 1;
-    }
-    
-    if (argc < 2) {
-        fprintf(stderr, "Usage: %s <input_file>\n", argv[0]);
-        return 1;
-    }
-
-    yyin = fopen(argv[1], "r");
-    if (yyin == NULL) {
-        perror("Error opening file");
-        return 1;
-    }
-
-    do {
-        yyparse();  
-    } while (!feof(yyin));
-    fclose(smt_file);
-    fclose(yyin); 
+void yyerror(char *s) {
+  printf("%s\n", s);
+}
+int main() {
+yyparse();
 }
