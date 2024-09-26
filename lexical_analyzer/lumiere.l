@@ -9,39 +9,41 @@ number    [0-9]
 %}
 
 %%
-[0-9]+ {  yylval.intval= atoi(yytext); return INTEGER; };
-([0-9]+\.[0-9]+) { yylval.floatval= atof(yytext); return DOUBLE;};
+[0-9]+ {  yylval.intval= atoi(yytext); return INTEGER_VALUE; };
+([0-9]+\.[0-9]+) { yylval.floatval= atof(yytext); return DOUBLE_VALUE;};
 
 \".*\" {yylval.stringval = yytext; return STRING_VALUE;}
 TRUE {yylval.stringval = yytext; return BOOL_VALUE;} 
 FALSE { return BOOL_VALUE;}
-const {return CONST;};
-int { return INT;};
-float { return FLOAT;};
-char { return CHAR;};
-boolean { return BOOLEAN;};
-string { return STRING;};
-vec { return VECTOR;};
-cluster { return CLUSTER;};
+const {return CONST_TYPE;};
+int { return INT_TYPE;};
+float { return FLOAT_TYPE;};
+char { return CHAR_TYPE;};
+boolean { return BOOLEAN_TYPE;};
+string { return STRING_TYPE;};
+vec { return VECTOR_TYPE;};
+cluster { return CLUSTER_TYPE;};
 void { return VOID;};
+
 \(  {return LEFT_PAREN;}
 \)  {return RIGHT_PAREN;}
 \{  {return LEFT_CURLY_BRACE;}
 \}  {return RIGHT_CURLY_BRACE;}
 \[  {return LEFT_BRACE;}
 \]  {return RIGHT_BRACE;}
+
 body { return BODY;};
 basic { return BASIC;};
 force { return FORCE;};
 mass {return MASS;};
-
-
 sim {return MAIN;};
+
 if { return IF;};
 else { return ELSE;};
 check_until { return CHECK_UNTIL;};
 break { return BREAK;};
 continue { return CONTINUE;};
+
 __FIX__ { return FIX;};
 __USE__ { return USE;};
 __HARDWARE__ { return HARDWARE;};
@@ -59,13 +61,14 @@ extends { return EXTENDS;};
 inherit { return INHERITS;};
 hidden { return HIDDEN;};
 deg {  return DEG;}
+
 \+ { return ADD_OP;}
 - { return SUB_OP;}
 \/ { return DIV_OP;}
 \* { return MULT_OP;}
-\^ { return POW_OP;}
+\^ { return XOR_POW_OP;}
 % { return MOD_OP;}
-\| { return ABS_OP;}
+\| { return PIPE_OP;}
 \+= { return COMP_ASSIGN_ADD;}
 -= { return COMP_ASSIGN_SUBTRACT;}
 \*= { return COMP_ASSIGN_MUL;}
@@ -79,8 +82,9 @@ deg {  return DEG;}
 "/~"([^~]|\~[^/])*"~/"  { return MULTI_LINE_COMMENT; };
 [ \t]+ {  /* Ignore whitespace */ }
 [\n] {return EOL;}
+(_)*({alphabet})({alphabet}|{number}|(_))*  { return IDENTIFIER;}
+\& {return AND_OP;}
 ; {return EOL;}
-(_)*({alphabet})({alphabet}|{number}|(_))*  { return VAR;}
 
 . { };
 %%
