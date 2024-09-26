@@ -38,6 +38,7 @@ mass {return MASS;};
 
 sim {return MAIN;};
 if { return IF;};
+elif {return ELSE_IF;};
 else { return ELSE;};
 check_until { return CHECK_UNTIL;};
 break { return BREAK;};
