@@ -9,11 +9,11 @@ number    [0-9]
 %}
 
 %%
-[0-9]+ {  yylval.intval= atoi(yytext); return INTEGER; };
-([0-9]+\.[0-9]+) { yylval.floatval= atof(yytext); return DOUBLE;};
+[0-9]+ {  yylval.intval= atoi(yytext); return INTEGER_VALUE; };
+([0-9]+\.[0-9]+) { yylval.floatval= atof(yytext); return DOUBLE_VALUE;};
 
 \".*\" {yylval.stringval = yytext; return STRING_VALUE;}
-TRUE {yylval.stringval = yytext; return BOOL_VALUE;} 
+TRUE { yylval.stringval = yytext; return BOOL_VALUE;} 
 FALSE { return BOOL_VALUE;}
 const {return CONST;};
 int { return INT;};
@@ -24,12 +24,12 @@ string { return STRING;};
 vec { return VECTOR;};
 cluster { return CLUSTER;};
 void { return VOID;};
-\(  {return LEFT_PAREN;}
-\)  {return RIGHT_PAREN;}
-\{  {return LEFT_CURLY_BRACE;}
-\}  {return RIGHT_CURLY_BRACE;}
-\[  {return LEFT_BRACE;}
-\]  {return RIGHT_BRACE;}
+\(  { return LEFT_PAREN;}
+\)  { return RIGHT_PAREN;}
+\{   { return LEFT_CURLY_BRACE;}
+\}  { return RIGHT_CURLY_BRACE;}
+\[  { return LEFT_BRACE;}
+\]  { return RIGHT_BRACE;}
 body { return BODY;};
 basic { return BASIC;};
 force { return FORCE;};
@@ -39,6 +39,7 @@ mass {return MASS;};
 sim {return MAIN;};
 if { return IF;};
 else { return ELSE;};
+elif  {return ELSE_IF;}
 check_until { return CHECK_UNTIL;};
 break { return BREAK;};
 continue { return CONTINUE;};
@@ -78,8 +79,8 @@ deg {  return DEG;}
 "~".*\n            { return SINGLE_LINE_COMMENT ;};
 "/~"([^~]|\~[^/])*"~/"  { return MULTI_LINE_COMMENT; };
 [ \t]+ {  /* Ignore whitespace */ }
-[\n] {return EOL;}
-; {return EOL;}
+[\n] { return EOL;}
+; {  return EOL;}
 (_)*({alphabet})({alphabet}|{number}|(_))*  { return VAR;}
 
 . { };
