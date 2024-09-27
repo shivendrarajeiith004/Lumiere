@@ -24,7 +24,7 @@ int yylex();
 %token GREAT_THAN GREAT_THAN_EQ VAR ASSIGN COMP_ASSIGN_ADD EOL LEFT_PAREN   EQUAL_TO NOT_EQUAL_TO
 %token RIGHT_PAREN  LEFT_CURLY_BRACE RIGHT_CURLY_BRACE LEFT_BRACE RIGHT_BRACE
 %token MAIN SINGLE_LINE_COMMENT MULTI_LINE_COMMENT CONST MASS ELSE_IF  
-%token P COMMA
+%token COMMA
 
 %left OR_OP
 %left AND_OP
@@ -67,10 +67,10 @@ INITIAL_CONDITION :STATEMENT STATEMENT EXPRESSION  { printf("INIT_CONDITION\n");
                   ;
 
 PREPROCESSOR_DECLERATION:
-    CPU { printf("CPU reached\n"); }
+    CPU VAR { printf("CPU reached\n"); }
     | USE LIB_MECH { printf("Lib_mech reached\n"); }
-    | MAC { printf("MAC used\n"); }
-    | GPU { printf("GPU reached\n"); }
+    | MAC VAR{ printf("MAC used\n"); }
+    | GPU  VAR{ printf("GPU reached\n"); }
     | FIX VAR  CONSTANT   {printf("Setting value");}
     ;
 
