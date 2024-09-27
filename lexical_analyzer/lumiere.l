@@ -48,7 +48,9 @@ __USE__ { return USE;};
 __HARDWARE__ { return HARDWARE;};
 __GPU__ { return GPU;};
 __CPU__ { return CPU;};
+__MAC__ { return MAC;};
 __OS__ { return OS;};
+lib.mech { return LIB_MECH;};
 
 fix { return FIX;};
 return { return RETURN;};
@@ -88,8 +90,8 @@ deg {  return DEG;}
 [ \t]+ {  /* Ignore whitespace */ }
 [\n] { return EOL;}
 ; {return EOL;};
+, {return COMMA;}
 (_)*({alphabet})({alphabet}|{number}|(_))*  { return VAR;}
-
 . { };
 %%
 
