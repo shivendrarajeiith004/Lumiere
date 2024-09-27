@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+extern FILE *yyin; 
 void yyerror(char *);
 int yylex();
 %}
@@ -193,10 +193,30 @@ ASSIGNMENT:
 void yyerror(char *s) {
     printf("Error: %s\n", s);
 }
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        printf("Give Command-line Argument as Following: %s <input-file>\n", argv[0]);
+        return 1;
+    }
 
-int main() {
+    FILE *inputFile = fopen(argv[1], "r");
+    if (!inputFile) {
+        perror("File Opening Failed");
+        return 1;
+    }
+
+
+    yyin = inputFile;
+
+    yyparse();
+
+    fclose(inputFile);
+    return 0;
+}
+
+/*int main() {
     while (1) {
         yyparse();
     }
     return 0;
-}
+}*/
