@@ -78,19 +78,19 @@ deg {  return DEG;}
 \<= { return LESS_THAN_EQ;}
 \> { return GREAT_THAN;}
 \>= { return GREAT_THAN_EQ;}
-
+","  {return COMMA;}
 \&& { return AND_OP;}
 \|\| { return OR_OP;}
 \! { return NOT_OP;}
 == { return EQUAL_TO;}
 != { return NOT_EQUAL_TO;}
 
-"~".*\n            { return SINGLE_LINE_COMMENT ;};
-"/~"([^~]|\~[^/])*"~/"  { return MULTI_LINE_COMMENT; };
+"~".*\n            { return SINGLE_LINE_COMMENT ;}
+"/~"([^~]|\~[^/])*"~/"  { return MULTI_LINE_COMMENT; }
 [ \t]+ {  /* Ignore whitespace */ }
 [\n] { return EOL;}
-; {return EOL;};
-, {return COMMA;}
+; {return EOL;}
+',' {return COMMA;}
 (_)*({alphabet})({alphabet}|{number}|(_))*  { return VAR;}
 . { };
 %%

@@ -44,6 +44,8 @@ STATEMENT: CONDITIONAL_STATEMENT EOL
          | LOOP_STATEMENT EOL
          | PREPROCESSOR_DECLERATION
          | FUNCTION_DECLERATION
+         |DECLARATION EOL
+         |ASSIGNMENT EOL
          | EOL
          ;
           
@@ -149,6 +151,36 @@ CONSTANT : INTEGER_VALUE
          | STRING_VALUE
          | BOOL_VALUE
          ;
+DECLARATION:
+      INT var_list   {printf("DECLARATION varlist\n");}                 // DECLARATION with type 'int'
+      |FLOAT var_list
+      |VECTOR var_list
+      |BOOLEAN var_list
+      |CHAR var_list
+      |STRING var_list {printf("DECLARATION varlist\n");}
+      |CLUSTER var_list
+    ;
+VEC_DATA_TYPES: DOUBLE_VALUE |INTEGER_VALUE |VAR;
+var_list:
+      VAR   {printf("JUst Declared");}                          // Single variable
+    | VAR COMMA var_list {printf("VAR COMMA var_list\n");}             // Multiple variables separated by commas
+    | VAR ASSIGN INTEGER_VALUE {printf("VAR ASSIGN INTEGER\n");}             // Variable initialized with an integer value
+    | VAR ASSIGN STRING_VALUE {printf("VAR ASSIGN STRING_VALUE\n");}
+    | VAR ASSIGN DOUBLE_VALUE {printf("VAR ASSIGN STRING_VALUE\n");}
+    | VAR ASSIGN DOUBLE_VALUE COMMA var_list {printf("VAR ASSIGN STRING_VALUE\n");}
+    | VAR ASSIGN INTEGER_VALUE COMMA var_list {printf("VAR ASSIGN INTEGER COMMA var_list\n");} // Initialized variable followed by others
+    | VAR LEFT_BRACE INTEGER_VALUE RIGHT_BRACE {printf("Array DECLARATION\n");}  // Array DECLARATION
+    | VAR LEFT_BRACE INTEGER_VALUE RIGHT_BRACE COMMA var_list {printf("Array and Variables DECLARATION\n");} // Array and variable list
+    | VAR LEFT_BRACE INTEGER_VALUE RIGHT_BRACE ASSIGN INTEGER_VALUE {printf("Array DECLARATION with Initialization\n");} // Array initialized
+    | VAR ASSIGN LESS_THAN VEC_DATA_TYPES COMMA VEC_DATA_TYPES GREAT_THAN {printf("Vec DECLARATION with Initialization\n");}
+    | VAR ASSIGN LESS_THAN VEC_DATA_TYPES COMMA VEC_DATA_TYPES GREAT_THAN COMMA var_list{printf(" Series of Vec DECLARATION with Initialization\n");}
+
+    ;
+
+ASSIGNMENT:
+     VAR ASSIGN INTEGER_VALUE {printf("VAR ASSIGN INTEGER\n");}  
+    |VAR ASSIGN STRING_VALUE             // Simple assignment statement
+    ;
 
 
 %%
