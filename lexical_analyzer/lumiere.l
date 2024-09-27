@@ -9,8 +9,8 @@ number    [0-9]
 %}
 
 %%
-[0-9]+ {  yylval.intval= atoi(yytext); return INTEGER; };
-([0-9]+\.[0-9]+) { yylval.floatval= atof(yytext); return DOUBLE;};
+[0-9]+ {  yylval.intval= atoi(yytext); return INTEGER_VALUE; };
+([0-9]+\.[0-9]+) { yylval.floatval= atof(yytext); return DOUBLE_VALUE;};
 
 \".*\" {yylval.stringval = yytext; return STRING_VALUE;}
 TRUE {yylval.stringval = yytext; return BOOL_VALUE;} 
@@ -47,7 +47,9 @@ __USE__ { return USE;};
 __HARDWARE__ { return HARDWARE;};
 __GPU__ { return GPU;};
 __CPU__ { return CPU;};
+__MAC__ { return MAC;};
 __OS__ { return OS;};
+lib.mech { return LIB_MECH;};
 
 fix { return FIX;};
 return { return RETURN;};
@@ -78,10 +80,10 @@ deg {  return DEG;}
 "~".*\n            { return SINGLE_LINE_COMMENT ;};
 "/~"([^~]|\~[^/])*"~/"  { return MULTI_LINE_COMMENT; };
 [ \t]+ {  /* Ignore whitespace */ }
-[\n] {return EOL;}
-; {return EOL;}
+[\n] {}
+; {}
+, {return COMMA;}
 (_)*({alphabet})({alphabet}|{number}|(_))*  { return VAR;}
-
 . { };
 %%
 
