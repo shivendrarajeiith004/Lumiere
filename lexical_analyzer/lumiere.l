@@ -86,8 +86,8 @@ deg {  return DEG;}
 "~".*\n            { return SINGLE_LINE_COMMENT ;};
 "/~"([^~]|\~[^/])*"~/"  { return MULTI_LINE_COMMENT; };
 [ \t]+ {  /* Ignore whitespace */ }
-[\n] {return EOL;}
-; {return EOL;}
+[\n] { return EOL;}
+; {return EOL;};
 (_)*({alphabet})({alphabet}|{number}|(_))*  { return VAR;}
 
 . { };

@@ -1,0 +1,446 @@
+Terminals unused in grammar
+
+    DOUBLE
+    STRING_VALUE
+    BOOL_VALUE
+    FLOAT
+    CHAR
+    BOOLEAN
+    STRING
+    VECTOR
+    CLUSTER
+    VOID
+    BODY
+    BASIC
+    FORCE
+    IF
+    ELSE
+    BREAK
+    CONTINUE
+    FIX
+    USE
+    HARDWARE
+    GPU
+    CPU
+    OS
+    RETURN
+    TRY
+    CATCH
+    TYPEOF
+    CLASS
+    EXTENDS
+    INHERITS
+    HIDDEN
+    DEG
+    ADD_OP
+    SUB_OP
+    DIV_OP
+    MULT_OP
+    POW_OP
+    MOD_OP
+    ABS_OP
+    COMP_ASSIGN_DIV
+    COMP_ASSIGN_SUBTRACT
+    COMP_ASSIGN_MUL
+    LESS_THAN
+    LESS_THAN_EQ
+    GREAT_THAN
+    GREAT_THAN_EQ
+    COMP_ASSIGN_ADD
+    EOL
+    LEFT_BRACE
+    RIGHT_BRACE
+    MAIN
+    SINGLE_LINE_COMMENT
+    MULTI_LINE_COMMENT
+    CONST
+    MASS
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: program STATEMENT
+    2        | ε
+
+    3 STATEMENT: LOOP_STATEMENT
+    4          | ASSIGNMENT_STATEMENT
+    5          | DECLARATION_STATEMENT
+
+    6 STATEMENT_LIST: STATEMENT
+    7               | STATEMENT_LIST ',' STATEMENT
+
+    8 DECLARATION_STATEMENT: INT VAR
+
+    9 LOOP_STATEMENT: CHECK_UNTIL LEFT_PAREN INITIAL_CONDITION RIGHT_PAREN LEFT_CURLY_BRACE STATEMENT_LIST RIGHT_CURLY_BRACE
+
+   10 INITIAL_CONDITION: ASSIGNMENT_STATEMENT SEMICOLON ASSIGNMENT_STATEMENT SEMICOLON ASSIGNMENT_STATEMENT
+   11                  | SEMICOLON SEMICOLON SEMICOLON
+   12                  | INTEGER
+   13                  | VAR
+
+   14 ASSIGNMENT_STATEMENT: VAR ASSIGN INTEGER
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    ',' (44) 7
+    error (256)
+    INTEGER (258) 12 14
+    DOUBLE (259)
+    STRING_VALUE (260)
+    BOOL_VALUE (261)
+    INT (262) 8
+    FLOAT (263)
+    CHAR (264)
+    BOOLEAN (265)
+    STRING (266)
+    VECTOR (267)
+    CLUSTER (268)
+    VOID (269)
+    BODY (270)
+    BASIC (271)
+    FORCE (272)
+    IF (273)
+    ELSE (274)
+    CHECK_UNTIL (275) 9
+    BREAK (276)
+    CONTINUE (277)
+    FIX (278)
+    USE (279)
+    HARDWARE (280)
+    GPU (281)
+    CPU (282)
+    OS (283)
+    RETURN (284)
+    TRY (285)
+    CATCH (286)
+    TYPEOF (287)
+    CLASS (288)
+    EXTENDS (289)
+    INHERITS (290)
+    HIDDEN (291)
+    DEG (292)
+    ADD_OP (293)
+    SUB_OP (294)
+    DIV_OP (295)
+    MULT_OP (296)
+    POW_OP (297)
+    MOD_OP (298)
+    ABS_OP (299)
+    COMP_ASSIGN_DIV (300)
+    COMP_ASSIGN_SUBTRACT (301)
+    COMP_ASSIGN_MUL (302)
+    LESS_THAN (303)
+    LESS_THAN_EQ (304)
+    GREAT_THAN (305)
+    GREAT_THAN_EQ (306)
+    VAR (307) 8 13 14
+    ASSIGN (308) 14
+    COMP_ASSIGN_ADD (309)
+    EOL (310)
+    LEFT_PAREN (311) 9
+    RIGHT_PAREN (312) 9
+    LEFT_CURLY_BRACE (313) 9
+    RIGHT_CURLY_BRACE (314) 9
+    LEFT_BRACE (315)
+    RIGHT_BRACE (316)
+    MAIN (317)
+    SINGLE_LINE_COMMENT (318)
+    MULTI_LINE_COMMENT (319)
+    CONST (320)
+    MASS (321)
+    SEMICOLON (322) 10 11
+
+
+Nonterminals, with rules where they appear
+
+    $accept (69)
+        on left: 0
+    program (70)
+        on left: 1 2
+        on right: 0 1
+    STATEMENT (71)
+        on left: 3 4 5
+        on right: 1 6 7
+    STATEMENT_LIST (72)
+        on left: 6 7
+        on right: 7 9
+    DECLARATION_STATEMENT (73)
+        on left: 8
+        on right: 5
+    LOOP_STATEMENT (74)
+        on left: 9
+        on right: 3
+    INITIAL_CONDITION (75)
+        on left: 10 11 12 13
+        on right: 9
+    ASSIGNMENT_STATEMENT (76)
+        on left: 14
+        on right: 4 10
+
+
+State 0
+
+    0 $accept: • program $end
+
+    $default  reduce using rule 2 (program)
+
+    program  go to state 1
+
+
+State 1
+
+    0 $accept: program • $end
+    1 program: program • STATEMENT
+
+    $end         shift, and go to state 2
+    INT          shift, and go to state 3
+    CHECK_UNTIL  shift, and go to state 4
+    VAR          shift, and go to state 5
+
+    STATEMENT              go to state 6
+    DECLARATION_STATEMENT  go to state 7
+    LOOP_STATEMENT         go to state 8
+    ASSIGNMENT_STATEMENT   go to state 9
+
+
+State 2
+
+    0 $accept: program $end •
+
+    $default  accept
+
+
+State 3
+
+    8 DECLARATION_STATEMENT: INT • VAR
+
+    VAR  shift, and go to state 10
+
+
+State 4
+
+    9 LOOP_STATEMENT: CHECK_UNTIL • LEFT_PAREN INITIAL_CONDITION RIGHT_PAREN LEFT_CURLY_BRACE STATEMENT_LIST RIGHT_CURLY_BRACE
+
+    LEFT_PAREN  shift, and go to state 11
+
+
+State 5
+
+   14 ASSIGNMENT_STATEMENT: VAR • ASSIGN INTEGER
+
+    ASSIGN  shift, and go to state 12
+
+
+State 6
+
+    1 program: program STATEMENT •
+
+    $default  reduce using rule 1 (program)
+
+
+State 7
+
+    5 STATEMENT: DECLARATION_STATEMENT •
+
+    $default  reduce using rule 5 (STATEMENT)
+
+
+State 8
+
+    3 STATEMENT: LOOP_STATEMENT •
+
+    $default  reduce using rule 3 (STATEMENT)
+
+
+State 9
+
+    4 STATEMENT: ASSIGNMENT_STATEMENT •
+
+    $default  reduce using rule 4 (STATEMENT)
+
+
+State 10
+
+    8 DECLARATION_STATEMENT: INT VAR •
+
+    $default  reduce using rule 8 (DECLARATION_STATEMENT)
+
+
+State 11
+
+    9 LOOP_STATEMENT: CHECK_UNTIL LEFT_PAREN • INITIAL_CONDITION RIGHT_PAREN LEFT_CURLY_BRACE STATEMENT_LIST RIGHT_CURLY_BRACE
+
+    INTEGER    shift, and go to state 13
+    VAR        shift, and go to state 14
+    SEMICOLON  shift, and go to state 15
+
+    INITIAL_CONDITION     go to state 16
+    ASSIGNMENT_STATEMENT  go to state 17
+
+
+State 12
+
+   14 ASSIGNMENT_STATEMENT: VAR ASSIGN • INTEGER
+
+    INTEGER  shift, and go to state 18
+
+
+State 13
+
+   12 INITIAL_CONDITION: INTEGER •
+
+    $default  reduce using rule 12 (INITIAL_CONDITION)
+
+
+State 14
+
+   13 INITIAL_CONDITION: VAR •
+   14 ASSIGNMENT_STATEMENT: VAR • ASSIGN INTEGER
+
+    ASSIGN  shift, and go to state 12
+
+    $default  reduce using rule 13 (INITIAL_CONDITION)
+
+
+State 15
+
+   11 INITIAL_CONDITION: SEMICOLON • SEMICOLON SEMICOLON
+
+    SEMICOLON  shift, and go to state 19
+
+
+State 16
+
+    9 LOOP_STATEMENT: CHECK_UNTIL LEFT_PAREN INITIAL_CONDITION • RIGHT_PAREN LEFT_CURLY_BRACE STATEMENT_LIST RIGHT_CURLY_BRACE
+
+    RIGHT_PAREN  shift, and go to state 20
+
+
+State 17
+
+   10 INITIAL_CONDITION: ASSIGNMENT_STATEMENT • SEMICOLON ASSIGNMENT_STATEMENT SEMICOLON ASSIGNMENT_STATEMENT
+
+    SEMICOLON  shift, and go to state 21
+
+
+State 18
+
+   14 ASSIGNMENT_STATEMENT: VAR ASSIGN INTEGER •
+
+    $default  reduce using rule 14 (ASSIGNMENT_STATEMENT)
+
+
+State 19
+
+   11 INITIAL_CONDITION: SEMICOLON SEMICOLON • SEMICOLON
+
+    SEMICOLON  shift, and go to state 22
+
+
+State 20
+
+    9 LOOP_STATEMENT: CHECK_UNTIL LEFT_PAREN INITIAL_CONDITION RIGHT_PAREN • LEFT_CURLY_BRACE STATEMENT_LIST RIGHT_CURLY_BRACE
+
+    LEFT_CURLY_BRACE  shift, and go to state 23
+
+
+State 21
+
+   10 INITIAL_CONDITION: ASSIGNMENT_STATEMENT SEMICOLON • ASSIGNMENT_STATEMENT SEMICOLON ASSIGNMENT_STATEMENT
+
+    VAR  shift, and go to state 5
+
+    ASSIGNMENT_STATEMENT  go to state 24
+
+
+State 22
+
+   11 INITIAL_CONDITION: SEMICOLON SEMICOLON SEMICOLON •
+
+    $default  reduce using rule 11 (INITIAL_CONDITION)
+
+
+State 23
+
+    9 LOOP_STATEMENT: CHECK_UNTIL LEFT_PAREN INITIAL_CONDITION RIGHT_PAREN LEFT_CURLY_BRACE • STATEMENT_LIST RIGHT_CURLY_BRACE
+
+    INT          shift, and go to state 3
+    CHECK_UNTIL  shift, and go to state 4
+    VAR          shift, and go to state 5
+
+    STATEMENT              go to state 25
+    STATEMENT_LIST         go to state 26
+    DECLARATION_STATEMENT  go to state 7
+    LOOP_STATEMENT         go to state 8
+    ASSIGNMENT_STATEMENT   go to state 9
+
+
+State 24
+
+   10 INITIAL_CONDITION: ASSIGNMENT_STATEMENT SEMICOLON ASSIGNMENT_STATEMENT • SEMICOLON ASSIGNMENT_STATEMENT
+
+    SEMICOLON  shift, and go to state 27
+
+
+State 25
+
+    6 STATEMENT_LIST: STATEMENT •
+
+    $default  reduce using rule 6 (STATEMENT_LIST)
+
+
+State 26
+
+    7 STATEMENT_LIST: STATEMENT_LIST • ',' STATEMENT
+    9 LOOP_STATEMENT: CHECK_UNTIL LEFT_PAREN INITIAL_CONDITION RIGHT_PAREN LEFT_CURLY_BRACE STATEMENT_LIST • RIGHT_CURLY_BRACE
+
+    RIGHT_CURLY_BRACE  shift, and go to state 28
+    ','                shift, and go to state 29
+
+
+State 27
+
+   10 INITIAL_CONDITION: ASSIGNMENT_STATEMENT SEMICOLON ASSIGNMENT_STATEMENT SEMICOLON • ASSIGNMENT_STATEMENT
+
+    VAR  shift, and go to state 5
+
+    ASSIGNMENT_STATEMENT  go to state 30
+
+
+State 28
+
+    9 LOOP_STATEMENT: CHECK_UNTIL LEFT_PAREN INITIAL_CONDITION RIGHT_PAREN LEFT_CURLY_BRACE STATEMENT_LIST RIGHT_CURLY_BRACE •
+
+    $default  reduce using rule 9 (LOOP_STATEMENT)
+
+
+State 29
+
+    7 STATEMENT_LIST: STATEMENT_LIST ',' • STATEMENT
+
+    INT          shift, and go to state 3
+    CHECK_UNTIL  shift, and go to state 4
+    VAR          shift, and go to state 5
+
+    STATEMENT              go to state 31
+    DECLARATION_STATEMENT  go to state 7
+    LOOP_STATEMENT         go to state 8
+    ASSIGNMENT_STATEMENT   go to state 9
+
+
+State 30
+
+   10 INITIAL_CONDITION: ASSIGNMENT_STATEMENT SEMICOLON ASSIGNMENT_STATEMENT SEMICOLON ASSIGNMENT_STATEMENT •
+
+    $default  reduce using rule 10 (INITIAL_CONDITION)
+
+
+State 31
+
+    7 STATEMENT_LIST: STATEMENT_LIST ',' STATEMENT •
+
+    $default  reduce using rule 7 (STATEMENT_LIST)

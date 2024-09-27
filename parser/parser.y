@@ -14,6 +14,7 @@ int addtoken(char *s,char*token_value);
     char * stringval;
 }
 
+
 %token INTEGER_VALUE
 %token DOUBLE_VALUE 
 %token STRING_VALUE BOOL_VALUE
@@ -34,26 +35,39 @@ int addtoken(char *s,char*token_value);
 %left MULT_OP DIV_OP
 %right POW_OP
 
+
 %%
 
 CMPND_STATEMENT : CMPND_STATEMENT STATEMENT
                 |
                 ;
 STATEMENT: CONDITIONAL_STATEMENT EOL 
-         | EXPRESSION EOL {printf("Statement here\n");} 
+         | EXPRESSION EOL{printf("Statement here\n");} 
+         | LOOP_STATEMENT EOL
+         | EOL
          ;
           
 
 
-CONDITIONAL_STATEMENT:IF_STATEMENT {printf("If statement.\n");}
-                     |IF_STATEMENT ELSE_STATEMENT {printf("If  ELSE statement.\n");}
+CONDITIONAL_STATEMENT: IF_STATEMENT {printf("If statement.\n");}
+                     | IF_STATEMENT ELSE_STATEMENT {printf("If  ELSE statement.\n");}
                      | IF_STATEMENT ELSEIF_STATEMENT ELSE_STATEMENT {printf("If  ELSEIF ELSE statement.\n");};
-
+/* STATEMENTS */
 IF_STATEMENT:IF LEFT_PAREN BOOLEAN_EXP RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE ;
 
 ELSE_STATEMENT: ELSE LEFT_CURLY_BRACE STATEMENT RIGHT_CURLY_BRACE;
 
 ELSEIF_STATEMENT: ELSE_IF LEFT_PAREN BOOLEAN_EXP RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE;
+
+LOOP_STATEMENT  : CHECK_UNTIL LEFT_PAREN INITIAL_CONDITION RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE{printf("FOR STATEMENT\n");};
+
+INITIAL_CONDITION :STATEMENT STATEMENT EXPRESSION  { printf("INIT_CONDITION\n");}
+                  | STATEMENT STATEMENT {printf(" ; ; ");}
+                  | EXPRESSION {printf("empty CONDITION");}
+                  ;
+
+/* EXPRESSION */
+
 
 EXPRESSION : BOOLEAN_EXP  {printf("Relations here\n");}
            ;
