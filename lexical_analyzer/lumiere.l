@@ -61,6 +61,7 @@ class { return CLASS;};
 extends { return EXTENDS;};
 inherit { return INHERITS;};
 hidden { return HIDDEN;};
+public {return PUBLIC;};
 deg {  return DEG;}
 \+ { return ADD_OP;}
 - { return SUB_OP;}
@@ -89,6 +90,7 @@ deg {  return DEG;}
 "/~"([^~]|\~[^/])*"~/"  { return MULTI_LINE_COMMENT; }
 [ \t]+ {  /* Ignore whitespace */ }
 [\n] {}
+: {return COLON;}
 ; {return EOL;}
 ',' {return COMMA;}
 (_)*({alphabet})({alphabet}|{number}|(_))*  { return VAR;}

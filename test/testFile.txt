@@ -15,3 +15,7 @@ float a=10.1, b,c;
 int a=10, b,c;
 
 void sum(char a , char b ) { check_until(true) { if (true) { a + b ;}} }
+
+
+//class
+class A{hidden: int a; int b; int c; int a(int b, int c){int b;} public:int a; int b; int c; int a(int b, int c){int b;}}
