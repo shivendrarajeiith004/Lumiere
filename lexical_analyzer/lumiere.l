@@ -70,7 +70,7 @@ deg {  return DEG;}
 -= { return COMP_ASSIGN_SUBTRACT;}
 \*= { return COMP_ASSIGN_MUL;}
 \/= { return COMP_ASSIGN_DIV;}
-= { return ASSIGN;}
+"=" { return ASSIGN;}
 \< { return LESS_THAN;}
 \<= { return LESS_THAN_EQ;}
 \> { return GREAT_THAN;}
@@ -78,10 +78,10 @@ deg {  return DEG;}
 "~".*\n            { return SINGLE_LINE_COMMENT ;};
 "/~"([^~]|\~[^/])*"~/"  { return MULTI_LINE_COMMENT; };
 [ \t]+ {  /* Ignore whitespace */ }
-[\n] {return EOL;}
-; {return EOL;}
+[\n] {/*return EOL;*/}
+";" {return SEMICOLON;}
 (_)*({alphabet})({alphabet}|{number}|(_))*  { return VAR;}
-
+","  {return COMMA;}
 . { };
 %%
 
