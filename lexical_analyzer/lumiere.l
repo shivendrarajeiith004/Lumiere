@@ -76,7 +76,7 @@ deg {  return DEG;}
 \<= { return LESS_THAN_EQ;}
 \> { return GREAT_THAN;}
 \>= { return GREAT_THAN_EQ;}
-
+","  {return COMMA;}
 \&& { return AND_OP;}
 \|\| { return OR_OP;}
 \! { return NOT_OP;}

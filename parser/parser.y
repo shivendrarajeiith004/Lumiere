@@ -25,7 +25,7 @@ int addtoken(char *s,char*token_value);
 %token COMP_ASSIGN_SUBTRACT COMP_ASSIGN_MUL LESS_THAN LESS_THAN_EQ AND_OP OR_OP NOT_OP 
 %token GREAT_THAN GREAT_THAN_EQ VAR ASSIGN COMP_ASSIGN_ADD EOL LEFT_PAREN   EQUAL_TO NOT_EQUAL_TO
 %token RIGHT_PAREN  LEFT_CURLY_BRACE RIGHT_CURLY_BRACE LEFT_BRACE RIGHT_BRACE
-%token MAIN SINGLE_LINE_COMMENT MULTI_LINE_COMMENT CONST MASS ELSE_IF  
+%token MAIN SINGLE_LINE_COMMENT MULTI_LINE_COMMENT CONST MASS ELSE_IF  COMMA
 
 
 %left OR_OP
@@ -44,6 +44,8 @@ CMPND_STATEMENT : CMPND_STATEMENT STATEMENT
 STATEMENT: CONDITIONAL_STATEMENT EOL 
          | EXPRESSION EOL{printf("Statement here\n");} 
          | LOOP_STATEMENT EOL
+         |DECLARATION EOL
+         |ASSIGNMENT EOL
          | EOL
          ;
           
@@ -125,6 +127,39 @@ TYPE : INT
      | BOOLEAN
      | VECTOR 
      ;
+
+DECLARATION:
+      INT var_list   {printf("DECLARATION varlist\n");}                 // DECLARATION with type 'int'
+      |FLOAT var_list
+      |VECTOR var_list
+      |BOOLEAN var_list
+      |CHAR var_list
+      |STRING var_list {printf("DECLARATION varlist\n");}
+      |CLUSTER var_list
+    ;
+VEC_DATA_TYPES: DOUBLE_VALUE |INTEGER_VALUE |VAR;
+var_list:
+      VAR   {printf("JUst Declared");}                          // Single variable
+    | VAR COMMA var_list {printf("VAR COMMA var_list\n");}             // Multiple variables separated by commas
+    | VAR ASSIGN INTEGER_VALUE {printf("VAR ASSIGN INTEGER\n");}             // Variable initialized with an integer value
+    | VAR ASSIGN STRING_VALUE {printf("VAR ASSIGN STRING_VALUE\n");}
+    | VAR ASSIGN DOUBLE_VALUE {printf("VAR ASSIGN STRING_VALUE\n");}
+    | VAR ASSIGN DOUBLE_VALUE COMMA var_list {printf("VAR ASSIGN STRING_VALUE\n");}
+    | VAR ASSIGN INTEGER_VALUE COMMA var_list {printf("VAR ASSIGN INTEGER COMMA var_list\n");} // Initialized variable followed by others
+    | VAR LEFT_BRACE INTEGER_VALUE RIGHT_BRACE {printf("Array DECLARATION\n");}  // Array DECLARATION
+    | VAR LEFT_BRACE INTEGER_VALUE RIGHT_BRACE COMMA var_list {printf("Array and Variables DECLARATION\n");} // Array and variable list
+    | VAR LEFT_BRACE INTEGER_VALUE RIGHT_BRACE ASSIGN INTEGER_VALUE {printf("Array DECLARATION with Initialization\n");} // Array initialized
+    | VAR ASSIGN LESS_THAN VEC_DATA_TYPES COMMA VEC_DATA_TYPES GREAT_THAN {printf("Vec DECLARATION with Initialization\n");}
+    | VAR ASSIGN LESS_THAN VEC_DATA_TYPES COMMA VEC_DATA_TYPES GREAT_THAN COMMA var_list{printf(" Series of Vec DECLARATION with Initialization\n");}
+
+    ;
+
+ASSIGNMENT:
+     VAR ASSIGN INTEGER_VALUE {printf("VAR ASSIGN INTEGER\n");}  
+    |VAR ASSIGN STRING_VALUE             // Simple assignment statement
+    ;
+
+
 %%
 
 void yyerror(char *s) {
