@@ -1,0 +1,17 @@
+void here(int a, int b) { check_until(a < b) {} }
+
+void sum(char a, char b) { check_until(1) { if (true) {} } }
+
+int main() {
+    if ((3 + 5) > 5 && (2 * 3) == 6) {} else {}
+
+    if ((int)(3.5 + 5) > (int)(5.0) && (2 * (int)3) == 6) {}
+    elif((float)(4 * 2) == 10.0 || (int)(8 / 2) != 3) {  -(7 + 3) + 2 ; } 
+    else {  (float) (10 * 3) / (float) 5 ; }
+
+    string s1, s2, s3, s4;
+    char c1, c2, c3, c4;
+    float f1 = 10.1, f2, f3;
+    int i1 = 10, i2, i3;
+
+}

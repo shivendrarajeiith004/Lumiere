@@ -17,4 +17,4 @@ run: lum
 
 # Clean the generated files
 clean:
-	rm -f lex.yy.c y.tab.c y.tab.h lum
+	rm -f lex.yy.c *.c *.h *.output lumiere lum

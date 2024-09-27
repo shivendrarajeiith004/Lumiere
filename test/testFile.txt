@@ -13,3 +13,5 @@ char a,b,c,d;
 vec a= <10,10> ,b ,c ,d ,e;
 float a=10.1, b,c;
 int a=10, b,c;
+
+void sum(char a , char b ) { check_until(true) { if (true) { a + b ;}} }

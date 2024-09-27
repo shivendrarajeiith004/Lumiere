@@ -39,13 +39,13 @@ int yylex();
 CMPND_STATEMENT : CMPND_STATEMENT STATEMENT
                 |
                 ;
-STATEMENT: CONDITIONAL_STATEMENT EOL 
+STATEMENT: CONDITIONAL_STATEMENT 
          | EXPRESSION EOL{printf("Statement here\n");} 
-         | LOOP_STATEMENT EOL
+         | LOOP_STATEMENT 
          | PREPROCESSOR_DECLERATION
          | FUNCTION_DECLERATION
-         |DECLARATION EOL
-         |ASSIGNMENT EOL
+         | DECLARATION EOL
+         | ASSIGNMENT EOL
          | EOL
          ;
           
@@ -57,7 +57,7 @@ CONDITIONAL_STATEMENT: IF_STATEMENT {printf("If statement.\n");}
 /* STATEMENTS */
 IF_STATEMENT:IF LEFT_PAREN BOOLEAN_EXP RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE ;
 
-ELSE_STATEMENT: ELSE LEFT_CURLY_BRACE STATEMENT RIGHT_CURLY_BRACE;
+ELSE_STATEMENT: ELSE LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE;
 
 ELSEIF_STATEMENT: ELSE_IF LEFT_PAREN BOOLEAN_EXP RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE;
 
@@ -77,7 +77,10 @@ PREPROCESSOR_DECLERATION:
     ;
 
 FUNCTION_DECLERATION:
-    TYPE VAR LEFT_PAREN PARAMETER_LIST RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE {
+    VOID VAR LEFT_PAREN PARAMETER_LIST RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE {
+        printf("Function name: f_name with return type: ret_name\n");
+    }
+ | TYPE VAR LEFT_PAREN PARAMETER_LIST RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE {
         printf("Function name: f_name with return type: ret_name\n");
     }
     ;
@@ -108,7 +111,7 @@ UNARY_EXPRESSION : ADD_OP  UNARY_EXPRESSION
                  | SUB_OP UNARY_EXPRESSION  
                  | PRIMARY_EXP  
                  ;
-PRIMARY_EXP  : LEFT_PAREN BOOLEAN_EXP RIGHT_PAREN 
+PRIMARY_EXP  : LEFT_PAREN EXPRESSION RIGHT_PAREN 
              | FACTOR 
              ; 
 BOOLEAN_EXP : BOOLEAN_EXP AND_OP RELATIONAL_EXP {}
@@ -143,7 +146,8 @@ TYPE : INT
      | STRING
      | BOOLEAN
      | VECTOR 
-     | VOID
+     | CLUSTER
+     | CHAR
      ;
 
 CONSTANT : INTEGER_VALUE
@@ -151,18 +155,12 @@ CONSTANT : INTEGER_VALUE
          | STRING_VALUE
          | BOOL_VALUE
          ;
-DECLARATION:
-      INT var_list   {printf("DECLARATION varlist\n");}                 // DECLARATION with type 'int'
-      |FLOAT var_list
-      |VECTOR var_list
-      |BOOLEAN var_list
-      |CHAR var_list
-      |STRING var_list {printf("DECLARATION varlist\n");}
-      |CLUSTER var_list
-    ;
+DECLARATION : TYPE var_list { printf("here");}
+           ;
+
 VEC_DATA_TYPES: DOUBLE_VALUE |INTEGER_VALUE |VAR;
 var_list:
-      VAR   {printf("JUst Declared");}                          // Single variable
+      VAR   {printf("VARIABLE");}                          // Single variable
     | VAR COMMA var_list {printf("VAR COMMA var_list\n");}             // Multiple variables separated by commas
     | VAR ASSIGN INTEGER_VALUE {printf("VAR ASSIGN INTEGER\n");}             // Variable initialized with an integer value
     | VAR ASSIGN STRING_VALUE {printf("VAR ASSIGN STRING_VALUE\n");}
@@ -179,7 +177,7 @@ var_list:
 
 ASSIGNMENT:
      VAR ASSIGN INTEGER_VALUE {printf("VAR ASSIGN INTEGER\n");}  
-    |VAR ASSIGN STRING_VALUE             // Simple assignment statement
+    | VAR ASSIGN STRING_VALUE             // Simple assignment statement
     ;
 
 
