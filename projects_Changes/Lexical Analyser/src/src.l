@@ -10,17 +10,25 @@ FILE* outputFile;
 digit [0-9]
 blanks [ \t]*
 letter  [a-zA-Z_]
-value (\+|\-)?(({digit}+\.{digit}+)|{digit}+)
-assign_operator =
-reserved_type "mass"|"init_vel"|"final_vel"|"accl"|"init_pos"|"final_pos"|"init_time"|"final_time"
+value (\+|\-)?(({digit}+\.{digit}+)|{digit}+) 
+assign_operator \=
+equal_operator \=\=
+not_equal_operator \!\=
+greater_than_equal_to_operator \>\=
+less_than_equal_to_operator \<\=
+reserved_type "mass"|"init_vel"|"final_vel"|"accl"|"init_pos"|"final_pos"|"init_time"|"final_time"|body
 reserved_keyword "if"|"else if"|"else"|"check_until"|"return"
+/*string \"[^\"]*\" anything written between this " and this " */
+variable "variable"
 library "library"
 include "include"
 int "int"
 function "function"
-function_name {letter}+
+console "console"
 hash \# 
 semicolon ;
+comma \,
+join_operator \.
 left_parenthesis \(
 right_parenthesis \)
 left_brace \[
@@ -29,6 +37,18 @@ left_curly_brace \{
 right_curly_brace \}
 less_than \<
 greater_than \>
+add_operator \+
+sub_operator \-
+mult_operator \*
+div_operator  \/
+cmpd_add_operator \+\=
+cmpd_sub_operator \-\=
+cmpd_mult_operator \*\=
+cmpd_div_operator \/\=
+identifier {letter}({letter}|{digit})*
+comment \/\*[^\*\/]*\*\/    
+string \"[^\"\n]*\"
+
 %%
 {value}                     {fprintf(outputFile,"<value: %f>",atof(yytext));}
 {assign_operator}           {fprintf(outputFile,"<assign_operator>");}
@@ -41,7 +61,13 @@ greater_than \>
 {int}                       {fprintf(outputFile,"<int>");}
 {library}                   {fprintf(outputFile,"<library: %s>",yytext);}/*should always be above than function_name*/
 {function}                  {fprintf(outputFile,"<function>");}
-{function_name}             {fprintf(outputFile,"<function_name: %s",yytext);}
+{console}                   {fprintf(outputFile,"<console>");}
+{variable}                  {fprintf(outputFile,"<variable>");} /*variable is only used to store value not the type of the value*/
+{string}                    {fprintf(outputFile,"<string: %s>", yytext);}
+{comment}                   {fprintf(outputFile,"<comment: %s>", yytext);}
+{identifier}                {fprintf(outputFile,"<identifier: %s>",yytext);}
+{comma}                     {fprintf(outputFile, "<comma>");}
+{join_operator}             {fprintf(outputFile,"<join_operator>");}
 {hash}                      {fprintf(outputFile,"<hash>");}
 {less_than}                 {fprintf(outputFile,"<less_than>");}
 {greater_than}              {fprintf(outputFile,"<greater_than>");}
@@ -51,16 +77,27 @@ greater_than \>
 {right_brace}               {fprintf(outputFile,"<right_brace>");}
 {left_curly_brace}          {fprintf(outputFile,"<left_curly_brace>");}
 {right_curly_brace}         {fprintf(outputFile,"<right_curly_brace>");}
-
+{add_operator}              {fprintf(outputFile,"<add_operator>");}
+{sub_operator}              {fprintf(outputFile,"<sub_operator>");}
+{mult_operator}             {fprintf(outputFile,"<mult_operator>");}
+{div_operator}              {fprintf(outputFile,"<div_operator>");}
+{cmpd_add_operator}         {fprintf(outputFile,"<cmpd_add_operator>");}
+{cmpd_sub_operator}         {fprintf(outputFile,"<cmpd_sub_operator>");}
+{cmpd_mult_operator}        {fprintf(outputFile,"<cmpd_mult_operator>");}
+{cmpd_div_operator}         {fprintf(outputFile,"<cmpd_div_operator>");}
+{equal_operator}            {fprintf(outputFile,"<equal_operator>");}
+{not_equal_operator}        {fprintf(outputFile,"<not_equal_operator>");}
+{greater_than_equal_to_operator} {fprintf(outputFile,"<greater_than_equal_to_operator>");}
+{less_than_equal_to_operator} {fprintf(outputFile,"<less_than_equal_to_operator>");}        
 %%
 
 int yywrap(){
     return 1;
 }
-int main(){
+int main(int argc, char** argv){
     
-    inputFile = fopen("../test/inp.txt", "r");
-    outputFile = fopen("../test/out.txt", "w");
+    inputFile = fopen(argv[1], "r");
+    outputFile = fopen(argv[2], "w");
     fprintf(outputFile,"{LINE NO : %d}\n",lineno);
     yyin = inputFile;
     yylex();
