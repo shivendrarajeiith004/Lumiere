@@ -45,6 +45,8 @@ cmpd_add_operator \+\=
 cmpd_sub_operator \-\=
 cmpd_mult_operator \*\=
 cmpd_div_operator \/\=
+and_operator \&\&
+or_operator  \|\|
 identifier {letter}({letter}|{digit})*
 comment \/\*[^\*\/]*\*\/    
 string \"[^\"\n]*\"
@@ -77,6 +79,8 @@ string \"[^\"\n]*\"
 {right_brace}               {fprintf(outputFile,"<right_brace>");}
 {left_curly_brace}          {fprintf(outputFile,"<left_curly_brace>");}
 {right_curly_brace}         {fprintf(outputFile,"<right_curly_brace>");}
+{and_operator}              {fprintf(outputFile,"<and_operator>");}
+{or_operator}               {fprintf(outputFile,"<or_operator>");}
 {add_operator}              {fprintf(outputFile,"<add_operator>");}
 {sub_operator}              {fprintf(outputFile,"<sub_operator>");}
 {mult_operator}             {fprintf(outputFile,"<mult_operator>");}
