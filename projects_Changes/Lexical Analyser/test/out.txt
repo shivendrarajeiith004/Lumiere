@@ -1,0 +1,50 @@
+{LINE NO : 1}
+<hash><include><less_than><library: library><greater_than><newline>
+
+{LINE NO : 2}
+<newline>
+
+{LINE NO : 3}
+<int><function><left_parent><right_parent><left_curly_brace><newline>
+
+{LINE NO : 4}
+<comment: /*No need for any function calls*/><newline>
+
+{LINE NO : 5}
+<reserved_operator: mass><identifier: m1><assign_operator><value: 67.000000><comma><identifier: m2><comma><identifier: m3><semicolon><newline>
+
+{LINE NO : 6}
+<reserved_operator: body><identifier: b1><semicolon><newline>
+
+{LINE NO : 7}
+<identifier: m3><join_operator><identifier: connectTo><left_parent><identifier: b1><right_parent><semicolon><newline>
+
+{LINE NO : 8}
+<variable><identifier: b><assign_operator><reserved_operator: mass><semicolon><newline>
+
+{LINE NO : 9}
+<identifier: b><cmpd_add_operator><value: 3.000000><semicolon><newline>
+
+{LINE NO : 10}
+<reserved_keyword : if><left_parent><identifier: b><greater_than><identifier: c><and_operator><identifier: d><equal_operator><identifier: e><right_parent><left_curly_brace><newline>
+
+{LINE NO : 11}
+<identifier: get_final_vel_at_time><left_parent><value: 4.000000><right_parent><semicolon><newline>
+
+{LINE NO : 12}
+<right_curly_brace><reserved_keyword : else><left_curly_brace><newline>
+
+{LINE NO : 13}
+<identifier: get_final_vel_at_time><left_parent><value: 3.000000><right_parent><semicolon><newline>
+
+{LINE NO : 14}
+<right_curly_brace><newline>
+
+{LINE NO : 15}
+<console><left_parent><string: "printing output"><right_parent><semicolon><newline>
+
+{LINE NO : 16}
+<reserved_keyword : return><value: 0.000000><semicolon><newline>
+
+{LINE NO : 17}
+<right_curly_brace>
