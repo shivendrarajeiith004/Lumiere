@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "y.tab.h"
+
 //extern FILE * yyin;
 //int lineno = 1;
 //FILE* inputFile;
 //FILE* outputFile;
+//int lineno= 1;
 %}
 
 digit [0-9]
@@ -57,8 +59,8 @@ string \"[^\"\n]*\"
 {assign_operator}           {return ASSIGN_OPERATOR;}
 {reserved_type}             {return RESERVED_TYPE;}
 {reserved_keyword}          {return RESERVED_KEYWORD;}
-\n                          {}
-{blanks}                    {return BLANKS;}
+\n                          {yylineno++;}
+{blanks}                    {}
 {semicolon}                 {return SEMICOLON;}
 {include}                   {return INCLUDE;}
 {int}                       {return INT;}
