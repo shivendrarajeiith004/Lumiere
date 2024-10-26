@@ -13,3 +13,17 @@ if(b > c && d == e){                                : if-else statement and bina
     }                                               : else statement
 console("printing output");                         : console statments
 return 0;                                           : main_fnctn_return_statement    
+
+
+reserved_type_declaration : reserved_type reserved_type_statement's;
+reserved_type_statement's : reserved_type_statement  , reserved_type_statement's
+                          | reserved_type_statement
+                          ;
+                        
+reserved_type_statement : simple_assignment | complex_expression | identifier;
+
+simple_assignment :
+complex_expression :
+identifier : identifier;
+                    
+
