@@ -56,9 +56,9 @@ string \"[^\"\n]*\"
 {value}                     {return VALUE;}
 {assign_operator}           {return ASSIGN_OPERATOR;}
 {reserved_type}             {return RESERVED_TYPE;}
-{reserved_keyword}          {return RESERVED_KEYWORD}
+{reserved_keyword}          {return RESERVED_KEYWORD;}
 \n                          {}
-{blanks}                    {/*to be ignored..*/}
+{blanks}                    {return BLANKS;}
 {semicolon}                 {return SEMICOLON;}
 {include}                   {return INCLUDE;}
 {int}                       {return INT;}

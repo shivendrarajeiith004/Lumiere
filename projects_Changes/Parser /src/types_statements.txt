@@ -1,0 +1,15 @@
+#include<library>                                   : include-type-statement
+int function(){many statements in here}             : main-function-statement
+/*No need for any function calls*/                  : comments
+mass m1 = 67, m2,m3;                                : reserved_type declaration/assignment statements
+body b1;                                            : reserved_type declaration statement
+m3.connectTo(b1);                                   : connectTo function type
+variable b = mass;                                  : variable type declaration/assignment statement
+b += 3;                                             : arithmetic expression
+if(b > c && d == e){                                : if-else statement and binary operator statments 
+        get_final_vel_at_time(4);                   : inbuilt_function_call statments;
+    } else{                                         : else if statments
+        get_final_vel_at_time(3);                   : inbuilt_function_call statements;
+    }                                               : else statement
+console("printing output");                         : console statments
+return 0;                                           : main_fnctn_return_statement    
