@@ -17,7 +17,7 @@
 <reserved_operator: body><identifier: b1><semicolon><newline>
 
 {LINE NO : 7}
-<identifier: m3><join_operator><identifier: connectTo><left_parent><identifier: b1><right_parent><semicolon><newline>
+<identifier: m3><join_operator><connectTo><left_parent><identifier: b1><right_parent><semicolon><newline>
 
 {LINE NO : 8}
 <variable><identifier: b><assign_operator><reserved_operator: mass><semicolon><newline>

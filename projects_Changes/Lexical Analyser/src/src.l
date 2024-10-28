@@ -17,8 +17,10 @@ not_equal_operator \!\=
 greater_than_equal_to_operator \>\=
 less_than_equal_to_operator \<\=
 reserved_type "mass"|"init_vel"|"final_vel"|"accl"|"init_pos"|"final_pos"|"init_time"|"final_time"|body
-reserved_keyword "if"|"else if"|"else"|"check_until"|"return"
+reserved_keyword "if"|"else if"|"else"|"check_until"
 /*string \"[^\"]*\" anything written between this " and this " */
+return "return"
+connectTo "connectTo"
 variable "variable"
 library "library"
 include "include"
@@ -59,7 +61,9 @@ string \"[^\"\n]*\"
 \n                          { fprintf(outputFile,"<newline>\n");lineno++;fprintf(outputFile,"\n{LINE NO : %d}\n",lineno);}
 {blanks}                    {/*to be ignored..*/}
 {semicolon}                 {fprintf(outputFile,"<semicolon>");}
+{return}                    {fprintf(outputFile,"<return>");}
 {include}                   {fprintf(outputFile,"<include>");}
+{connectTo}                 {fprintf(outputFile,"<connectTo>");}
 {int}                       {fprintf(outputFile,"<int>");}
 {library}                   {fprintf(outputFile,"<library: %s>",yytext);}/*should always be above than function_name*/
 {function}                  {fprintf(outputFile,"<function>");}
@@ -91,6 +95,7 @@ string \"[^\"\n]*\"
 {cmpd_div_operator}         {fprintf(outputFile,"<cmpd_div_operator>");}
 {equal_operator}            {fprintf(outputFile,"<equal_operator>");}
 {not_equal_operator}        {fprintf(outputFile,"<not_equal_operator>");}
+
 {greater_than_equal_to_operator} {fprintf(outputFile,"<greater_than_equal_to_operator>");}
 {less_than_equal_to_operator} {fprintf(outputFile,"<less_than_equal_to_operator>");}        
 %%

@@ -20,8 +20,10 @@ not_equal_operator \!\=
 greater_than_equal_to_operator \>\=
 less_than_equal_to_operator \<\=
 reserved_type "mass"|"init_vel"|"final_vel"|"accl"|"init_pos"|"final_pos"|"init_time"|"final_time"|body
-reserved_keyword "if"|"else if"|"else"|"check_until"|"return"
+reserved_keyword "if"|"else if"|"else"|"check_until"
 /*string \"[^\"]*\" anything written between this " and this " */
+return "return"
+connectTo "connectTo"
 variable "variable"
 library "library"
 include "include"
@@ -63,6 +65,8 @@ string \"[^\"\n]*\"
 {blanks}                    {}
 {semicolon}                 {return SEMICOLON;}
 {include}                   {return INCLUDE;}
+{return}                    {return RETURN;}
+{connectTo}                 {return CONNECT_TO;}
 {int}                       {return INT;}
 {library}                   {return LIBRARY;}/*should always be above than function_name*/
 {function}                  {return FUNCTION;}
