@@ -8,9 +8,9 @@ int function(){
     variable b = mass;
     b += 3;
     if(b > c && d == e){
-        get_final_vel_at_time(4);
+        v1 = get_final_vel_at_time(4);
     } else{
-        get_final_vel_at_time(3);
+        v2 = get_final_vel_at_time(3);
     }
     console("printing output");
     return 0;

@@ -19,12 +19,12 @@ equal_operator \=\=
 not_equal_operator \!\=
 greater_than_equal_to_operator \>\=
 less_than_equal_to_operator \<\=
-reserved_type "mass"|"init_vel"|"final_vel"|"accl"|"init_pos"|"final_pos"|"init_time"|"final_time"|body
-reserved_keyword "if"|"else if"|"else"|"check_until"
+reserved_type "mass"|"init_vel"|"final_vel"|"accl"|"init_pos"|"final_pos"|"init_time"|"final_time"|"body"|"variable" 
+reserved_keyword "else if"|"else"|"check_until"
+if "if"
 /*string \"[^\"]*\" anything written between this " and this " */
 return "return"
 connectTo "connectTo"
-variable "variable"
 library "library"
 include "include"
 int "int"
@@ -60,6 +60,7 @@ string \"[^\"\n]*\"
 {value}                     {return VALUE;}
 {assign_operator}           {return ASSIGN_OPERATOR;}
 {reserved_type}             {return RESERVED_TYPE;}
+{if}                        {return IF;}
 {reserved_keyword}          {return RESERVED_KEYWORD;}
 \n                          {yylineno++;}
 {blanks}                    {}
@@ -71,7 +72,6 @@ string \"[^\"\n]*\"
 {library}                   {return LIBRARY;}/*should always be above than function_name*/
 {function}                  {return FUNCTION;}
 {console}                   {return CONSOLE;}
-{variable}                  {return VARIABLE;} /*variable is only used to store value not the type of the value*/
 {string}                    {return STRING;}
 {comment}                   {return COMMENT;}
 {identifier}                {return IDENTIFIER;}
