@@ -5,7 +5,10 @@
 
 void yyerror(char *);
 int yylex();
+int cur_scope = 0;
+bool block_running  = False;
 %}
+
 
 %union {
     int intval;
@@ -25,7 +28,6 @@ int yylex();
 %token RIGHT_PAREN  LEFT_CURLY_BRACE RIGHT_CURLY_BRACE LEFT_BRACE RIGHT_BRACE
 %token MAIN SINGLE_LINE_COMMENT MULTI_LINE_COMMENT CONST MASS ELSE_IF  
 %token COMMA
-
 %left OR_OP
 %left AND_OP
 %left LESS_THAN LESS_THAN_EQ GREAT_THAN GREAT_THAN_EQ EQUAL_TO NOT_EQUAL_TO
@@ -39,11 +41,11 @@ int yylex();
 CMPND_STATEMENT : CMPND_STATEMENT STATEMENT
                 |
                 ;
-STATEMENT: CONDITIONAL_STATEMENT 
+STATEMENT: CONDITIONAL_STATEMENT { block_running = False;} 
          | EXPRESSION EOL{printf("Statement here\n");} 
-         | LOOP_STATEMENT 
+         | LOOP_STATEMENT{block_running = False;} 
          | PREPROCESSOR_DECLERATION
-         | FUNCTION_DECLERATION
+         | FUNCTION_DECLERATION {block_running = False;}
          | DECLARATION EOL
          | ASSIGNMENT EOL
          | EOL
@@ -182,7 +184,7 @@ ASSIGNMENT:
 
 %%
 
-void yyerror(char *s) {
+void yyerror(std::string *s) {
     printf("Error: %s\n", s);
 }
 
