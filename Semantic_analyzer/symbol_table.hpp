@@ -1,6 +1,7 @@
 
 
 #include <cstdlib>
+#include <map>
 #include <string>
 #include <vector>
 #ifndef SYM_TAB_HPP
@@ -54,18 +55,22 @@ public:
 
 class SymbolTableVAR {
 private:
+  int surr_scope;
   std::vector<DataRecord *> variable_list;
 
 public:
+  SymbolTableVAR(int surr_scope);
   void addVar(std::string name, TYPE type, ELEMENT_TYPE eleType, int line_no,
               int col_no, std::vector<int> dimensions = {});
   void addVar(std::vector<std::string> names, TYPE type, ELEMENT_TYPE eleType,
               std::vector<std::vector<int>> dimensions = {}, int line_no = 0,
               int col_no = 0);
-  void addVarList();
-  DataRecord *getVar(std::string name, int scope);
+  void addVarList(SymbolTableVAR *oldSymT);
+  DataRecord *getVar(std::string name);
   void displayInfo(int scopeLevel);
 
+  int get_surr_scope();
+  std::vector<DataRecord *> getVarList();
   // Destructor to clean up dynamically allocated DataRecords
   ~SymbolTableVAR() {
     for (auto var : variable_list) {
@@ -74,20 +79,8 @@ public:
     variable_list.clear();
   }
 };
-class Block {
-private:
-  int curr_scope;
-  int surr_scope;
-  SymbolTableVAR *sym_table_var;
 
-public:
-  DataRecord *getVar(std::string name);
-  DataRecord *addVar(std::string name, TYPE type, ELEMENT_TYPE eleType,
-                     int line_no, int col_no, std::vector<int> dimensions = {});
-  DataRecord *addVar(std::vector<std::string> names, TYPE type,
-                     ELEMENT_TYPE eleType, int line_no = 0, int col_no = 0,
-                     std::vector<std::vector<int>> dimensions = {});
-  DataRecord *removeVar(std::string name);
-  ~Block() { std::free(sym_table_var); }
-};
+DataRecord *get_var(std::map<int, SymbolTableVAR *>, std::string name,
+                    int curr_scope);
+
 #endif

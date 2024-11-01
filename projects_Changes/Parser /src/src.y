@@ -8,7 +8,9 @@ extern int yylineno;
 int lineno;
 FILE * inputFile;
 FILE* outputFile;
-
+int curr_scope = -1;
+std::map<int , SymbolTableVar> blockList;
+SymbolTableVar * curr_symb_table;
 %}
 
 %token VALUE ASSIGN_OPERATOR RESERVED_TYPE RESERVED_KEYWORD SEMICOLON INCLUDE INT LIBRARY 

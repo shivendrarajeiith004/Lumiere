@@ -1,7 +1,9 @@
-#include "symbol_table.h"
+#include "symbol_table.hpp"
+#include <ios>
 #include <iostream>
+#include <map>
 
-// Constructors for DataRecord with line and column numbers
+// Constructors for DataRecord with line and column numbers void
 void DataRecord::display(int scope_level) const {
   std::cout << "Identifier Name: " << identifier_name << " | Type: "
             << (identifier_type == TYPE::PRIMITIVE ? "PRIMITIVE" : "CLUSTER")
@@ -37,6 +39,9 @@ void DataRecord::display(int scope_level) const {
             << " | Column: " << col_no << std::endl;
 }
 
+SymbolTableVAR::SymbolTableVAR(int surr_scope) {
+  this->surr_scope = surr_scope;
+}
 void SymbolTableVAR::addVar(std::string name, TYPE type, ELEMENT_TYPE eleType,
                             int line_no, int col_no,
                             std::vector<int> dimensions) {
@@ -66,10 +71,13 @@ void SymbolTableVAR::addVar(std::vector<std::string> names, TYPE type,
     addVar(name, type, eleType, line_no, col_no, dim);
   }
 }
+/**/
+/*void SymbolTableVAR::addVarList(SymbolTableVAR *oldSymT) {*/
+/*  for (const auto &data : oldSymT->variable_list) {*/
+/*  }*/
+/*}*/
 
-void SymbolTableVAR::addVarList() {}
-
-DataRecord *SymbolTableVAR::getVar(std::string name, int scope) {
+DataRecord *SymbolTableVAR::getVar(std::string name) {
   DataRecord *result = nullptr;
   for (const auto &var : variable_list) {
     if (var->getName() == name) {
@@ -90,4 +98,14 @@ void SymbolTableVAR::displayInfo(int scope_level) {
   for (const auto &var : variable_list) {
     var->display(scope_level);
   }
+}
+
+DataRecord *get_var(std::map<int, SymbolTableVAR *> symb_table_list,
+                    std::string name, int curr_scope) {
+  DataRecord *data_ptr = nullptr;
+  while (curr_scope != -1 && data_ptr == nullptr) {
+    data_ptr = symb_table_list[curr_scope]->getVar(name);
+    curr_scope = symb_table_list[curr_scope]->get_surr_scope();
+  }
+  return data_ptr;
 }
