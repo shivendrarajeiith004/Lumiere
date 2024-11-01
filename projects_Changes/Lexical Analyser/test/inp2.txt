@@ -1,0 +1,17 @@
+#include <library>
+
+int function(){
+    /*No need for any function calls*/
+    mass m1 = 67, m2,m3;
+    body b1;
+    m3.connectTo(b1);
+    variable b = mass;
+    b += 3;
+    if(b > c && d == e){
+        v1 = get_final_vel_at_time(4);
+    } else{
+        v2 = get_final_vel_at_time(3);
+    }
+    console("printing output");
+    return 0;
+}

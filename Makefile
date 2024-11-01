@@ -3,7 +3,7 @@
 
 # Compile the lexer and parser
 
-INPUT_FILE = testCase2.txt
+INPUT_FILE = ./test/test1.txt
 
 # Build the executable
 

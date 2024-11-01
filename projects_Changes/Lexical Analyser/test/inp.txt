@@ -1,0 +1,9 @@
+#include<library>
+
+int function(){
+    mass = 5;
+    init_vel = -4634;
+    
+    get_final_vel_at_time(4);
+    return 0;
+}
