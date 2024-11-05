@@ -5,8 +5,16 @@ int function(){
     /*This is a comment*/
     /*This is a multiline comment*/
     #include<library>
-    mass m1=3, m2 ,m3=-352.3453, m4 = (m1*2)+(m4-2);
+    if(2){
+    mass m1,m3=12;
+    }
+    else_if(2){
+    mass m1= (m2+2)/(m2-14)*2;
+    mass m2=1;
+    }
+    else{
     m1.connectTo(b1);
+    }
     variable v1, v2 = -5, v3 = m1;
     console("this is a string");
     

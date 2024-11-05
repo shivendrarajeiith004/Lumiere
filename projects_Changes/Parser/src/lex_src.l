@@ -13,15 +13,17 @@
 digit [0-9]
 blanks [ \t]*
 letter  [a-zA-Z_]
-value (\+|\-)?(({digit}+\.{digit}+)|{digit}+) 
+value (({digit}+\.{digit}+)|{digit}+) 
 assign_operator \=
 equal_operator \=\=
 not_equal_operator \!\=
 greater_than_equal_to_operator \>\=
 less_than_equal_to_operator \<\=
 reserved_type "mass"|"init_vel"|"final_vel"|"accl"|"init_pos"|"final_pos"|"init_time"|"final_time"|"body"|"variable" 
-reserved_keyword "else if"|"else"|"check_until"
+reserved_keyword "check_until"
 if "if"
+else "else"
+else_if "else_if"
 /*string \"[^\"]*\" anything written between this " and this " */
 return "return"
 connectTo "connectTo"
@@ -51,7 +53,9 @@ cmpd_sub_operator \-\=
 cmpd_mult_operator \*\=
 cmpd_div_operator \/\=
 and_operator \&\&
+not_operator !
 or_operator  \|\|
+power_operator ^
 identifier {letter}({letter}|{digit})*
 comment \/\*[^\*\/]*\*\/    
 string \"[^\"\n]*\"
@@ -61,6 +65,8 @@ string \"[^\"\n]*\"
 {assign_operator}           {return ASSIGN_OPERATOR;}
 {reserved_type}             {return RESERVED_TYPE;}
 {if}                        {return IF;}
+{else}                      {return ELSE;}
+{else_if}                   {return ELSE_IF;}
 {reserved_keyword}          {return RESERVED_KEYWORD;}
 \n                          {yylineno++;}
 {blanks}                    {}
@@ -99,7 +105,8 @@ string \"[^\"\n]*\"
 {equal_operator}            {return EQUAL_OPERATOR;}
 {not_equal_operator}        {return NOT_EQUAL_OPERATOR;} 
 {greater_than_equal_to_operator} {return GE_OPERATOR;}
-{less_than_equal_to_operator} {return LE_OPERATOR;}        
+{less_than_equal_to_operator} {return LE_OPERATOR;}       
+{not_operator} {return NOT_OPERATOR;}
 %%
 
 int yywrap(){
