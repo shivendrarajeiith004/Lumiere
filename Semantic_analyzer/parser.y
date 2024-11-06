@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 void yyerror(char *);
 int yylex();
 int cur_scope = 0;
@@ -14,6 +15,7 @@ bool block_running  = False;
     int intval;
     float floatval;
     char *stringval; // Corrected to use char * for strings
+    
 }
 
 %token INTEGER_VALUE
@@ -55,11 +57,12 @@ STATEMENT: CONDITIONAL_STATEMENT { block_running = False;}
 
 CONDITIONAL_STATEMENT: IF_STATEMENT {printf("If statement.\n");}
                      | IF_STATEMENT ELSE_STATEMENT {printf("If  ELSE statement.\n");}
-                     | IF_STATEMENT ELSEIF_STATEMENT ELSE_STATEMENT {printf("If  ELSEIF ELSE statement.\n");};
+                     | IF_STATEMENT ELSE_IF_LIST ELSE_STATEMENT {printf("If  ELSEIF ELSE statement.\n");};
 /* STATEMENTS */
 IF_STATEMENT:IF LEFT_PAREN BOOLEAN_EXP RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE ;
 
 ELSE_STATEMENT: ELSE LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE;
+ELSE_IF_LIST: ELSE_IF_LIST ELSE_IF {$1->push_back($2); $$ = $1;} |ELSE_IF;
 
 ELSEIF_STATEMENT: ELSE_IF LEFT_PAREN BOOLEAN_EXP RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE;
 
