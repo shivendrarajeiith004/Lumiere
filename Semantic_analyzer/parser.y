@@ -14,6 +14,7 @@ bool block_running  = False;
     int intval;
     float floatval;
     char *stringval; // Corrected to use char * for strings
+
 }
 
 %token INTEGER_VALUE

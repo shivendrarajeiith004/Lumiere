@@ -8,7 +8,7 @@
 #include <optional>
 #include <map>
 #include <unordered_map>
-#include "sym.h"
+
 
 extern int yylineno, yycolumn;
 
@@ -55,6 +55,7 @@ class CMPND_STATEMENT : public Node
 {
 public:
     vector<STATEMENT> statements;
+    CMPND_STATEMENT(vector<STATEMENT> statements);
     void print() const override;
 };
 
@@ -129,6 +130,7 @@ class LOOP_STATEMENT : public STATEMENT
 public:
     std::unique_ptr<INITIAL_CONDITION> initCondition;
     std::unique_ptr<CMPND_STATEMENT> body;
+    LOOP_STATEMENT( std::unique_ptr<INITIAL_CONDITION> initCondition,std::unique_ptr<CMPND_STATEMENT> body);
     void print() const override;
 };
 
@@ -138,6 +140,7 @@ class PREPROCESSOR_DECLERATION : public STATEMENT
 public:
     std::string type;
     std::string var;
+    PREPROCESSOR_DECLERATION( std::string type,std::string var);
     void print() const override;
 };
 
@@ -149,6 +152,7 @@ public:
     std::string name;
     std::unique_ptr<PARAMETER_LIST> parameters;
     std::unique_ptr<CMPND_STATEMENT> body;
+    FUNCTION_DECLERATION(std::string returnType,std::string name,std::unique_ptr<PARAMETER_LIST> parameters,std::unique_ptr<CMPND_STATEMENT> body);
     void print() const override;
 };
 
@@ -186,6 +190,7 @@ class DECLARATION : public STATEMENT
 public:
     std::string type;
     std::vector<std::string> variables;
+    DECLARATION( std::string type,std::vector<std::string> variables);
     void print() const override;
 };
 
@@ -195,6 +200,7 @@ class ASSIGNMENT : public STATEMENT
 public:
     std::string var;
     std::unique_ptr<EXPRESSION> expression;
+    ASSIGNMENT(std::string var,std::unique_ptr<EXPRESSION> expression);
     void print() const override;
 };
 
@@ -203,9 +209,92 @@ class TYPE : public Node
 {
 public:
     std::string typeName;
+    TYPE(std::string typeName);
     void print() const override;
 };
 
+class FACTOR : public EXPRESSION
+{
+public:
+    std::unique_ptr<PRIMARY_EXP> primary;
+    FACTOR(std::unique_ptr<PRIMARY_EXP> primary);
+    void print() const override;
+};
+
+class PRIMARY_EXP : public EXPRESSION
+{
+public:
+    std::string value;
+    PRIMARY_EXP(std::string value);
+    void print() const override;
+};
+
+// Parameter list
+class PARAMETER_LIST : public Node
+{
+public:
+    std::vector<std::unique_ptr<PARAMETER>> parameters;
+    PARAMETER_LIST(std::vector<std::unique_ptr<PARAMETER>> parameters);
+    void print() const override;
+};
+
+// Parameter
+class PARAMETER : public Node
+{
+public:
+    std::string type;
+    std::string name;
+    PARAMETER(std::string type, std::string name);
+    void print() const override;
+};
+
+// Constant class
+class CONSTANT : public EXPRESSION
+{
+public:
+    std::string value;
+    CONSTANT(std::string value);
+    void print() const override;
+};
+
+// Multiplication expression
+class MUL_EXP : public ARITHMETIC_EXP
+{
+public:
+    std::unique_ptr<EXPRESSION> left;
+    std::unique_ptr<EXPRESSION> right;
+    MUL_EXP(std::unique_ptr<EXPRESSION> left, std::unique_ptr<EXPRESSION> right);
+    void print() const override;
+};
+
+// Power expression
+class POW_EXP : public ARITHMETIC_EXP
+{
+public:
+    std::unique_ptr<EXPRESSION> base;
+    std::unique_ptr<EXPRESSION> exponent;
+    POW_EXP(std::unique_ptr<EXPRESSION> base, std::unique_ptr<EXPRESSION> exponent);
+    void print() const override;
+};
+
+// Cast expression
+class CAST_EXP : public EXPRESSION
+{
+public:
+    std::unique_ptr<EXPRESSION> expression;
+    std::string type;
+    CAST_EXP(std::unique_ptr<EXPRESSION> expression, std::string type);
+    void print() const override;
+};
+
+// Unary expression
+class UNARY_EXPRESSION : public EXPRESSION
+{
+public:
+    std::unique_ptr<EXPRESSION> expression;
+    UNARY_EXPRESSION(std::unique_ptr<EXPRESSION> expression);
+    void print() const override;
+};
 // Implement other classes similarly...
 
 #endif // AST_H
