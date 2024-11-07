@@ -5,12 +5,43 @@
 
 void yyerror(char *);
 int yylex();
+extern int yylineno;
+extern int yycolumn;
+extern char yytext[];
 %}
 
 %union {
     int intval;
     float floatval;
     char *stringval; // Corrected to use char * for strings
+    class CMPND_STATEMENT* ast_compund_statement;
+    class STATEMENT* ast_statement;
+    class CONDITIONAL_STATEMENT* ast_conditional_statement;
+    class IF_STATEMENT* ast_if_statement;
+    class ELSE_STATEMENT* ast_else_statement;
+    class ELSEIF_STATEMENTS* ast_elseif_statements;
+    class ELSEIF_STATEMENT* ast_elseif_statement;
+
+    class LOOP_STATEMENT* ast_loop_statement;
+    class INITIAL_CONDITION* ast_initial_condition;
+    class PREPROCESSOR_DECLERATION* ast_preprocessor_declaration;
+    class FUNCTION_DECLERATION* ast_function_declaration;
+    class EXPRESSION* ast_expression;
+    class ARITHMETIC_EXP* ast_arithmetic_exp;
+    class MUL_EXP* ast_mul_exp;
+    class POW_EXP* ast_pow_exp;
+    class CAST_EXP* ast_cast_exp;
+    class UNARY_EXPRESSION* ast_unary_expression;
+    class PRIMARY_EXP* ast_primary_exp;
+    class BOOLEAN_EXP* ast_boolean_exp;
+    class RELATIONAL_EXP* ast_relational_exp;
+    class FACTOR* ast_factor;
+    class PARAMETER_LIST* ast_parameter_list;
+    class PARAMETER* ast_parameter;
+    class DECLARATION* ast_declaration;
+    class ASSIGNMENT* ast_assignment;
+    class CONSTANT* ast_constnt;
+    class TYPE * ast_type;
 }
 
 %token INTEGER_VALUE
@@ -26,6 +57,34 @@ int yylex();
 %token MAIN SINGLE_LINE_COMMENT MULTI_LINE_COMMENT CONST MASS ELSE_IF  
 %token COMMA
 
+%type<ast_compund_statement> CMPND_STATEMENT
+%type<ast_statement> STATEMENT
+%type<ast_conditional_statement> CONDITIONAL_STATEMENT
+%type<ast_if_statement> IF_STATEMENT
+%type<ast_else_statement> ELSE_STATEMENT
+%type<ast_elseif_statements> ELSEIF_STATEMENTS
+%type<ast_elseif_statement> ELSEIF_STATEMENT
+%type<ast_loop_statement> LOOP_STATEMENT
+%type<ast_initial_condition> INITIAL_CONDITION
+%type<ast_preprocessor_declaration> PREPROCESSOR_DECLERATION
+%type<ast_function_declaration> FUNCTION_DECLERATION
+%type<ast_expression> EXPRESSION
+%type<ast_arithmetic_exp> ARITHMETIC_EXP
+%type<ast_mul_exp> MUL_EXP
+%type<ast_pow_exp> POW_EXP
+%type<ast_cast_exp> CAST_EXP
+%type<ast_unary_expression> UNARY_EXPRESSION
+%type<ast_primary_exp> PRIMARY_EXP
+%type<ast_boolean_exp> BOOLEAN_EXP
+%type<ast_relational_exp> RELATIONAL_EXP
+%type<ast_factor> FACTOR
+%type<ast_parameter_list> PARAMETER_LIST
+%type<ast_parameter> PARAMETER
+%type<ast_declaration> DECLARATION
+%type<ast_assignment> ASSIGNMENT
+%type<ast_constnt> CONSTANT
+%type<ast_type> TYPE
+
 %left OR_OP
 %left AND_OP
 %left LESS_THAN LESS_THAN_EQ GREAT_THAN GREAT_THAN_EQ EQUAL_TO NOT_EQUAL_TO
@@ -35,11 +94,10 @@ int yylex();
 
 
 %%
-
-CMPND_STATEMENT : CMPND_STATEMENT STATEMENT
-                |
+CMPND_STATEMENT : CMPND_STATEMENT STATEMENT {$1->statements.push_back($2);$$=$1;}
+                | STATEMENT {$$=new CMPND_STATEMENT();$$->statements.push_back($1);}
                 ;
-STATEMENT: CONDITIONAL_STATEMENT 
+STATEMENT: CONDITIONAL_STATEMENT {$$=$1}
          | EXPRESSION EOL{printf("Statement here\n");} 
          | LOOP_STATEMENT 
          | PREPROCESSOR_DECLERATION
@@ -51,15 +109,17 @@ STATEMENT: CONDITIONAL_STATEMENT
           
 
 
-CONDITIONAL_STATEMENT: IF_STATEMENT {printf("If statement.\n");}
-                     | IF_STATEMENT ELSE_STATEMENT {printf("If  ELSE statement.\n");}
-                     | IF_STATEMENT ELSEIF_STATEMENT ELSE_STATEMENT {printf("If  ELSEIF ELSE statement.\n");};
+CONDITIONAL_STATEMENT: IF_STATEMENT {printf("If statement.\n");}{$$=new CONDITIONAL_STATEMENT($1)};
+                     | IF_STATEMENT ELSE_STATEMENT {printf("If  ELSE statement.\n");}{$$=new CONDITIONAL_STATEMENT($1,$2)};
+                     | IF_STATEMENT ELSEIF_STATEMENTS ELSE_STATEMENT {printf("If  ELSEIF ELSE statement.\n");}{$$=new CONDITIONAL_STATEMENT($1,$2,$3)};
 /* STATEMENTS */
 IF_STATEMENT:IF LEFT_PAREN BOOLEAN_EXP RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE ;
 
 ELSE_STATEMENT: ELSE LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE;
 
-ELSEIF_STATEMENT: ELSE_IF LEFT_PAREN BOOLEAN_EXP RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE;
+ELSEIF_STATEMENTS: ELSEIF_STATEMEMT ELSEIF_STATEMENTS;
+
+ELSEIF_STATEMEMT: ELSE_IF LEFT_PAREN BOOLEAN_EXP RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE;
 
 LOOP_STATEMENT  : CHECK_UNTIL LEFT_PAREN INITIAL_CONDITION RIGHT_PAREN LEFT_CURLY_BRACE CMPND_STATEMENT RIGHT_CURLY_BRACE{printf("FOR STATEMENT\n");};
 
