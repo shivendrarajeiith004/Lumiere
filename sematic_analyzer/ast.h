@@ -213,6 +213,7 @@ public:
     void print() const override;
 };
 
+// Factor class (for literal values, variables, etc.)
 class FACTOR : public EXPRESSION
 {
 public:
@@ -221,6 +222,7 @@ public:
     void print() const override;
 };
 
+// Primary expression class (could be a literal, variable, or grouped expression)
 class PRIMARY_EXP : public EXPRESSION
 {
 public:
