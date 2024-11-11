@@ -100,8 +100,7 @@ void SymbolTableVAR::displayInfo(int scope_level) {
   }
 }
 
-DataRecord *get_var(std::map<int, SymbolTableVAR *> symb_table_list,
-                    std::string name, int curr_scope) {
+DataRecord *get_var(std::map<int, SymbolTableVAR *> symb_table_list, std::string name, int curr_scope) {
   DataRecord *data_ptr = nullptr;
   while (curr_scope != -1 && data_ptr == nullptr) {
     data_ptr = symb_table_list[curr_scope]->getVar(name);

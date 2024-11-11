@@ -19,6 +19,7 @@ enum class ELEMENT_TYPE {
   VECT,
   VOID,
 };
+enum class OPERATOR { ADD, SUB, MUL, DIV, AND, OR, GT, LT, EQ };
 
 class DataRecord {
 private:
@@ -32,15 +33,11 @@ private:
 public:
   DataRecord() = default;
 
-  DataRecord(const std::string &name, TYPE type, ELEMENT_TYPE ele_type,
-             const std::vector<int> &dim_list, int line = 0, int col = 0)
-      : identifier_name(name), identifier_type(type), element_type(ele_type),
-        dimensions(dim_list), line_no(line), col_no(col) {}
+  DataRecord(const std::string &name, TYPE type, ELEMENT_TYPE ele_type, const std::vector<int> &dim_list, int line = 0, int col = 0)
+      : identifier_name(name), identifier_type(type), element_type(ele_type), dimensions(dim_list), line_no(line), col_no(col) {}
 
-  DataRecord(const std::string &name, TYPE type, ELEMENT_TYPE ele_type,
-             int line = 0, int col = 0)
-      : identifier_name(name), identifier_type(type), element_type(ele_type),
-        line_no(line), col_no(col) {}
+  DataRecord(const std::string &name, TYPE type, ELEMENT_TYPE ele_type, int line = 0, int col = 0)
+      : identifier_name(name), identifier_type(type), element_type(ele_type), line_no(line), col_no(col) {}
 
   // Accessor methods
   std::string getName() const { return identifier_name; }
@@ -69,7 +66,7 @@ public:
   DataRecord *getVar(std::string name);
   void displayInfo(int scopeLevel);
 
-  int get_surr_scope();
+  int get_surr_scope(){ return surr_scope; };
   std::vector<DataRecord *> getVarList();
   // Destructor to clean up dynamically allocated DataRecords
   ~SymbolTableVAR() {
@@ -80,7 +77,6 @@ public:
   }
 };
 
-DataRecord *get_var(std::map<int, SymbolTableVAR *>, std::string name,
-                    int curr_scope);
+DataRecord *get_var(std::map<int, SymbolTableVAR *>, std::string name, int curr_scope);
 
 #endif
