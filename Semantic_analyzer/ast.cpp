@@ -1,123 +1,102 @@
 #include <iostream>
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <variant>
+#include <optional>
+#include <map>
+#include "symbol_table.hpp"
 
-class Code_Block
-{
-};
-
-class Conditional_Block : public Code_Block
-{
-};
-
-class Expression_Block : public Code_Block {
-};
-
-class Reserved_Block : public Code_Block
- {
-};
-
-template <typename T>
-class Node{
-  T* curr;
-  T* next;
-
-  Node(){
-    curr = nullptr;
-    next = nullptr;
-  }
-
-  Node(T* new_curr){
-    curr = new_curr;
-    next = nullptr;
-  }
-
-  Node(T* new_curr, T* new_next){
-    curr = new_curr;
-    next = new_next;
-  }
-
-};
-
-template <typename T>
-class Linked_List
-{
+class ASTVisitor {
 public:
-  Node<T>* head;
-  Node<T>* tail;
-
-  Linked_List(){
-    head = nullptr;
-    tail = nullptr;
-  }
-
-  void push_back(T new_block){
-    if (new_block == nullptr){
-      std::cout << "Can not read a NULL block" << std::endl;
-      return;
-    }
-    Node<T>* new_node = new Node<T>;
-    new_node->curr = new_block;
-    if (head == nullptr)
-    {
-      head = new_node;
-      tail = new_node;
-    }
-    else{
-      tail->next = new_node;
-      tail = new_node;
-    }
-  }
+  virtual void visit(Literal &node) = 0;
+  virtual void visit(Variable &node) = 0;
+  virtual void visit(BinaryOperation &node) = 0;
+  virtual void visit(Conditional &node) = 0;
 };
 
-typedef struct Start
-{
-  Linked_List<Asgn_Block> asgn_blocks;
-  Linked_List<Expr_Block> decl_blocks;
-};
-class IfStatement : public Code_Block
-{
-public:
-  Code_Block *boolean_exp;
-  Code_Block *body;
-
-  IfStatement(Code_Block *boolean_exp, Code_Block *body) : boolean_exp(boolean_exp), body(body) {}
-
-  virtual ~IfStatement() = default;
+class ASTNode{
+  public:
+    virtual void accept(class ASTVisitor &visitor) = 0;
+    virtual ~ASTNode() = default;
 };
 
-class ElseIfStatement : public Code_Block
-{
-public:
-  Code_Block *boolean_exp;
-  Code_Block *body;
+class Literal : public ASTNode {
+  public:
+    std::variant<int, char, bool> value;
 
-  ElseIfStatement(Code_Block *boolean_exp, Code_Block *body) : boolean_exp(boolean_exp), body(body) {}
+    Literal(int i) : value(i) {}
+    Literal(char c) : value(c) {}
+    Literal(bool b) : value(b) {}
+    ~Literal() {}
 
-  virtual ~ElseIfStatement() = default;
+    void accept(class ASTVisitor &visitor) override;
 };
 
-class ElseStatement : public Code_Block
-{
-public:
-  Code_Block *body;
-
-  ElseStatement(Code_Block *body) : body(body) {}
-
-  virtual ~ElseStatement() = default;
+class Variable : public ASTNode {
+  public:
+    std::string name;
+    Variable(std::string &n) : name(n) {}
+    ~Variable() {}
+    void accept(class ASTVisitor &visitor) override;
 };
 
-class ConditionalStatement : public Code_Block
-{
-public:
-  IfStatement *ifStatement;
-  ElseIfStatement *elseIfStatement;
-  ElseStatement *elseStatement;
+class BinaryOperation : public ASTNode {
+  public:
+    enum class Operator{
+      ADD,
+      SUB, 
+      MUL,
+      DIV,
+      AND,
+      OR,
+      GT,
+      LT,
+      EQ
+    };
+    Operator my_operator;
+    ASTNode* left;
+    ASTNode* right;
 
-  ConditionalStatement(IfStatement *ifStmt, ElseIfStatement *elseIfStmt = nullptr, ElseStatement *elseStmt = nullptr)
-      : ifStatement(ifStmt), elseIfStatement(elseIfStmt), elseStatement(elseStmt) {}
-
-  virtual ~ConditionalStatement() = default;
+    BinaryOperation(Operator o, ASTNode* l, ASTNode* r) : my_operator(o), left(l), right(r) {}
+    ~BinaryOperation() {}
+    void accept(class ASTVisitor &visitor) override;
 };
 
-int main()
-{
+class Conditional : public ASTNode {
+  public:
+    ASTNode* condition;
+    ASTNode* true_branch;
+    ASTNode* false_branch;
+
+    Conditional(ASTNode* c, ASTNode* t) : condition(c), true_branch(t), false_branch(nullptr) {}
+    Conditional(ASTNode* c, ASTNode* t, ASTNode* f) : condition(c), true_branch(t), false_branch(f) {}
+    ~Conditional() {}
+    void accept(class ASTVisitor &visitor) override;
+};
+
+class ASTVisitor {
+  public:
+    virtual void visit(Literal &l) = 0;
+    virtual void visit(Variable &l) = 0;
+    virtual void visit(BinaryOperation &l) = 0;
+    virtual void visit(Conditional &l) = 0;
+};
+
+void Literal::accept(ASTVisitor &visitor){
+  visitor.visit(*this);
 }
+
+void Variable::accept(ASTVisitor &visitor){
+  visitor.visit(*this);
+}
+
+void BinaryOperation::accept(ASTVisitor &visitor){
+  visitor.visit(*this);
+}
+
+void Conditional::accept(ASTVisitor &visitor){
+  visitor.visit(*this);
+}
+
+
