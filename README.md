@@ -4,7 +4,7 @@ To see specifications regarding Lumiere:
 	Go To The Language/documentation Folder..
 
 To View source code for each of the Phases, You can see it in Language Folder:
-	1.Phase 1 :
+	1. Phase 1 :
 		Consists of Lexical Analysing For the language.It contains details about token used in the language
 		1. To Run the Code for Phase 1
 			a. Open terminal in 'src' directory for each phase.
