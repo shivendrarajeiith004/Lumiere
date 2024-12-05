@@ -3,8 +3,14 @@
 
 #include <stddef.h> // For size_t
 #include <string.h> // For strcpy and strlen
-enum TYPE { INTEGER_ENUM, DOUBLE_ENUM, CHAR_ENUM };
-enum OPERAND {
+enum TYPE
+{
+  INTEGER_ENUM,
+  DOUBLE_ENUM,
+  CHAR_ENUM
+};
+enum OPERAND
+{
   ADD,
   SUB,
   MUL,
@@ -23,26 +29,33 @@ enum OPERAND {
   GREATER_THAN_EQUAL_TO_ENUM
 };
 
-enum NODE_TYPE {
+enum NODE_TYPE
+{
   NODE_TYPE_VARIABLE,
   NODE_TYPE_CONST,
   NODE_TYPE_EXP,
   NODE_TYPE_DECL,
-  NODE_TYPE_ASSIGN
+  NODE_TYPE_ASSIGN,
+  NODE_TYPE_INCLUDE,
+  NODE_TYPE_CONSOLE
+
 }; //  Union to hold different types of values
-union value {
+union value
+{
   int intval;
   double floatval;
 };
 
-struct SymbolTableItem {
+struct SymbolTableItem
+{
   char name[256];  // Fixed-size char array for the string
   enum TYPE dtype; // Data type
   int line_no;
 };
 
 // SymbolTable structure (replaces C++ class)
-struct SymbolTable {
+struct SymbolTable
+{
   struct SymbolTableItem *items; // Dynamic array of SymbolTableItem
   size_t size;                   // Current number of items in the table
   size_t capacity;               // Capacity of the dynamic array

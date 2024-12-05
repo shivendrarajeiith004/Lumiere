@@ -5,7 +5,8 @@
 #include <string.h>
 #include <time.h>
 int no_errors = 0;
-void init_cmpndStatement(struct CmpndStatement *stmt) {
+void init_cmpndStatement(struct CmpndStatement *stmt)
+{
 
   stmt->capacity = 1;
   stmt->ptr = malloc(1 * sizeof(struct CmpndStatement *));
@@ -13,12 +14,15 @@ void init_cmpndStatement(struct CmpndStatement *stmt) {
 }
 
 void add_to_cmpnd_Statement(struct CmpndStatement *stmt,
-                            struct CmpndStatementNode *node) {
-  if (stmt->size >= stmt->capacity) {
+                            struct CmpndStatementNode *node)
+{
+  if (stmt->size >= stmt->capacity)
+  {
     stmt->capacity *= 2;
     stmt->ptr =
         realloc(stmt->ptr, stmt->capacity * sizeof(struct CmpndStatementNode));
-    if (stmt->ptr == NULL) {
+    if (stmt->ptr == NULL)
+    {
       fprintf(stderr,
               "Memory allocation failed during resize for CmpndStatement\n");
       exit(1);
@@ -31,10 +35,12 @@ void add_to_cmpnd_Statement(struct CmpndStatement *stmt,
 }
 
 // Constructor for ConstNode
-struct VariableNode *new_VariableNode(const char *name, int line_no) {
+struct VariableNode *new_VariableNode(const char *name, int line_no)
+{
   struct VariableNode *varNode =
       (struct VariableNode *)malloc(sizeof(struct VariableNode));
-  if (varNode == NULL) {
+  if (varNode == NULL)
+  {
     fprintf(stderr, "Memory allocation failed for ConstNode\n");
     exit(1);
   }
@@ -43,10 +49,12 @@ struct VariableNode *new_VariableNode(const char *name, int line_no) {
   varNode->base.line_no = line_no;
   return varNode;
 }
-struct ConstNode *new_ConstNode(union value val, int line_no, enum TYPE type) {
+struct ConstNode *new_ConstNode(union value val, int line_no, enum TYPE type)
+{
   struct ConstNode *constNode =
       (struct ConstNode *)malloc(sizeof(struct ConstNode));
-  if (constNode == NULL) {
+  if (constNode == NULL)
+  {
     fprintf(stderr, "Memory allocation failed for ConstNode\n");
     exit(1);
   }
@@ -59,10 +67,12 @@ struct ConstNode *new_ConstNode(union value val, int line_no, enum TYPE type) {
 
 // Constructor for EXP_NODE
 struct EXP_NODE *new_EXP_NODE(enum OPERAND oprnd, void *lhs, void *rhs,
-                              int line_no) {
+                              int line_no)
+{
   struct EXP_NODE *expNode = (struct EXP_NODE *)malloc(sizeof(struct EXP_NODE));
   /*printf("%d", oprnd);*/
-  if (expNode == NULL) {
+  if (expNode == NULL)
+  {
     fprintf(stderr, "Memory allocation failed for EXP_NODE\n");
     exit(1);
   }
@@ -77,12 +87,14 @@ struct EXP_NODE *new_EXP_NODE(enum OPERAND oprnd, void *lhs, void *rhs,
 
 // Constructor for DECL_NODE
 struct DECL_NODE *new_DECL_NODE(enum TYPE type, char **list_of_vars,
-                                int line_no) {
+                                int line_no)
+{
 
   struct DECL_NODE *declNode =
       (struct DECL_NODE *)malloc(sizeof(struct DECL_NODE));
   /*printf("Inside New DECL_NODE %s:\n", type_to_string(type));*/
-  if (declNode == NULL) {
+  if (declNode == NULL)
+  {
     fprintf(stderr, "Memory allocation failed for DECL_NODE\n");
     exit(1);
   }
@@ -96,10 +108,12 @@ struct DECL_NODE *new_DECL_NODE(enum TYPE type, char **list_of_vars,
 
 // Constructor for ASSIGN_NODE
 struct ASSIGN_NODE *new_ASSIGN_NODE(enum OPERAND op, struct VariableNode *lhs,
-                                    void *rhs, int line_no) {
+                                    void *rhs, int line_no)
+{
   struct ASSIGN_NODE *assignNode =
       (struct ASSIGN_NODE *)malloc(sizeof(struct ASSIGN_NODE));
-  if (assignNode == NULL) {
+  if (assignNode == NULL)
+  {
     fprintf(stderr, "Memory allocation failed for ASSIGN_NODE\n");
     exit(1);
   }
@@ -110,44 +124,90 @@ struct ASSIGN_NODE *new_ASSIGN_NODE(enum OPERAND op, struct VariableNode *lhs,
   assignNode->base.line_no = line_no;
   return assignNode;
 }
-void free_cmpndStatement(struct CmpndStatement *stmt) {
-  for (int i = 0; i < stmt->size; i++) {
+struct INCLUDE_NODE *new_INCLUDE_NODE(char *lib_name)
+{
+  struct INCLUDE_NODE *includeNode = (struct INCLUDE_NODE *)malloc(sizeof(struct INCLUDE_NODE));
+  if (includeNode == NULL)
+  {
+    fprintf(stderr, "Memory allocation failed for INCLUDE_NODE\n");
+    exit(1);
+  }
+  strncpy(includeNode->lib_name, lib_name, sizeof(includeNode->lib_name) - 1);
+  includeNode->lib_name[sizeof(includeNode->lib_name) - 1] = '\0';
+  includeNode->base.node_type = NODE_TYPE_INCLUDE;
+  return includeNode;
+}
+struct CONSOLE_NODE *new_CONSOLE_NODE(char *console_string)
+{
+  struct CONSOLE_NODE *ConstNode = (struct CONSOLE_NODE *)malloc(sizeof(struct CONSOLE_NODE));
+  if (ConstNode == NULL)
+  {
+    fprintf(stderr, "Memory allocation failed for INCLUDE_NODE\n");
+    exit(1);
+  }
+  ConstNode->base.node_type = NODE_TYPE_CONSOLE;
+  ConstNode->string = console_string;
+  return ConstNode;
+}
+void free_cmpndStatement(struct CmpndStatement *stmt)
+{
+  for (int i = 0; i < stmt->size; i++)
+  {
 
     free_node(stmt->ptr[i]->ptr);
   }
 }
-void free_node(void *ptr) {
-  if (ptr == NULL) {
+void free_node(void *ptr)
+{
+  if (ptr == NULL)
+  {
     return; // Early return if the pointer is NULL
   }
   struct Node *node = (struct Node *)ptr; // Cast to the base Node type
-  switch (node->node_type) {
-  case NODE_TYPE_VARIABLE: {
+  switch (node->node_type)
+  {
+  case NODE_TYPE_VARIABLE:
+  {
     struct VariableNode *var_node = (struct VariableNode *)node;
     free_VariableNode(var_node);
     break;
   }
-  case NODE_TYPE_CONST: {
+  case NODE_TYPE_CONST:
+  {
     struct ConstNode *const_node = (struct ConstNode *)node;
     free_ConstNode(const_node);
     break;
   }
-  case NODE_TYPE_EXP: {
+  case NODE_TYPE_EXP:
+  {
     struct EXP_NODE *exp_node = (struct EXP_NODE *)node;
     free_EXP_NODE(exp_node);
     break;
   }
-  case NODE_TYPE_DECL: {
+  case NODE_TYPE_DECL:
+  {
     struct DECL_NODE *decl_node = (struct DECL_NODE *)node;
     free_DECL_NODE(decl_node);
     break;
   }
-  case NODE_TYPE_ASSIGN: {
+  case NODE_TYPE_ASSIGN:
+  {
     struct ASSIGN_NODE *assign_node = (struct ASSIGN_NODE *)node;
     free_ASSIGN_NODE(assign_node);
     break;
   }
-
+  case NODE_TYPE_INCLUDE:
+  {
+    struct INCLUDE_NODE *include_node = (struct INCLUDE_NODE *)node;
+    free_INCLUDE_NODE(include_node);
+    break;
+  }
+  case NODE_TYPE_CONSOLE:
+  {
+    struct CONSOLE_NODE *console_node = (struct CONSOLE_NODE *)node;
+    free_CONSOLE_NODE(console_node);
+    break;
+  }
   default:
     fprintf(stderr, "Unknown node type!%s\n",
             node_type_to_string(node->node_type));
@@ -156,67 +216,94 @@ void free_node(void *ptr) {
 
   free(node); // Finally free the base node itself}
 }
-void free_EXP_NODE(struct EXP_NODE *node) {
-  if (node->lhs != NULL) {
+void free_EXP_NODE(struct EXP_NODE *node)
+{
+  if (node->lhs != NULL)
+  {
     free_node(node->lhs);
   }
-  if (node->rhs != NULL) {
+  if (node->rhs != NULL)
+  {
     free_node(node->rhs);
   }
 }
 
 void free_ConstNode(struct ConstNode *node) {}
-void free_ASSIGN_NODE(struct ASSIGN_NODE *node) {
-  if (node->lhs != NULL) {
+void free_ASSIGN_NODE(struct ASSIGN_NODE *node)
+{
+  if (node->lhs != NULL)
+  {
     free_VariableNode(node->lhs);
   }
-  if (node->rhs != NULL) {
+  if (node->rhs != NULL)
+  {
     free_EXP_NODE(node->rhs);
   }
 }
-void free_DECL_NODE(struct DECL_NODE *node) {
-  if (node->list_of_vars) {
-    for (size_t i = 0; strcmp(node->list_of_vars[i], "\0"); ++i) {
+void free_DECL_NODE(struct DECL_NODE *node)
+{
+  if (node->list_of_vars)
+  {
+    for (size_t i = 0; strcmp(node->list_of_vars[i], "\0"); ++i)
+    {
       free(node->list_of_vars[i]);
     }
     free(node->list_of_vars);
   }
 }
-void free_VariableNode(struct VariableNode *node) {
+void free_VariableNode(struct VariableNode *node)
+{
 
   memset(node->name, 0, sizeof(node->name));
 }
-void semanticCheck(struct CmpndStatement *stmt, struct SymbolTable *table) {
-  for (int i = 0; i < stmt->size; i++) {
+void free_INCLUDE_NODE(struct INCLUDE_NODE *node)
+{
+  free(node->lib_name);
+}
+void free_CONSOLE_NODE(struct CONSOLE_NODE *node)
+{
+  free(node->string);
+};
+void semanticCheck(struct CmpndStatement *stmt, struct SymbolTable *table)
+{
+  for (int i = 0; i < stmt->size; i++)
+  {
     /*printf("statement NO:%d \n", i);*/
     semantic_check(table, stmt->ptr[i]->ptr);
   }
 }
 
-void semantic_check(struct SymbolTable *table, void *ptr) {
-  if (ptr == NULL) {
+void semantic_check(struct SymbolTable *table, void *ptr)
+{
+  if (ptr == NULL)
+  {
     return; // Early return if the pointer is NULL
   }
   struct Node *node = (struct Node *)ptr; // Cast to the base Node type
 
   /*printf("Node Type is : %s\n", node_type_to_string(node->node_type));*/
-  switch (node->node_type) {
-  case NODE_TYPE_EXP: {
+  switch (node->node_type)
+  {
+  case NODE_TYPE_EXP:
+  {
     struct EXP_NODE *exp_node = (struct EXP_NODE *)node;
     exp_semantic(table, exp_node);
     break;
   }
-  case NODE_TYPE_DECL: {
+  case NODE_TYPE_DECL:
+  {
     struct DECL_NODE *decl_node = (struct DECL_NODE *)node;
     decl_semantic(table, decl_node);
     break;
   }
-  case NODE_TYPE_VARIABLE: {
+  case NODE_TYPE_VARIABLE:
+  {
     struct VariableNode *assign_node = (struct VariableNode *)node;
     variable_semantic(table, assign_node);
     break;
   }
-  case NODE_TYPE_ASSIGN: {
+  case NODE_TYPE_ASSIGN:
+  {
     struct ASSIGN_NODE *assign_node = (struct ASSIGN_NODE *)node;
     assign_semantic(table, assign_node);
     break;
@@ -227,24 +314,29 @@ void semantic_check(struct SymbolTable *table, void *ptr) {
     break;
   }
 }
-void exp_semantic(struct SymbolTable *table, struct EXP_NODE *ptr) {
+void exp_semantic(struct SymbolTable *table, struct EXP_NODE *ptr)
+{
 
-  if (ptr->rhs != NULL) {
+  if (ptr->rhs != NULL)
+  {
     semantic_check(table, ptr->rhs);
   }
-  if (ptr->lhs != NULL) {
+  if (ptr->lhs != NULL)
+  {
     semantic_check(table, ptr->lhs);
   }
   enum TYPE resType;
   resType = getType(table, ptr);
 }
 
-void assign_semantic(struct SymbolTable *table, struct ASSIGN_NODE *ptr) {
+void assign_semantic(struct SymbolTable *table, struct ASSIGN_NODE *ptr)
+{
 
   enum TYPE lhs_type = getType(table, ptr->lhs);
   enum TYPE rhs_type = getType(table, ptr->rhs);
   enum TYPE resType = typeResolution(lhs_type, rhs_type);
-  if (resType == -1) {
+  if (resType == -1)
+  {
     no_errors++;
     fprintf(stderr,
             "Error:(Line: %d) Cannot assign %s to variable %s with type %s\n",
@@ -253,7 +345,8 @@ void assign_semantic(struct SymbolTable *table, struct ASSIGN_NODE *ptr) {
     /**type = -1;*/
   }
 }
-void decl_semantic(struct SymbolTable *table, struct DECL_NODE *ptr) {
+void decl_semantic(struct SymbolTable *table, struct DECL_NODE *ptr)
+{
 
   struct SymbolTableItem *item =
       (struct SymbolTableItem *)malloc(sizeof(struct SymbolTableItem));
@@ -270,67 +363,99 @@ void decl_semantic(struct SymbolTable *table, struct DECL_NODE *ptr) {
   /*  i++;*/
   /*}*/
 }
-void variable_semantic(struct SymbolTable *table, struct VariableNode *ptr) {
+void variable_semantic(struct SymbolTable *table, struct VariableNode *ptr)
+{
   struct SymbolTableItem *item =
       (struct SymbolTableItem *)malloc(sizeof(struct SymbolTableItem));
   item = getItem(table, ptr->name);
-  if (item == NULL) {
+  if (item == NULL)
+  {
     no_errors++;
     printf("Error (Line :%d )  Variable '%s' is used before its "
            "definition.\n",
            ptr->base.line_no, ptr->name);
   }
 }
-void add_dec_node(struct SymbolTable *symtable, struct DECL_NODE node) {
+void include_semantic(struct INCLUDE_NODE *ptr)
+{
+  if (ptr->lib_name == NULL)
+  {
+    printf("Error! Library Resolution Failed.\n");
+  }
+}
+
+void console_semantic(struct CONSOLE_NODE *ptr)
+{
+  if (ptr->string == NULL)
+  {
+    printf("Error! Library Resolution Failed.\n");
+  }
+}
+void add_dec_node(struct SymbolTable *symtable, struct DECL_NODE node)
+{
   char **temp = node.list_of_vars;
   int i = 0;
-  while (strcmp(temp[i], "\0") != 0) {
+  while (strcmp(temp[i], "\0") != 0)
+  {
     int index = addToTable(symtable, temp[i], node.type, node.base.line_no);
-    if (index == -1) {
+    if (index == -1)
+    {
       no_errors++;
     }
     i = i + 1;
   }
 }
 
-enum TYPE getType(struct SymbolTable *table, void *ptr) {
+enum TYPE getType(struct SymbolTable *table, void *ptr)
+{
 
   struct Node *nodePtr = (struct Node *)ptr;
 
-  switch (nodePtr->node_type) {
-  case NODE_TYPE_CONST: {
+  switch (nodePtr->node_type)
+  {
+  case NODE_TYPE_CONST:
+  {
     struct ConstNode *nodePtr = (struct ConstNode *)ptr;
     /*printf("%s", type_to_string(nodePtr->type));*/
     return nodePtr->type;
   }
-  case NODE_TYPE_VARIABLE: {
+  case NODE_TYPE_VARIABLE:
+  {
     struct VariableNode *varPtr = (struct VariableNode *)ptr;
     struct SymbolTableItem *item =
         (struct SymbolTableItem *)malloc(sizeof(struct SymbolTableItem));
     item = getItem(table, varPtr->name);
     /*printf("After GetItem");*/
-    if (item == NULL) {
+    if (item == NULL)
+    {
       return -2;
-    } else {
+    }
+    else
+    {
       return item->dtype;
     }
   }
-  case NODE_TYPE_EXP: {
+  case NODE_TYPE_EXP:
+  {
     struct EXP_NODE *expPtr = (struct EXP_NODE *)ptr;
     enum TYPE lhs_type;
     enum TYPE rhs_type;
-    if (expPtr->rhs != NULL) {
+    if (expPtr->rhs != NULL)
+    {
       rhs_type = getType(table, expPtr->rhs);
     }
-    if (expPtr->lhs != NULL) {
+    if (expPtr->lhs != NULL)
+    {
 
       lhs_type = getType(table, expPtr->lhs);
     }
-    if (lhs_type == -2 || lhs_type == -2) {
+    if (lhs_type == -2 || lhs_type == -2)
+    {
       return -2;
     }
     enum TYPE resType = typeResolution(lhs_type, rhs_type);
-    if (resType == -1) {
+    if (resType == -1)
+    {
 
       no_errors++;
       fprintf(stderr, "%s between %s type and %s type is not allowed.\n",
@@ -345,20 +470,26 @@ enum TYPE getType(struct SymbolTable *table, void *ptr) {
   }
 }
 
-enum TYPE typeResolution(enum TYPE type1, enum TYPE type2) {
+enum TYPE typeResolution(enum TYPE type1, enum TYPE type2)
+{
   if ((type1 == INTEGER_ENUM && type2 == DOUBLE_ENUM) ||
       (type1 == DOUBLE_ENUM && type2 == INTEGER_ENUM) ||
-      (type1 == DOUBLE_ENUM && type2 == DOUBLE_ENUM)) {
+      (type1 == DOUBLE_ENUM && type2 == DOUBLE_ENUM))
+  {
     return DOUBLE_ENUM;
-  } else if (type1 == INTEGER_ENUM && type2 == INTEGER_ENUM)
+  }
+  else if (type1 == INTEGER_ENUM && type2 == INTEGER_ENUM)
     return INTEGER_ENUM;
-  else if (type1 == CHAR_ENUM && type2 == CHAR_ENUM) {
+  else if (type1 == CHAR_ENUM && type2 == CHAR_ENUM)
+  {
     return CHAR_ENUM;
   }
   return -1;
 } // Function to convert TYPE enum to string
-const char *type_to_string(enum TYPE t) {
-  switch (t) {
+const char *type_to_string(enum TYPE t)
+{
+  switch (t)
+  {
   case INTEGER_ENUM:
     return "int";
   case DOUBLE_ENUM:
@@ -371,8 +502,10 @@ const char *type_to_string(enum TYPE t) {
 }
 
 // Function to convert operand enum to string
-const char *operand_to_string(enum OPERAND op) {
-  switch (op) {
+const char *operand_to_string(enum OPERAND op)
+{
+  switch (op)
+  {
   case ADD:
     return "+";
   case SUB:
@@ -411,8 +544,10 @@ const char *operand_to_string(enum OPERAND op) {
 }
 
 // Function to convert node_type enum to string
-const char *node_type_to_string(enum NODE_TYPE nt) {
-  switch (nt) {
+const char *node_type_to_string(enum NODE_TYPE nt)
+{
+  switch (nt)
+  {
   case NODE_TYPE_VARIABLE:
     return "NODE_TYPE_VARIABLE";
   case NODE_TYPE_CONST:
@@ -428,10 +563,13 @@ const char *node_type_to_string(enum NODE_TYPE nt) {
   }
 }
 
-void transpile_cmpd(struct SymbolTable *table, struct CmpndStatement *stmt) {
+void transpile_cmpd(struct SymbolTable *table, struct CmpndStatement *stmt)
+{
   printf("int main() {\n");
-  if (no_errors == 0) {
-    for (int i = 0; i < stmt->size; i++) {
+  if (no_errors == 0)
+  {
+    for (int i = 0; i < stmt->size; i++)
+    {
       /*printf("statement NO:%d \n", i);*/
       transpile_stmt(table, stmt->ptr[i]->ptr);
       printf(";\n");
@@ -440,40 +578,53 @@ void transpile_cmpd(struct SymbolTable *table, struct CmpndStatement *stmt) {
   }
 }
 
-void transpile_stmt(struct SymbolTable *table, void *ptr) {
+void transpile_stmt(struct SymbolTable *table, void *ptr)
+{
 
-  if (ptr == NULL) {
+  if (ptr == NULL)
+  {
     return; // Early return if the pointer is NULL
   }
   struct Node *node = (struct Node *)ptr; // Cast to the base Node type
   /*printf("Node Type is : %s\n", node_type_to_string(node->node_type));*/
-  switch (node->node_type) {
-  case NODE_TYPE_EXP: {
+  switch (node->node_type)
+  {
+  case NODE_TYPE_EXP:
+  {
     struct EXP_NODE *exp_node = (struct EXP_NODE *)node;
     transpile_exp(table, *exp_node);
     break;
   }
-  case NODE_TYPE_DECL: {
+  case NODE_TYPE_DECL:
+  {
     struct DECL_NODE *decl_node = (struct DECL_NODE *)node;
     transpile_decl(table, *decl_node);
     /*decl_semantic(table, decl_node);*/
     break;
   }
     printf("here");
-  case NODE_TYPE_VARIABLE: {
+  case NODE_TYPE_VARIABLE:
+  {
     struct VariableNode *varNode = (struct VariableNode *)node;
     transpile_var(table, *varNode);
     break;
   }
-  case NODE_TYPE_ASSIGN: {
+  case NODE_TYPE_ASSIGN:
+  {
     struct ASSIGN_NODE *assign_node = (struct ASSIGN_NODE *)node;
     transpile_assign(table, *assign_node);
     break;
   }
-  case NODE_TYPE_CONST: {
+  case NODE_TYPE_CONST:
+  {
     struct ConstNode *const_node = (struct ConstNode *)node;
     transpile_const(table, *const_node);
     break;
+  }
+  case NODE_TYPE_INCLUDE:
+  {
+    struct INCLUDE_NODE *includeNode = (struct INCLUDE_NODE *)node;
+    transpile_include(*includeNode);
   }
   default:
     fprintf(stderr, "Unknown node type!%d\n", node->node_type);
@@ -481,46 +632,67 @@ void transpile_stmt(struct SymbolTable *table, void *ptr) {
   }
 }
 
-void transpile_decl(struct SymbolTable *table, struct DECL_NODE declNode) {
+void transpile_decl(struct SymbolTable *table, struct DECL_NODE declNode)
+{
   printf("%s ", type_to_string(declNode.type));
 
   printf("%s ", declNode.list_of_vars[0]);
-  for (int i = 1; strcmp(declNode.list_of_vars[i], "\0"); i++) {
+  for (int i = 1; strcmp(declNode.list_of_vars[i], "\0"); i++)
+  {
     printf(",%s ", declNode.list_of_vars[i]);
   }
 }
-void transpile_exp(struct SymbolTable *table, struct EXP_NODE expNode) {
+void transpile_exp(struct SymbolTable *table, struct EXP_NODE expNode)
+{
   printf("(");
-  if (expNode.lhs != NULL) {
+  if (expNode.lhs != NULL)
+  {
     transpile_stmt(table, expNode.lhs);
   }
   printf("%s", operand_to_string(expNode.oprnd));
-  if (expNode.rhs != NULL) {
+  if (expNode.rhs != NULL)
+  {
     transpile_stmt(table, expNode.rhs);
   }
 
   printf(")");
 }
 
-void transpile_var(struct SymbolTable *table, struct VariableNode expNode) {
+void transpile_var(struct SymbolTable *table, struct VariableNode expNode)
+{
   printf("%s", expNode.name);
 }
 
-void transpile_const(struct SymbolTable *table, struct ConstNode constNode) {
-  switch (constNode.type) {
-  case INTEGER_ENUM: {
+void transpile_const(struct SymbolTable *table, struct ConstNode constNode)
+{
+  switch (constNode.type)
+  {
+  case INTEGER_ENUM:
+  {
     printf("%d", constNode.val.intval);
     break;
   }
-  case DOUBLE_ENUM: {
+  case DOUBLE_ENUM:
+  {
     printf("%f", constNode.val.floatval);
     break;
   }
   }
 }
 
-void transpile_assign(struct SymbolTable *table, struct ASSIGN_NODE expNode) {
+void transpile_assign(struct SymbolTable *table, struct ASSIGN_NODE expNode)
+{
   printf("%s", expNode.lhs->name);
   printf("=");
   transpile_stmt(table, expNode.rhs);
+}
+
+void transpile_include(struct INCLUDE_NODE includeNode)
+{
+  printf("#include<%s>", includeNode.lib_name);
+}
+
+void transpile_console(struct CONSOLE_NODE consoleNode)
+{
+  printf("printf(%s)", consoleNode.string);
 }
