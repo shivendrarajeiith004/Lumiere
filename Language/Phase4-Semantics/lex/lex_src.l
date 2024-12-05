@@ -72,7 +72,7 @@ console         { return CONSOLE; }
 }
 
 {blanks}+ { current_col += yyleng; /* Skip blanks and adjust column */ }
-\n { lineno++; current_col = 0; return 0; /* Handle new lines */ }
+\n { lineno++; current_col = 0;; /* Handle new lines */ }
 . { /* Handle unrecognized characters */ \
     return INVALID_CHAR; 
    }

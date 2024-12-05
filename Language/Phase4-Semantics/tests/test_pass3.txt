@@ -1,0 +1,16 @@
+body a 
+init_vel    b   
+final_vel   c   
+accl        d  
+init_pos    e 
+mass m
+int  g ,h ,i 
+a.connectTo(b)
+
+if ( (g+h) > 10 ) {
+  a.connectTo(c)
+a.connectTo(d)
+a.connectTo(e)
+a.connectTo(m)
+}
+

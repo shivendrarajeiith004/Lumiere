@@ -62,6 +62,10 @@ CMPD_STATEMENT: CMPD_STATEMENT STATEMENT {
           | CONDITIONAL_STATEMENT{$$=$1;}
           | RESERVED_TYPE_DECLARATION
           | CONNECT_TO_STATEMENT
+          |INCLUDE_STATEMENT
+          |CONSOLE_STATEMENT
+INCLUDE_STATEMENT: HASH INCLUDE LESS_THAN VAR GREATER_THAN;
+CONSOLE_STATEMENT: CONSOLE LEFT_PAREN ARTH_EXP RIGHT_PAREN SEMICOLON  {};
 CONNECT_TO_STATEMENT: VAR JOIN_OPERATOR CONNECT_TO LEFT_PAREN VAR RIGHT_PAREN ;
 CONDITIONAL_STATEMENT: IF_STATEMENT {
                      struct CONDITIONAL_NODE *conNodePtr= (struct CONDITIONAL_NODE*)malloc(sizeof(struct CONDITIONAL_NODE));
@@ -215,13 +219,13 @@ ASSIGN_OP : ASSIGN   {$$ = ASSIGN_ENUM;}
           | DIVIDE_COMPOUND_ASSIGNMENT {$$=DIV_CMPND_ENUM;}
 
 
-RESERVED_TYPE_DECLARATION: RESERVED_TYPE RESERVED_TYPE_STATEMENTS SEMICOLON
-RESERVED_TYPE_STATEMENTS:RESERVED_TYPE_STATEMENT COMMA RESERVED_TYPE_STATEMENTS
-                         | RESERVED_TYPE_STATEMENT{printf("Reserved Type\n");}
+RESERVED_TYPE_DECLARATION: RESERVED_TYPE RESERVED_TYPE_STATEMENTS {}
+RESERVED_TYPE_STATEMENTS:RESERVED_TYPE_STATEMENTS COMMA RESERVED_TYPE_STATEMENT
+                         | RESERVED_TYPE_STATEMENT{}
                          ;
-RESERVED_TYPE_STATEMENT: VAR {printf("Indentifier\n");} | VAR ASSIGN_OP ARTH_EXP;
-RESERVED_TYPE: MASS {printf("Mass\n");}| INIT_VEL | FINAL_VEL |ACCL | INIT_POS | FINAL_POS | INIT_TIME
-                |FINAL_TIME |BODY;
+RESERVED_TYPE_STATEMENT: VAR {} | VAR ASSIGN_OP ARTH_EXP;
+RESERVED_TYPE: MASS {}| INIT_VEL | FINAL_VEL |ACCL | INIT_POS | FINAL_POS | INIT_TIME
+                |FINAL_TIME |BODY {};
 %%
 
 void yyerror(char * s){
@@ -251,7 +255,6 @@ free_cmpndStatement( mainProgram);
         exit(0);  // Exit the program
 }
 }
-
 extern FILE *yyin;
 int main(int argc, char** argv){
 if (argc < 2) {
@@ -282,6 +285,9 @@ init_SymbolTable(&symTable);
     }
     return 0;
 */
+ while (!feof(yyin)) {
+        yyparse();  // This will parse the tokens from the input file
+    }yyparse();
 semanticCheck(mainProgram,&symTable);
 transpile_cmpd(&symTable,mainProgram);
 free_cmpndStatement( mainProgram); 

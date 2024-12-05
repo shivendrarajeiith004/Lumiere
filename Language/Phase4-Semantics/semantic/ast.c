@@ -154,47 +154,44 @@ struct ASSIGN_NODE *new_ASSIGN_NODE(enum OPERAND op, struct VariableNode *lhs,
   return assignNode;
 }
 
-struct INCLUDE_NODE *new_INCLUDE_NODE(char *lib_name)
-{
-    struct INCLUDE_NODE *includeNode = (struct INCLUDE_NODE *)malloc(sizeof(struct INCLUDE_NODE));
-    if (includeNode == NULL)
-    {
-        fprintf(stderr, "Memory allocation failed for INCLUDE_NODE\n");
-        exit(1);
-    }
-    strncpy(includeNode->lib_name, lib_name, sizeof(includeNode->lib_name) - 1);
-    includeNode->lib_name[sizeof(includeNode->lib_name) - 1] = '\0';
-    includeNode->base.node_type = NODE_TYPE_INCLUDE;
-    return includeNode;
+struct INCLUDE_NODE *new_INCLUDE_NODE(char *lib_name) {
+  struct INCLUDE_NODE *includeNode =
+      (struct INCLUDE_NODE *)malloc(sizeof(struct INCLUDE_NODE));
+  if (includeNode == NULL) {
+    fprintf(stderr, "Memory allocation failed for INCLUDE_NODE\n");
+    exit(1);
+  }
+  strncpy(includeNode->lib_name, lib_name, sizeof(includeNode->lib_name) - 1);
+  includeNode->lib_name[sizeof(includeNode->lib_name) - 1] = '\0';
+  includeNode->base.node_type = NODE_TYPE_INCLUDE;
+  return includeNode;
 }
-struct CONSOLE_NODE *new_CONSOLE_NODE(char *console_string)
-{
-    struct CONSOLE_NODE *ConstNode = (struct CONSOLE_NODE *)malloc(sizeof(struct CONSOLE_NODE));
-    if (ConstNode == NULL)
-    {
-        fprintf(stderr, "Memory allocation failed for INCLUDE_NODE\n");
-        exit(1);
-    }
-    ConstNode->base.node_type = NODE_TYPE_CONSOLE;
-    ConstNode->string = console_string;
-    return ConstNode;
+struct CONSOLE_NODE *new_CONSOLE_NODE(char *console_string) {
+  struct CONSOLE_NODE *ConstNode =
+      (struct CONSOLE_NODE *)malloc(sizeof(struct CONSOLE_NODE));
+  if (ConstNode == NULL) {
+    fprintf(stderr, "Memory allocation failed for INCLUDE_NODE\n");
+    exit(1);
+  }
+  ConstNode->base.node_type = NODE_TYPE_CONSOLE;
+  ConstNode->string = console_string;
+  return ConstNode;
 }
-struct Connect_to_NODE *new_Connect_to_NODE(struct VariableNode *lhs, struct VariableNode *rhs,int line_no)
-{
-    struct Connect_to_NODE *node =
-        (struct Connect_to_NODE *)malloc(sizeof(struct Connect_to_NODE));
-    if (node == NULL)
-    {
-        fprintf(stderr, "Memory allocation failed for ASSIGN_NODE\n");
-        exit(1);
-    }
-    node->base.node_type = NODE_TYPE_CONNECT_TO;
-    node->lhs = lhs;
-    node->rhs = rhs;
-    node->base.line_no = line_no;
-    return node;
+struct Connect_to_NODE *new_Connect_to_NODE(struct VariableNode *lhs,
+                                            struct VariableNode *rhs,
+                                            int line_no) {
+  struct Connect_to_NODE *node =
+      (struct Connect_to_NODE *)malloc(sizeof(struct Connect_to_NODE));
+  if (node == NULL) {
+    fprintf(stderr, "Memory allocation failed for ASSIGN_NODE\n");
+    exit(1);
+  }
+  node->base.node_type = NODE_TYPE_CONNECT_TO;
+  node->lhs = lhs;
+  node->rhs = rhs;
+  node->base.line_no = line_no;
+  return node;
 }
-
 
 void free_cmpndStatement(struct CmpndStatement *stmt) {
   for (int i = 0; i < stmt->size; i++) {
@@ -233,24 +230,23 @@ void free_node(void *ptr) {
     free_ASSIGN_NODE(assign_node);
     break;
   }
-  case NODE_TYPE_INCLUDE:
-{
-    struct INCLUDE_NODE *include_node = (struct INCLUDE_NODE *)node;
-    free_INCLUDE_NODE(include_node);
-    break;
-}
-case NODE_TYPE_CONSOLE:
-{
-    struct CONSOLE_NODE *console_node = (struct CONSOLE_NODE *)node;
-    free_CONSOLE_NODE(console_node);
-    break;
-}
-case NODE_TYPE_CONNECT_TO:
-{
-    struct Connect_to_NODE *connect_to_node = (struct Connect_to_NODE *)node;
-    free_Connect_to_NODE(connect_to_node);
-    break;
-}
+  /*}*/
+  /*case NODE_TYPE_INCLUDE: {*/
+  /*  struct INCLUDE_NODE *include_node = (struct INCLUDE_NODE *)node;*/
+  /*  free_INCLUDE_NODE(include_node);*/
+  /*  break;*/
+  /*}*/
+  /*case NODE_TYPE_CONSOLE: {*/
+  /*  struct CONSOLE_NODE *console_node = (struct CONSOLE_NODE *)node;*/
+  /*  free_CONSOLE_NODE(console_node);*/
+  /*  break;*/
+  /*}*/
+  /*case NODE_TYPE_CONNECT_TO: {*/
+  /*  struct Connect_to_NODE *connect_to_node = (struct Connect_to_NODE
+   * *)node;*/
+  /*  free_Connect_to_NODE(connect_to_node);*/
+  /*  break;*/
+  /*}*/
   default:
     /*fprintf(stderr, "Unknown node type!%s\n",*/
     /*node_type_to_string(node->node_type));*/
@@ -289,24 +285,15 @@ void free_VariableNode(struct VariableNode *node) {
 
   memset(node->name, 0, sizeof(node->name));
 }
-void free_INCLUDE_NODE(struct INCLUDE_NODE *node)
-{
-    free(node->lib_name);
-}
-void free_CONSOLE_NODE(struct CONSOLE_NODE *node)
-{
-    free(node->string);
-};
-void free_Connect_to_NODE(struct Connect_to_NODE *node)
-{
-    if (node->lhs != NULL)
-    {
-        free_VariableNode(node->lhs);
-    }
-    if (node->rhs != NULL)
-    {
-        free_EXP_NODE(node->rhs);
-    }
+void free_INCLUDE_NODE(struct INCLUDE_NODE *node) { free(node->lib_name); }
+void free_CONSOLE_NODE(struct CONSOLE_NODE *node) { free(node->string); };
+void free_Connect_to_NODE(struct Connect_to_NODE *node) {
+  if (node->lhs != NULL) {
+    free_VariableNode(node->lhs);
+  }
+  if (node->rhs != NULL) {
+    free_EXP_NODE(node->rhs);
+  }
 }
 void semanticCheck(struct CmpndStatement *stmt, struct SymbolTable *table) {
   for (int i = 0; i < stmt->size; i++) {
@@ -343,18 +330,16 @@ void semantic_check(struct SymbolTable *table, void *ptr) {
     assign_semantic(table, assign_node);
     break;
   }
-case NODE_TYPE_CONSOLE:
-{
+  case NODE_TYPE_CONSOLE: {
     struct CONSOLE_NODE *console_node = (struct CONSOLE_NODE *)node;
     console_semantic(console_node);
     break;
-}
-case NODE_TYPE_CONNECT_TO:
-{
+  }
+  case NODE_TYPE_CONNECT_TO: {
     struct Connect_to_NODE *connect_to_node = (struct Connect_to_NODE *)node;
-    connectTo_semantic(table,connect_to_node);
+    connectTo_semantic(table, connect_to_node);
     break;
-}
+  }
 
   default:
     /*fprintf(stderr, "Unknown node type!%d\n", node->node_type);*/
@@ -416,36 +401,31 @@ void variable_semantic(struct SymbolTable *table, struct VariableNode *ptr) {
   }
 }
 
-void include_semantic(struct INCLUDE_NODE *ptr)
-{
-    if (ptr->lib_name == NULL)
-    {
-        printf("Error! Library Resolution Failed.\n");
-    }
+void include_semantic(struct INCLUDE_NODE *ptr) {
+  if (ptr->lib_name == NULL) {
+    printf("Error! Library Resolution Failed.\n");
+  }
 }
 
-void console_semantic(struct CONSOLE_NODE *ptr)
-{
-    if (ptr->string == NULL)
-    {
-        printf("Error! Library Resolution Failed.\n");
-    }
+void console_semantic(struct CONSOLE_NODE *ptr) {
+  if (ptr->string == NULL) {
+    printf("Error! Library Resolution Failed.\n");
+  }
 }
 
-void connectTo_semantic(struct SymbolTable *table, struct Connect_to_NODE *node)
-{
-    enum TYPE lhs_type = getType(table, node->lhs);
-    enum TYPE rhs_type = getType(table, node->rhs);
-    enum TYPE resType = typeResolution(lhs_type, rhs_type);
-    if (resType == -1)
-    {
-        no_errors++;
-        fprintf(stderr,
-                "Error:(Line:%d) Cannot connect %s to variable %s with type %s\n",
-                node->base.line_no, type_to_string(rhs_type), node->lhs->name,
-                type_to_string(lhs_type));
-        /**type = -1;*/
-    }
+void connectTo_semantic(struct SymbolTable *table,
+                        struct Connect_to_NODE *node) {
+  enum TYPE lhs_type = getType(table, node->lhs);
+  enum TYPE rhs_type = getType(table, node->rhs);
+  enum TYPE resType = typeResolution(lhs_type, rhs_type);
+  if (resType == -1) {
+    no_errors++;
+    fprintf(stderr,
+            "Error:(Line:%d) Cannot connect %s to variable %s with type %s\n",
+            node->base.line_no, type_to_string(rhs_type), node->lhs->name,
+            type_to_string(lhs_type));
+    /**type = -1;*/
+  }
 }
 void add_dec_node(struct SymbolTable *symtable, struct DECL_NODE node) {
   char **temp = node.list_of_vars;
@@ -602,7 +582,7 @@ void transpile_cmpd(struct SymbolTable *table, struct CmpndStatement *stmt) {
       transpile_stmt(table, stmt->ptr[i]->ptr);
       printf(";\n");
     }
-    printf("}");
+    printf("}\n");
   }
 }
 
@@ -641,42 +621,40 @@ void transpile_stmt(struct SymbolTable *table, void *ptr) {
     transpile_const(table, *const_node);
     break;
   }
-  case NODE_TYPE_COND_IF: {
-    struct CONDITIONAL_NODE *con_node = (struct CONDITIONAL_NODE *)node;
-    transpile_stmt(table, con_node->if_node);
-    break;
-  }
-  case NODE_TYPE_COND_IF_ELSE: {
-    struct CONDITIONAL_NODE *con_node = (struct CONDITIONAL_NODE *)node;
-    transpile_stmt(table, con_node->if_node);
-    transpile_stmt(table, con_node->else_node);
-    break;
-  }
-  case NODE_TYPE_IF: {
-    struct IF_NODE *if_node = (struct IF_NODE *)node;
-    transpile_if(table, *if_node);
-    break;
-  }
-  case NODE_TYPE_INCLUDE:
-{
-    struct INCLUDE_NODE *includeNode = (struct INCLUDE_NODE *)node;
-    transpile_include(*includeNode);
-    break;
-}
-case NODE_TYPE_CONSOLE:
-{
-    struct CONSOLE_NODE *console_node = (struct CONSOLE_NODE *)node;
-    transpile_console(*console_node);
-    break;
-}
-case NODE_TYPE_CONNECT_TO:
-{
-    struct Connect_to_NODE *connect_to_node = (struct Connect_to_NODE *)node;
-    transpile_connectTo(connect_to_node);
-    break;
-}
+  /*case NODE_TYPE_COND_IF: {*/
+  /*  struct CONDITIONAL_NODE *con_node = (struct CONDITIONAL_NODE *)node;*/
+  /*  transpile_stmt(table, con_node->if_node);*/
+  /*  break;*/
+  /*}*/
+  /*case NODE_TYPE_COND_IF_ELSE: {*/
+  /*  struct CONDITIONAL_NODE *con_node = (struct CONDITIONAL_NODE *)node;*/
+  /*  transpile_stmt(table, con_node->if_node);*/
+  /*  transpile_stmt(table, con_node->else_node);*/
+  /*  break;*/
+  /*}*/
+  /*case NODE_TYPE_IF: {*/
+  /*  struct IF_NODE *if_node = (struct IF_NODE *)node;*/
+  /*  transpile_if(table, *if_node);*/
+  /*  break;*/
+  /*}*/
+  /*case NODE_TYPE_INCLUDE: {*/
+  /*  struct INCLUDE_NODE *includeNode = (struct INCLUDE_NODE *)node;*/
+  /*  transpile_include(*includeNode);*/
+  /*  break;*/
+  /*}*/
+  /*case NODE_TYPE_CONSOLE: {*/
+  /*  struct CONSOLE_NODE *console_node = (struct CONSOLE_NODE *)node;*/
+  /*  transpile_console(*console_node);*/
+  /*  break;*/
+  /*}*/
+  /*case NODE_TYPE_CONNECT_TO: {*/
+  /*  struct Connect_to_NODE *connect_to_node = (struct Connect_to_NODE
+   * *)node;*/
+  /*  transpile_connectTo(connect_to_node);*/
+  /*  break;*/
+  /*}*/
   default:
-    fprintf(stderr, "Unknown node type!%d\n", node->node_type);
+    /*fprintf(stderr, "Unknown node type!%d\n", node->node_type);*/
     break;
   }
 }
@@ -731,18 +709,15 @@ void transpile_if(struct SymbolTable *table, struct IF_NODE if_node) {
   transpile_cmpd(table, if_node.stmt);
 }
 
-void transpile_include(struct INCLUDE_NODE includeNode)
-{
-    printf("#include<%s>", includeNode.lib_name);
+void transpile_include(struct INCLUDE_NODE includeNode) {
+  printf("#include<%s>", includeNode.lib_name);
 }
 
-void transpile_console(struct CONSOLE_NODE consoleNode)
-{
-    printf("printf(%s)", consoleNode.string);
+void transpile_console(struct CONSOLE_NODE consoleNode) {
+  printf("printf(%s)", consoleNode.string);
 }
 
-void transpile_connectTo(struct Connect_to_NODE *node)
-{
+void transpile_connectTo(struct Connect_to_NODE *node) {
 
-    // make call to prewritten function
+  // make call to prewritten function
 }

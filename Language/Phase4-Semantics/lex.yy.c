@@ -1117,7 +1117,7 @@ case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
 #line 75 "./lex/lex_src.l"
-{ lineno++; current_col = 0; return 0; /* Handle new lines */ }
+{ lineno++; current_col = 0;; /* Handle new lines */ }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
