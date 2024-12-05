@@ -16,3 +16,5 @@ format:
 	clang-format -i $(filename) 
 run: lex   parse
 	gcc  -std=c18 -g -o calc -I./semantic lex.yy.c  parser.tab.c  semantic/ast.c semantic/symbol.c  $(CXXFLAGS) -ll  
+clean:
+	rm calc parser.tab.c parser.tab.h lex.yy.c

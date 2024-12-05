@@ -8,7 +8,7 @@ echo "Building the project..."
 make run
 
 # Directory containing input files
-input_dir="tests"
+input_dir="test"
 
 # Check if the input directory exists
 if [[ ! -d $input_dir ]]; then
