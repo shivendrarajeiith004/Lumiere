@@ -22,7 +22,7 @@ echo "Processing input files in '$input_dir'..."
 for input_file in "$input_dir"/*; do
     if [[ -f $input_file ]]; then
         echo "Running ./test/calc with input file: $input_file"
-        ./calc "$input_file"
+        ./src/calc "$input_file"
     else
         echo "Skipping non-file: $input_file"
     fi
