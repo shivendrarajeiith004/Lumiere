@@ -215,10 +215,9 @@ typedef union YYSTYPE
     enum TYPE type;
     char** var_list;  
     enum OPERAND op;
-struct CmpndStatement * program;
 }
 /* Line 1529 of yacc.c.  */
-#line 222 "parser.tab.h"
+#line 221 "parser.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

@@ -25,7 +25,6 @@ extern int lineno;
     enum TYPE type;
     char** var_list;  
     enum OPERAND op;
-struct CmpndStatement * program;
 }
 %token VALUE ASSIGN_OPERATOR RESERVED_TYPE RESERVED_KEYWORD SEMICOLON INCLUDE INT LIBRARY 
 %token FUNCTION CONSOLE  STRING CONNECT_TO RETURN
@@ -37,8 +36,7 @@ struct CmpndStatement * program;
 %token IF ELSE ELSE_IF
 %token ASSIGN GREATER_THAN LESS_THAN NOT_EQUAL_TO EQUAL_TO LESS_THAN_EQUAL_TO GREATER_THAN_EQUAL_TO SUBTRACT_COMPOUND_ASSIGNMENT ADD_COMPOUND_ASSIGNMENT MULTIPLY_COMPOUND_ASSIGNMENT DIVIDE_COMPOUND_ASSIGNMENT COMMA
 %token  INTEGER DOUBLE CHAR MUL_OP ADD_OP SUB_OP DIV_OP POW_OP LEFT_PAREN RIGHT_PAREN EOL INT_TYPE DOUBLE_TYPE  CHAR_TYPE VAR INVALID_CHAR 
-%type<nodePtr> ARTH_EXP MUL_EXP  TERM STATEMENT DECLERATION  ASSIGN_STATEMENT POW_EXP RELATIONAL_EXP CONDITIONAL_STATEMENT
-%type<program> CMPD_STATEMENT
+%type<nodePtr> ARTH_EXP MUL_EXP  TERM STATEMENT DECLERATION  ASSIGN_STATEMENT POW_EXP RELATIONAL_EXP CONDITIONAL_STATEMENT IF_STATEMENT ELSE_STATEMENT CMPD_STATEMENT
 %type<var_list> VAR_LIST
 %type<stringval> VAR INTEGER DOUBLE INT_TYPE DOUBLE_TYPE CHAR_TYPE
 %type<type> VAR_TYPE 
@@ -54,13 +52,36 @@ CMPD_STATEMENT: CMPD_STATEMENT STATEMENT {
     //printf("in just recursive Node\n");
     node->ptr = $2;
     add_to_cmpnd_Statement(mainProgram, node);
+    $$ = node;
 }
 |
 | INVALID_CHAR {free_cmpndStatement( mainProgram); exit(1); }
   STATEMENT : ARTH_EXP   {$$=$1;}
           | DECLERATION {$$=$1;}
           | ASSIGN_STATEMENT {$$=$1;}
+          | CONDITIONAL_STATEMENT{$$=$1;}
 
+CONDITIONAL_STATEMENT: IF_STATEMENT {
+                     struct CONDITIONAL_NODE *conNodePtr= (struct CONDITIONAL_NODE*)malloc(sizeof(struct CONDITIONAL_NODE));
+                conNodePtr = new_con_node($1,NULL,NODE_TYPE_COND_IF);
+                $$ = conNodePtr;
+}
+                     | IF_STATEMENT ELSE_STATEMENT {
+                     struct CONDITIONAL_NODE *conNodePtr= (struct CONDITIONAL_NODE*)malloc(sizeof(struct CONDITIONAL_NODE));
+                conNodePtr = new_con_node($1,$2,NODE_TYPE_COND_IF_ELSE);
+                $$ = conNodePtr;
+}
+IF_STATEMENT:IF LEFT_PAREN RELATIONAL_EXP RIGHT_PAREN LEFT_BRACKET CMPD_STATEMENT RIGHT_BRACKET {
+                     struct IF_NODE *if_node_ptr= (struct IF_NODE*)malloc(sizeof(struct IF_NODE));
+                if_node_ptr = new_if_node($6,$3,lineno);
+                $$ = if_node_ptr;
+            }
+ELSE_STATEMENT: ELSE LEFT_BRACKET CMPD_STATEMENT RIGHT_BRACKET {
+
+                     struct ELSE_NODE *else_node_ptr= (struct ELSE_NODE *)malloc(sizeof(struct ELSE_NODE));
+                else_node_ptr= new_else_node($3,lineno);
+                $$ = else_node_ptr;
+              }
 
 ASSIGN_STATEMENT: VAR ASSIGN_OP ARTH_EXP   {
                 struct VariableNode *varNodePtr = (struct VariableNode *)malloc(sizeof(struct VariableNode));
@@ -71,7 +92,6 @@ ASSIGN_STATEMENT: VAR ASSIGN_OP ARTH_EXP   {
                 $$ = nodePtr;
                 }
 
-CONDITIONAL_STATEMENT :
  DECLERATION:VAR_TYPE VAR_LIST { 
            struct  DECL_NODE *nodePtr = ( struct DECL_NODE*)malloc(sizeof(struct DECL_NODE));
                  nodePtr = new_DECL_NODE($1,$2 ,lineno);

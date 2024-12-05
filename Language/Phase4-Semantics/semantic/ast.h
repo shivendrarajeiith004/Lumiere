@@ -61,6 +61,22 @@ struct ASSIGN_NODE {
   struct VariableNode *lhs;
   void *rhs;
 };
+struct IF_NODE {
+  struct Node base;
+  struct EXP_NODE *bool_exp;
+  struct CmpndStatement *stmt;
+};
+struct ELSE_NODE {
+  struct Node base;
+  struct EXP_NODE *bool_exp;
+  struct CmpndStatement *stmt;
+};
+struct CONDITIONAL_NODE {
+  struct Node base;
+  struct IF_NODE *if_node;
+  struct ELSE_NODE *else_node;
+};
+
 // Function to initialize VariableNode
 void init_cmpndStatement(struct CmpndStatement *stmt);
 void add_to_cmpnd_Statement(struct CmpndStatement *stmt,
@@ -73,6 +89,12 @@ struct DECL_NODE *new_DECL_NODE(enum TYPE type, char **list_of_vars,
                                 int line_no);
 struct ASSIGN_NODE *new_ASSIGN_NODE(enum OPERAND op, struct VariableNode *lhs,
                                     void *rhs, int line_no);
+struct IF_NODE *new_if_node(struct CmpndStatement *stmt, struct EXP_NODE *exp,
+                            int line_no);
+struct ELSE_NODE *new_else_node(struct CmpndStatement *stmt, int line_no);
+struct CONDITIONAL_NODE *new_con_node(struct IF_NODE *if_node,
+                                      struct ELSE_NODE *else_node,
+                                      enum NODE_TYPE type);
 void free_cmpndStatement(struct CmpndStatement *stmt);
 void free_node(void *ptr);
 void free_VariableNode(struct VariableNode *node);
@@ -107,5 +129,6 @@ void transpile_const(struct SymbolTable *table, struct ConstNode constNode);
 void transpile_decl(struct SymbolTable *table, struct DECL_NODE declNode);
 void transpile_assign(struct SymbolTable *table, struct ASSIGN_NODE assignNode);
 
+void transpile_if(struct SymbolTable *table, struct IF_NODE if_node);
 #endif // AST_H
        //

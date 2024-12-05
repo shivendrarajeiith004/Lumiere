@@ -15,9 +15,7 @@ parse: lex
 format:
 	clang-format -i $(filename) 
 run: lex   parse
-	gcc  -std=c18 -o calc -I./semantic lex.yy.c  parser.tab.c  semantic/ast.c semantic/symbol.c  $(CXXFLAGS) -ll  
+	gcc  -std=c18 -g -o calc -I./semantic lex.yy.c  parser.tab.c  semantic/ast.c semantic/symbol.c  $(CXXFLAGS) -ll  
 	./calc
-
-
 
 

@@ -28,7 +28,11 @@ enum NODE_TYPE {
   NODE_TYPE_CONST,
   NODE_TYPE_EXP,
   NODE_TYPE_DECL,
-  NODE_TYPE_ASSIGN
+  NODE_TYPE_ASSIGN,
+  NODE_TYPE_COND_IF,
+  NODE_TYPE_COND_IF_ELSE,
+  NODE_TYPE_ELSE,
+  NODE_TYPE_IF
 }; //  Union to hold different types of values
 union value {
   int intval;

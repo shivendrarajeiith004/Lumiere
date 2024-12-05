@@ -30,7 +30,50 @@ void add_to_cmpnd_Statement(struct CmpndStatement *stmt,
   stmt->size++;
 }
 
-// Constructor for ConstNode
+struct CONDITIONAL_NODE *new_con_node(struct IF_NODE *if_node,
+                                      struct ELSE_NODE *else_node,
+                                      enum NODE_TYPE type) {
+  struct CONDITIONAL_NODE *con_node =
+      (struct CONDITIONAL_NODE *)malloc(sizeof(struct CONDITIONAL_NODE));
+  if (con_node == NULL) {
+    fprintf(stderr, "Memory allocation failed for CON_NODE\n");
+    exit(1);
+  }
+  con_node->if_node = if_node;
+  con_node->base.node_type = type;
+  if (type == NODE_TYPE_COND_IF_ELSE) {
+    con_node->else_node = else_node;
+  }
+  return con_node;
+}
+struct IF_NODE *new_if_node(struct CmpndStatement *stmt, struct EXP_NODE *exp,
+                            int line_no) {
+  struct IF_NODE *if_node = (struct IF_NODE *)malloc(sizeof(struct IF_NODE));
+  if (if_node == NULL) {
+    fprintf(stderr, "Memory allocation failed for ConstNode\n");
+    exit(1);
+  }
+  if_node->base.node_type = NODE_TYPE_IF;
+
+  if_node->stmt = stmt;
+  if_node->bool_exp = exp;
+  if_node->base.line_no = line_no;
+  return if_node;
+}
+struct ELSE_NODE *new_else_node(struct CmpndStatement *stmt, int line_no) {
+
+  struct ELSE_NODE *else_node =
+      (struct ELSE_NODE *)malloc(sizeof(struct ELSE_NODE));
+  if (else_node == NULL) {
+    fprintf(stderr, "Memory allocation failed for ConstNode\n");
+    exit(1);
+  }
+  else_node->base.node_type = NODE_TYPE_ELSE;
+  else_node->stmt = stmt;
+  else_node->base.line_no = line_no;
+  return else_node;
+}
+
 struct VariableNode *new_VariableNode(const char *name, int line_no) {
   struct VariableNode *varNode =
       (struct VariableNode *)malloc(sizeof(struct VariableNode));
@@ -147,10 +190,9 @@ void free_node(void *ptr) {
     free_ASSIGN_NODE(assign_node);
     break;
   }
-
   default:
-    fprintf(stderr, "Unknown node type!%s\n",
-            node_type_to_string(node->node_type));
+    /*fprintf(stderr, "Unknown node type!%s\n",*/
+    /*node_type_to_string(node->node_type));*/
     break;
   }
 
@@ -475,6 +517,22 @@ void transpile_stmt(struct SymbolTable *table, void *ptr) {
     transpile_const(table, *const_node);
     break;
   }
+  case NODE_TYPE_COND_IF: {
+    struct CONDITIONAL_NODE *con_node = (struct CONDITIONAL_NODE *)node;
+    transpile_stmt(table, con_node->if_node);
+    break;
+  }
+  case NODE_TYPE_COND_IF_ELSE: {
+    struct CONDITIONAL_NODE *con_node = (struct CONDITIONAL_NODE *)node;
+    transpile_stmt(table, con_node->if_node);
+    transpile_stmt(table, con_node->else_node);
+    break;
+  }
+  case NODE_TYPE_IF: {
+    struct IF_NODE *if_node = (struct IF_NODE *)node;
+    transpile_if(table, *if_node);
+    break;
+  }
   default:
     fprintf(stderr, "Unknown node type!%d\n", node->node_type);
     break;
@@ -523,4 +581,10 @@ void transpile_assign(struct SymbolTable *table, struct ASSIGN_NODE expNode) {
   printf("%s", expNode.lhs->name);
   printf("=");
   transpile_stmt(table, expNode.rhs);
+}
+void transpile_if(struct SymbolTable *table, struct IF_NODE if_node) {
+  printf("if (");
+  transpile_stmt(table, if_node.bool_exp);
+  printf(")");
+  transpile_cmpd(table, if_node.stmt);
 }
