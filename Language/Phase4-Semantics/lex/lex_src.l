@@ -1,125 +1,83 @@
 %{
-#include <stdio.h>
-#include <stdlib.h>
 #include "ast.h"
 #include "parser.tab.h"
 
-//extern FILE * yyin;
-//int lineno = 1;
-//FILE* inputFile;
-//FILE* outputFile;
-//int lineno= 1;
 
+%}
+%{
 int lineno = 0;
 int current_col = 0; 
 %}
 
-digit [0-9]
-blanks [ \t]*
-letter  [a-zA-Z_]
-value (({digit}+\.{digit}+)|{digit}+) 
-assign_operator \=
-equal_operator \=\=
-not_equal_operator \!\=
-greater_than_equal_to_operator \>\=
-less_than_equal_to_operator \<\=
-reserved_type "mass"|"init_vel"|"final_vel"|"accl"|"init_pos"|"final_pos"|"init_time"|"final_time"|"body"|"variable" 
-reserved_keyword "check_until"
-if "if"
-else "else"
-else_if "else_if"
-/*string \"[^\"]*\" anything written between this " and this " */
-return "return"
-connectTo "connectTo"
-library "library"
-include "include"
-int "int"
-function "function"
-console "console"
-hash \# 
-semicolon ;
-comma \,
-join_operator \.
-left_parenthesis \(
-right_parenthesis \)
-left_brace \[
-right_brace \]
-left_curly_brace \{
-right_curly_brace \}
-less_than \<
-greater_than \>
-add_operator \+
-sub_operator \-
-mult_operator \*
-div_operator  \/
-cmpd_add_operator \+\=
-cmpd_sub_operator \-\=
-cmpd_mult_operator \*\=
-cmpd_div_operator \/\=
-and_operator \&\&
-not_operator !
-or_operator  \|\|
-power_operator ^
-identifier {letter}({letter}|{digit})*
-comment \/\*[^\*\/]*\*\/    
-string \"[^\"\n]*\"
-
+digits [0-9] 
+blanks [ \t]+
 %%
-{value}                     {return VALUE;}
-{assign_operator}           {return ASSIGN_OPERATOR;}
-{reserved_type}             {return RESERVED_TYPE;}
-{if}                        {return IF;}
-{else}                      {return ELSE;}
-{else_if}                   {return ELSE_IF;}
-{reserved_keyword}          {return RESERVED_KEYWORD;}
-\n                          {yylineno++;}
-{blanks}                    {}
-{semicolon}                 {return SEMICOLON;}
-{include}                   {return INCLUDE;}
-{return}                    {return RETURN;}
-{connectTo}                 {return CONNECT_TO;}
-{int}                       {return INT_TYPE;}
-{library}                   {return LIBRARY;}/*should always be above than function_name*/
-{function}                  {return FUNCTION;}
-{console}                   {return CONSOLE;}
-{string}                    {return STRING;}
-{comment}                   {return COMMENT;}
-{identifier}                {return IDENTIFIER;}
-{comma}                     {return COMMA;}
-{join_operator}             {return JOIN_OPERATOR;}
-{hash}                      {return HASH;}
-{less_than}                 {return LESS_THAN;}
-{greater_than}              {return GREATER_THAN;}
-{left_parenthesis}          {return LEFT_PARENT;}
-{right_parenthesis}         {return RIGHT_PARENT;}
-{left_brace}                {return LEFT_BRACE;}
-{right_brace}               {return RIGHT_BRACE;}
-{left_curly_brace}          {return LEFT_CURLY_BRACE;}
-{right_curly_brace}         {return RIGHT_CURLY_BRACE;}
-{and_operator}              {return AND_OPERATOR;}
-{or_operator}               {return OR_OPERATOR;}
-{add_operator}              {return ADD_OPERATOR;}
-{sub_operator}              {return SUB_OPERATOR;}
-{mult_operator}             {return MULT_OPERATOR;}
-{div_operator}              {return DIV_OPERATOR;}
-{cmpd_add_operator}         {return CMPD_ADD_OPERATOR;}
-{cmpd_sub_operator}         {return CMPD_SUB_OPERATOR;}
-{cmpd_mult_operator}        {return CMPD_MULT_OPERATOR;}
-{cmpd_div_operator}         {return CMPD_DIV_OPERATOR;}
-{equal_operator}            {return EQUAL_OPERATOR;}
-{not_equal_operator}        {return NOT_EQUAL_OPERATOR;} 
-{greater_than_equal_to_operator} {return GE_OPERATOR;}
-{less_than_equal_to_operator} 	 {return LE_OPERATOR;}       
-{not_operator}              	 {return NOT_OPERATOR;}
+{digits}+ {   yylval.stringval = strdup(yytext); return INTEGER; }
+{digits}*\.{digits}+ {   yylval.stringval = strdup(yytext); return DOUBLE; }
+\".*\" { yylval.stringval = strdup(yytext); return CHAR;}
+\* {   return MUL_OP; }
+\/ {   return DIV_OP; }
+\+ {   return ADD_OP; }
+- {   return SUB_OP; }
+\*\* {   return POW_OP; }
 
-\n { lineno++; current_col = 0; return 0; /* Handle new lines */ }
+\( {   return LEFT_PAREN; }
+\) {   return RIGHT_PAREN; }
+\{ {   return LEFT_BRACKET; }
+\} {   return RIGHT_BRACKET; }
+
+\= {   return ASSIGN; }
+\> {   return GREATER_THAN; }
+\< {   return LESS_THAN; }
+"!=" {   return NOT_EQUAL_TO; }
+\=\= {   return EQUAL_TO; }
+\<= {   return LESS_THAN_EQUAL_TO; }
+\>= {   return GREATER_THAN_EQUAL_TO; }
+
+\-= {   return SUBTRACT_COMPOUND_ASSIGNMENT; }
+\+= {   return ADD_COMPOUND_ASSIGNMENT; }
+\*= {   return MULTIPLY_COMPOUND_ASSIGNMENT; }
+\/= {   return DIVIDE_COMPOUND_ASSIGNMENT; }
+int {  return INT_TYPE;  }
+double {   return DOUBLE_TYPE; }
+char {  return CHAR_TYPE;}
+if {   return IF; }
+else {   return ELSE; }
+elif {   return ELIF; }
+mass            { return MASS; }
+init_vel        { return INIT_VEL; }
+final_vel       { return FINAL_VEL; }
+accl            { return ACCL; }
+init_pos        { return INIT_POS; }
+final_pos       { return FINAL_POS; }
+init_time       { return INIT_TIME; }
+final_time      { return FINAL_TIME; }
+body            { return BODY; }
+
+check_until     { return CHECK_UNTIL; }
+return          { return RETURN; }
+connectTo       { return CONNECT_TO; }
+library         { return LIBRARY; }
+include         { return INCLUDE; }
+int             { return INT; }
+function        { return FUNCTION; }
+console         { return CONSOLE; }
+\# { return HASH;}
+\. { return JOIN_OPERATOR;}
+
+\, { return COMMA;}
 [a-zA-Z]+[_a-zA-Z0-9]* {   
   yylval.stringval = strdup(yytext); 
   return VAR;
 }
 
+{blanks}+ { current_col += yyleng; /* Skip blanks and adjust column */ }
+\n { lineno++; current_col = 0; return 0; /* Handle new lines */ }
+. { /* Handle unrecognized characters */ \
+    return INVALID_CHAR; 
+   }
 %%
-
-int yywrap(){
-    return 1;
+int yywrap()  {
+  return 1;
 }
+
