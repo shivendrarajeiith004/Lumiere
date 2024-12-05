@@ -19,3 +19,22 @@ To View source code for each of the Phases, You can see it in Language Folder:
 			b. use 'make' command to compile the program.
 			c. use 'make run' to execute the the program and the outputs will be present in 'test' directory.
 			d. use 'make clean' to remove files after use.
+
+# To Run the Code
+
+1. Navigate to the project directory:
+    ```bash
+    cd Language/Phase4-Semantics
+    ```
+
+2. Build the project using the `build.sh` script:
+    ```bash
+    bash build.sh
+    ```
+
+---
+
+## Transpilation Status:
+- **Declaration and Expression Transpilation**: Completed successfully.
+- **Next Steps**: Debugging required for other parts of the program.
+
