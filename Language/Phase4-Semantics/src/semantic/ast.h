@@ -76,21 +76,18 @@ struct CONDITIONAL_NODE {
   struct IF_NODE *if_node;
   struct ELSE_NODE *else_node;
 };
-struct INCLUDE_NODE
-{
-    struct Node base;
-    char lib_name[256];
+struct INCLUDE_NODE {
+  struct Node base;
+  char lib_name[256];
 };
-struct CONSOLE_NODE
-{
-    struct Node base;
-    char *string;
+struct CONSOLE_NODE {
+  struct Node base;
+  char *string;
 };
-struct Connect_to_NODE
-{
-    struct Node base;
-    struct VariableNode *lhs;
-    struct VariableNode *rhs;
+struct Connect_to_NODE {
+  struct Node base;
+  struct VariableNode *lhs;
+  struct VariableNode *rhs;
 };
 
 // Function to initialize VariableNode
@@ -111,7 +108,9 @@ struct ELSE_NODE *new_else_node(struct CmpndStatement *stmt, int line_no);
 struct CONDITIONAL_NODE *new_con_node(struct IF_NODE *if_node,
                                       struct ELSE_NODE *else_node,
                                       enum NODE_TYPE type);
-struct Connect_to_NODE *new_Connect_to_NODE(struct VariableNode *lhs, struct VariableNode *rhs,int line_no);
+struct Connect_to_NODE *new_Connect_to_NODE(struct VariableNode *lhs,
+                                            struct VariableNode *rhs,
+                                            int line_no);
 struct INCLUDE_NODE *new_INCLUDE_NODE(char *lib_name);
 struct CONSOLE_NODE *new_CONSOLE_NODE(char *console_string);
 
@@ -134,7 +133,8 @@ void decl_semantic(struct SymbolTable *table, struct DECL_NODE *ptr);
 void variable_semantic(struct SymbolTable *table, struct VariableNode *ptr);
 void include_semantic(struct INCLUDE_NODE *ptr);
 void console_semantic(struct CONSOLE_NODE *ptr);
-void connectTo_semantic(struct SymbolTable *table, struct Connect_to_NODE *node);
+void connectTo_semantic(struct SymbolTable *table,
+                        struct Connect_to_NODE *node);
 
 enum TYPE typeResolution(enum TYPE type1, enum TYPE type2);
 void add_dec_node(struct SymbolTable *symTable, struct DECL_NODE node);
