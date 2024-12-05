@@ -1,4 +1,3 @@
-
 #include "ast.h"
 #include "symbol.h"
 #include <stdio.h>
@@ -222,11 +221,7 @@ void semantic_check(struct SymbolTable *table, void *ptr) {
     assign_semantic(table, assign_node);
     break;
   }
-  case CONSOLE_NODE: {
-    struct ASSIGN_NODE *assign_node = (struct ASSIGN_NODE *)node;
-    assign_semantic(table, assign_node);
-    break;
-  }
+
   default:
     /*fprintf(stderr, "Unknown node type!%d\n", node->node_type);*/
     break;

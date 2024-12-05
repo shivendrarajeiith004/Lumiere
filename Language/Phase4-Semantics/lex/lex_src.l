@@ -1,13 +1,17 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include "y.tab.h"
+#include "ast.h"
+#include "parser.tab.h"
 
 //extern FILE * yyin;
 //int lineno = 1;
 //FILE* inputFile;
 //FILE* outputFile;
 //int lineno= 1;
+
+int lineno = 0;
+int current_col = 0; 
 %}
 
 digit [0-9]
@@ -74,7 +78,7 @@ string \"[^\"\n]*\"
 {include}                   {return INCLUDE;}
 {return}                    {return RETURN;}
 {connectTo}                 {return CONNECT_TO;}
-{int}                       {return INT;}
+{int}                       {return INT_TYPE;}
 {library}                   {return LIBRARY;}/*should always be above than function_name*/
 {function}                  {return FUNCTION;}
 {console}                   {return CONSOLE;}
@@ -107,6 +111,13 @@ string \"[^\"\n]*\"
 {greater_than_equal_to_operator} {return GE_OPERATOR;}
 {less_than_equal_to_operator} 	 {return LE_OPERATOR;}       
 {not_operator}              	 {return NOT_OPERATOR;}
+
+\n { lineno++; current_col = 0; return 0; /* Handle new lines */ }
+[a-zA-Z]+[_a-zA-Z0-9]* {   
+  yylval.stringval = strdup(yytext); 
+  return VAR;
+}
+
 %%
 
 int yywrap(){
