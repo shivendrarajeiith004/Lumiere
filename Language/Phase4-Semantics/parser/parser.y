@@ -26,7 +26,7 @@ extern int lineno;
     char** var_list;  
     enum OPERAND op;
 }
-%token VALUE ASSIGN_OPERATOR RESERVED_TYPE RESERVED_KEYWORD SEMICOLON INCLUDE INT LIBRARY 
+%token VALUE ASSIGN_OPERATOR RESERVED_KEYWORD SEMICOLON INCLUDE INT LIBRARY 
 %token FUNCTION CONSOLE  STRING CONNECT_TO RETURN
 %token COMMENT IDENTIFIER COMMA JOIN_OPERATOR HASH LESS_THAN GREATER_THAN LEFT_PARENT RIGHT_PARENT 
 %token ELIF MASS INIT_VEL FINAL_VEL ACCL INIT_POS FINAL_POS INIT_TIME FINAL_TIME BODY CHECK_UNTIL 
@@ -60,7 +60,9 @@ CMPD_STATEMENT: CMPD_STATEMENT STATEMENT {
           | DECLERATION {$$=$1;}
           | ASSIGN_STATEMENT {$$=$1;}
           | CONDITIONAL_STATEMENT{$$=$1;}
-
+          | RESERVED_TYPE_DECLARATION
+          | CONNECT_TO_STATEMENT
+CONNECT_TO_STATEMENT: VAR JOIN_OPERATOR CONNECT_TO LEFT_PAREN VAR RIGHT_PAREN ;
 CONDITIONAL_STATEMENT: IF_STATEMENT {
                      struct CONDITIONAL_NODE *conNodePtr= (struct CONDITIONAL_NODE*)malloc(sizeof(struct CONDITIONAL_NODE));
                 conNodePtr = new_con_node($1,NULL,NODE_TYPE_COND_IF);
@@ -212,6 +214,14 @@ ASSIGN_OP : ASSIGN   {$$ = ASSIGN_ENUM;}
           | MULTIPLY_COMPOUND_ASSIGNMENT {$$=MUL_CMPND_ENUM;}
           | DIVIDE_COMPOUND_ASSIGNMENT {$$=DIV_CMPND_ENUM;}
 
+
+RESERVED_TYPE_DECLARATION: RESERVED_TYPE RESERVED_TYPE_STATEMENTS SEMICOLON
+RESERVED_TYPE_STATEMENTS:RESERVED_TYPE_STATEMENT COMMA RESERVED_TYPE_STATEMENTS
+                         | RESERVED_TYPE_STATEMENT{printf("Reserved Type\n");}
+                         ;
+RESERVED_TYPE_STATEMENT: VAR {printf("Indentifier\n");} | VAR ASSIGN_OP ARTH_EXP;
+RESERVED_TYPE: MASS {printf("Mass\n");}| INIT_VEL | FINAL_VEL |ACCL | INIT_POS | FINAL_POS | INIT_TIME
+                |FINAL_TIME |BODY;
 %%
 
 void yyerror(char * s){
@@ -242,18 +252,38 @@ free_cmpndStatement( mainProgram);
 }
 }
 
+extern FILE *yyin;
 int main(int argc, char** argv){
+if (argc < 2) {
+        fprintf(stderr, "Usage: %s <input_file>\n", argv[0]);
+        return 1;
+    }
+
+    // Open the input file
+    FILE *input_file = fopen(argv[1], "r");
+    if (!input_file) {
+        fprintf(stderr, "Error: Could not open file %s\n", argv[1]);
+    }
+
+    // Set the input file for yyparse
+    yyin = input_file;
 init_SymbolTable(&symTable);
     mainProgram = (struct CmpndStatement*)malloc(sizeof(struct CmpndStatement));
     init_cmpndStatement( mainProgram);
-if (signal(SIGINT, signal_handler) == SIG_ERR) {
+
+/*if (signal(SIGINT, signal_handler) == SIG_ERR) {
         fprintf(stderr, "Error setting up signal handler.\n");
         return 1;
     }
+
     // Initialize the lexer state (if using Flex) or other setup
     while (1) {
         yyparse();
     }
     return 0;
+*/
+semanticCheck(mainProgram,&symTable);
+transpile_cmpd(&symTable,mainProgram);
+free_cmpndStatement( mainProgram); 
 
 }
