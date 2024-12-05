@@ -32,7 +32,7 @@ To View source code for each of the Phases, You can see it in Language Folder:
 			d. use 'make clean' to remove files after use.
 	3. Phase 4
 		# To Run the Code
-
+    **Note** : The code works perfectly fine on MacOs systems.
 		1. Navigate to the project directory:
 		    ```bash
 		    cd Language/Phase4-Semantics
