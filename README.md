@@ -2,6 +2,14 @@ Welcome To repository for Lumiere !!!
 
 To see specifications regarding Lumiere:
 	Go To The Language/documentation Folder..
+	To execute The language Code For all the phases:
+	To run the code: 
+		1.'chmod +x build.sh'
+		2.'./build.sh'
+	To clean the code :	
+		1.'chmod +x clean.sh'
+		2.'./clean.sh'
+
 
 To View source code for each of the Phases, You can see it in Language Folder:
 	1. Phase 1 :
@@ -19,20 +27,20 @@ To View source code for each of the Phases, You can see it in Language Folder:
 			b. use 'make' command to compile the program.
 			c. use 'make run' to execute the the program and the outputs will be present in 'test' directory.
 			d. use 'make clean' to remove files after use.
+	3. Phase 4
+		# To Run the Code
 
-# To Run the Code
-
-1. Navigate to the project directory:
-    ```bash
-    cd Language/Phase4-Semantics
-    ```
-
-2. Build the project using the `build.sh` script:
-    ```bash
-    bash build.sh
-    ```
-
----
+		1. Navigate to the project directory:
+		    ```bash
+		    cd Language/Phase4-Semantics
+		    ```
+		
+		2. Build the project using the `build.sh` script:
+		    ```bash
+		    bash build.sh
+		    ```
+		
+		---
 
 ## Transpilation Status:
 - **Declaration and Expression Transpilation**: Completed successfully.
