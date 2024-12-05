@@ -5,8 +5,9 @@ set -e
 
 # Build the project using the Makefile
 echo "Building the project..."
+cd src
 make run
-
+cd ..
 # Directory containing input files
 input_dir="test"
 
@@ -20,7 +21,7 @@ fi
 echo "Processing input files in '$input_dir'..."
 for input_file in "$input_dir"/*; do
     if [[ -f $input_file ]]; then
-        echo "Running ./calc with input file: $input_file"
+        echo "Running ./test/calc with input file: $input_file"
         ./calc "$input_file"
     else
         echo "Skipping non-file: $input_file"
