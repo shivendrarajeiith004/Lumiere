@@ -51,7 +51,6 @@ CMPD_STATEMENT: CMPD_STATEMENT STATEMENT {
         fprintf(stderr, "Memory allocation failed for CmpndStatementNode\n");
         exit(1);
     }
-
     //printf("in just recursive Node\n");
     node->ptr = $2;
     add_to_cmpnd_Statement(mainProgram, node);
@@ -61,7 +60,7 @@ CMPD_STATEMENT: CMPD_STATEMENT STATEMENT {
   STATEMENT : ARTH_EXP   {$$=$1;}
           | DECLERATION {$$=$1;}
           | ASSIGN_STATEMENT {$$=$1;}
-          | CONDITIONAL_STATEMENT{$$=$1;}
+
 
 ASSIGN_STATEMENT: VAR ASSIGN_OP ARTH_EXP   {
                 struct VariableNode *varNodePtr = (struct VariableNode *)malloc(sizeof(struct VariableNode));
@@ -72,16 +71,13 @@ ASSIGN_STATEMENT: VAR ASSIGN_OP ARTH_EXP   {
                 $$ = nodePtr;
                 }
 
+CONDITIONAL_STATEMENT :
  DECLERATION:VAR_TYPE VAR_LIST { 
            struct  DECL_NODE *nodePtr = ( struct DECL_NODE*)malloc(sizeof(struct DECL_NODE));
                  nodePtr = new_DECL_NODE($1,$2 ,lineno);
                  $$ =nodePtr;
 
                  }
-CONDITIONAL_STATEMENT : IF RELATIONAL_EXP MATCHED_STATEMENT ELSE MATCHED_STATEMENT  {}
-                      | IF RELATIONAL_EXP  MATCHED_STATEMENT ELIF RELATIONAL_EXP MATCHED_STATEMENT ELSE MATCHED_STATEMENT  {}
-                      | IF RELATIONAL_EXP  MATCHED_STATEMENT  {}
-
 MATCHED_STATEMENT :  LEFT_BRACKET CMPD_STATEMENT RIGHT_BRACKET
 
 ARTH_EXP : ARTH_EXP ADD_OP MUL_EXP { struct EXP_NODE *nodePtr  = (struct EXP_NODE*)malloc(sizeof(struct EXP_NODE));
