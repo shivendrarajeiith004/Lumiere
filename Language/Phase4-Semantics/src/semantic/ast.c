@@ -177,11 +177,9 @@ struct CONSOLE_NODE *new_CONSOLE_NODE(struct EXP_NODE *expNode) {
   ConstNode->expNode = expNode;
   return ConstNode;
 }
-struct Connect_to_NODE *new_Connect_to_NODE(struct VariableNode *lhs,
-                                            struct VariableNode *rhs,
-                                            int line_no) {
-  struct Connect_to_NODE *node =
-      (struct Connect_to_NODE *)malloc(sizeof(struct Connect_to_NODE));
+struct CONNECT_TO_NODE *new_CONNECT_TO_NODE(char *lhs, char *rhs, int line_no) {
+  struct CONNECT_TO_NODE *node =
+      (struct CONNECT_TO_NODE *)malloc(sizeof(struct CONNECT_TO_NODE));
   if (node == NULL) {
     fprintf(stderr, "Memory allocation failed for ASSIGN_NODE\n");
     exit(1);
@@ -242,9 +240,9 @@ void free_node(void *ptr) {
   /*  break;*/
   /*}*/
   /*case NODE_TYPE_CONNECT_TO: {*/
-  /*  struct Connect_to_NODE *connect_to_node = (struct Connect_to_NODE
+  /*  struct CONNECT_TO_NODE *connect_to_node = (struct CONNECT_TO_NODE
    * *)node;*/
-  /*  free_Connect_to_NODE(connect_to_node);*/
+  /*  free_CONNECT_TO_NODE(connect_to_node);*/
   /*  break;*/
   /*}*/
   default:
@@ -289,7 +287,7 @@ void free_INCLUDE_NODE(struct INCLUDE_NODE *node) { free(node->lib_name); }
 void free_CONSOLE_NODE(struct CONSOLE_NODE *node) {
   free_EXP_NODE(node->expNode);
 };
-void free_Connect_to_NODE(struct Connect_to_NODE *node) {
+void free_CONNECT_TO_NODE(struct CONNECT_TO_NODE *node) {
   if (node->lhs != NULL) {
     free_VariableNode(node->lhs);
   }
@@ -298,6 +296,23 @@ void free_Connect_to_NODE(struct Connect_to_NODE *node) {
   }
 }
 void semanticCheck(struct CmpndStatement *stmt, struct SymbolTable *table) {
+  int has_include = 0;
+  for (int i = 0; i < stmt->size; i++) {
+    /*printf("statement NO:%d \n", i);*/
+    struct Node *node = (struct Node *)stmt->ptr[i]->ptr;
+    if (node->node_type == NODE_TYPE_INCLUDE) {
+      has_include += 1;
+    }
+  }
+  if (has_include == 0) {
+    printf("ERROR: Must Include a library.\n");
+    no_errors++;
+  } else if (has_include > 1) {
+
+    no_errors++;
+    printf("ERROR: Cannot Include more than once.Included %d times\n",
+           has_include);
+  }
   for (int i = 0; i < stmt->size; i++) {
     /*printf("statement NO:%d \n", i);*/
     semantic_check(table, stmt->ptr[i]->ptr);
@@ -337,8 +352,13 @@ void semantic_check(struct SymbolTable *table, void *ptr) {
     console_semantic(table, console_node);
     break;
   }
+  case NODE_TYPE_INCLUDE: {
+    struct INCLUDE_NODE *inc_node = (struct INCLUDE_NODE *)node;
+    include_semantic(table, inc_node);
+    break;
+  }
   case NODE_TYPE_CONNECT_TO: {
-    struct Connect_to_NODE *connect_to_node = (struct Connect_to_NODE *)node;
+    struct CONNECT_TO_NODE *connect_to_node = (struct CONNECT_TO_NODE *)node;
     connectTo_semantic(table, connect_to_node);
     break;
   }
@@ -368,7 +388,7 @@ void assign_semantic(struct SymbolTable *table, struct ASSIGN_NODE *ptr) {
   if (resType == -1) {
     no_errors++;
     fprintf(stderr,
-            "Error:(Line: %d) Cannot assign %s to variable %s with type %s\n",
+            "ERROR: (Line: %d) Cannot assign %s to variable %s with type %s\n",
             ptr->base.line_no, type_to_string(rhs_type), ptr->lhs->name,
             type_to_string(lhs_type));
     /**type = -1;*/
@@ -397,7 +417,7 @@ void variable_semantic(struct SymbolTable *table, struct VariableNode *ptr) {
   item = getItem(table, ptr->name);
   if (item == NULL) {
     no_errors++;
-    printf("Error (Line :%d )  Variable '%s' is used before its "
+    printf("ERROR (Line::%d )  Variable '%s' is used before its "
            "definition.\n",
            ptr->base.line_no, ptr->name);
   }
@@ -405,8 +425,8 @@ void variable_semantic(struct SymbolTable *table, struct VariableNode *ptr) {
 
 void include_semantic(struct SymbolTable *table, struct INCLUDE_NODE *ptr) {
 
-  if (strcmp(ptr->lib_name, "motion")) {
-    printf("Error! Library Resolution Failed.\n");
+  if (strcmp(ptr->lib_name, "\"motion\"")) {
+    printf("ERROR! Library Resolution Failed.\n");
   }
 }
 
@@ -415,17 +435,20 @@ void console_semantic(struct SymbolTable *table, struct CONSOLE_NODE *ptr) {
 }
 
 void connectTo_semantic(struct SymbolTable *table,
-                        struct Connect_to_NODE *node) {
-  enum TYPE lhs_type = getType(table, node->lhs);
-  enum TYPE rhs_type = getType(table, node->rhs);
-  enum TYPE resType = typeResolution(lhs_type, rhs_type);
-  if (resType == -1) {
+                        struct CONNECT_TO_NODE *node) {
+  enum TYPE first_type = get_type_from_st(table, node->lhs);
+  enum TYPE second_type = get_type_from_st(table, node->rhs);
+  if (first_type != BODY_ENUM) {
     no_errors++;
-    fprintf(stderr,
-            "Error:(Line:%d) Cannot connect %s to variable %s with type %s\n",
-            node->base.line_no, type_to_string(rhs_type), node->lhs->name,
-            type_to_string(lhs_type));
-    /**type = -1;*/
+    printf("ERROR: (%d) %s is not a type of body.\n", node->base.line_no,
+           node->lhs);
+    return;
+  }
+  if (second_type == INTEGER_ENUM || second_type == DOUBLE_ENUM ||
+      second_type == CHAR_ENUM || second_type == BODY_ENUM) {
+    printf("%s type cannot be used here.Only allowed typed are mass,init_vel "
+           "...etc\n",
+           type_to_string(second_type));
   }
 }
 void add_dec_node(struct SymbolTable *symtable, struct DECL_NODE node) {
@@ -478,11 +501,12 @@ enum TYPE getType(struct SymbolTable *table, void *ptr) {
     }
     enum TYPE resType = typeResolution(lhs_type, rhs_type);
     if (resType == -1) {
-
       no_errors++;
-      fprintf(stderr, "%s between %s type and %s type is not allowed.\n",
-              operand_to_string(expPtr->oprnd), type_to_string(lhs_type),
-              type_to_string(rhs_type));
+      fprintf(
+          stderr,
+          "ERROR: (Line:%d) %s between %s type and %s type is not allowed.\n",
+          expPtr->base.line_no, operand_to_string(expPtr->oprnd),
+          type_to_string(lhs_type), type_to_string(rhs_type));
       /**type = -1;*/
       return -1;
       break;
@@ -512,8 +536,10 @@ const char *type_to_string(enum TYPE t) {
     return "double";
   case CHAR_ENUM:
     return "char";
+  case BODY_ENUM:
+    return "struct Body";
   default:
-    return "Unknown TYPE";
+    return "double";
   }
 }
 
@@ -576,12 +602,27 @@ const char *node_type_to_string(enum NODE_TYPE nt) {
 }
 
 void transpile_cmpd(struct SymbolTable *table, struct CmpndStatement *stmt) {
-  printf("int main() {\n");
   if (no_errors == 0) {
     for (int i = 0; i < stmt->size; i++) {
       /*printf("statement NO:%d \n", i);*/
-      transpile_stmt(table, stmt->ptr[i]->ptr);
-      printf(";\n");
+      struct Node *node = (struct Node *)stmt->ptr[i]->ptr;
+      if (node->node_type == NODE_TYPE_INCLUDE) {
+        transpile_stmt(table, stmt->ptr[i]->ptr);
+
+        printf(";\n");
+      }
+    }
+
+    printf("int main() {\n");
+    for (int i = 0; i < stmt->size; i++) {
+      /*printf("statement NO:%d \n", i);*/
+
+      struct Node *node = (struct Node *)stmt->ptr[i]->ptr;
+      if (node->node_type != NODE_TYPE_INCLUDE) {
+        transpile_stmt(table, stmt->ptr[i]->ptr);
+
+        printf(";\n");
+      }
     }
     printf("}\n");
   }
@@ -638,22 +679,21 @@ void transpile_stmt(struct SymbolTable *table, void *ptr) {
   /*  transpile_if(table, *if_node);*/
   /*  break;*/
   /*}*/
-  /*case NODE_TYPE_INCLUDE: {*/
-  /*  struct INCLUDE_NODE *includeNode = (struct INCLUDE_NODE *)node;*/
-  /*  transpile_include(*includeNode);*/
-  /*  break;*/
-  /*}*/
+  case NODE_TYPE_INCLUDE: {
+    struct INCLUDE_NODE *includeNode = (struct INCLUDE_NODE *)node;
+    transpile_include(table, includeNode);
+    break;
+  }
   case NODE_TYPE_CONSOLE: {
     struct CONSOLE_NODE *console_node = (struct CONSOLE_NODE *)node;
     transpile_console(table, *console_node);
     break;
   }
-  /*case NODE_TYPE_CONNECT_TO: {*/
-  /*  struct Connect_to_NODE *connect_to_node = (struct Connect_to_NODE
-   * *)node;*/
-  /*  transpile_connectTo(connect_to_node);*/
-  /*  break;*/
-  /*}*/
+  case NODE_TYPE_CONNECT_TO: {
+    struct CONNECT_TO_NODE *connect_to_node = (struct CONNECT_TO_NODE *)node;
+    transpile_connectTo(table, connect_to_node);
+    break;
+  }
   default:
     /*fprintf(stderr, "Unknown node type!%d\n", node->node_type);*/
     break;
@@ -662,10 +702,13 @@ void transpile_stmt(struct SymbolTable *table, void *ptr) {
 
 void transpile_decl(struct SymbolTable *table, struct DECL_NODE declNode) {
   printf("%s ", type_to_string(declNode.type));
-
   printf("%s ", declNode.list_of_vars[0]);
   for (int i = 1; strcmp(declNode.list_of_vars[i], "\0"); i++) {
     printf(",%s ", declNode.list_of_vars[i]);
+  }
+  if (declNode.type != INTEGER_ENUM && declNode.type != DOUBLE_ENUM &&
+      declNode.type != CHAR_ENUM) {
+    printf("// This is of %s type", reservedTypeToString(declNode.type));
   }
 }
 void transpile_exp(struct SymbolTable *table, struct EXP_NODE expNode) {
@@ -711,8 +754,8 @@ void transpile_if(struct SymbolTable *table, struct IF_NODE if_node) {
 }
 
 void transpile_include(struct SymbolTable *table,
-                       struct INCLUDE_NODE includeNode) {
-  printf("#include<%s>", includeNode.lib_name);
+                       struct INCLUDE_NODE *includeNode) {
+  printf("#include<%s>", includeNode->lib_name);
 }
 
 void transpile_console(struct SymbolTable *table,
@@ -722,7 +765,69 @@ void transpile_console(struct SymbolTable *table,
   printf(")");
 }
 
-void transpile_connectTo(struct Connect_to_NODE *node) {
+void transpile_connectTo(struct SymbolTable *table,
+                         struct CONNECT_TO_NODE *node) {
+  enum TYPE first_type = get_type_from_st(table, node->lhs);
+  enum TYPE second_type = get_type_from_st(table, node->rhs);
+  printf("%s(%s,%s)", get_func_name(second_type), node->lhs, node->rhs);
+}
+const char *reservedTypeToString(enum TYPE type) {
+  switch (type) {
+  case MASS_ENUM:
+    return "MASS";
+  case INIT_VEL_ENUM:
+    return "INITIAL VELOCITY";
+  case FINAL_VEL_ENUM:
+    return "FINAL VELOCITY";
+  case ACCL_ENUM:
+    return "ACCELERATION";
+  case INIT_POS_ENUM:
+    return "INITIAL POSITION";
+  case FINAL_POS_ENUM:
+    return "FINAL POSITION";
+  case INIT_TIME_ENUM:
+    return "INITIAL TIME";
+  case FINAL_TIME_ENUM:
+    return "FINAL TIME";
+  case BODY_ENUM:
+    return "BODY";
+  default:
+    return "UNKNOWN TYPE";
+  }
+}
+enum TYPE get_type_from_st(struct SymbolTable *table, char *name) {
+  struct SymbolTableItem *item =
+      (struct SymbolTableItem *)malloc(sizeof(struct SymbolTableItem));
+  item = getItem(table, name);
+  /*printf("After GetItem");*/
+  if (item == NULL) {
+    return -2;
+  } else {
+    return item->dtype;
+  }
+}
 
-  // make call to prewritten function
+const char *get_func_name(enum TYPE type) {
+  switch (type) {
+  case MASS_ENUM:
+    return "set_mass";
+  case INIT_VEL_ENUM:
+    return "set_init_vel";
+  case FINAL_VEL_ENUM:
+    return "set_final_vel";
+  case ACCL_ENUM:
+    return "set_accl";
+  case INIT_POS_ENUM:
+    return "set_init_pos";
+  case FINAL_POS_ENUM:
+    return "set_final_pos"; // Adjust if you have a matching function
+  case INIT_TIME_ENUM:
+    return "set_init_time";
+  case FINAL_TIME_ENUM:
+    return "set_final_time"; // Adjust if you have a matching function
+  case BODY_ENUM:
+    return "set_body"; // Adjust if you have a matching function
+  default:
+    return "unknown_function";
+  }
 }

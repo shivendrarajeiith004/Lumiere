@@ -84,10 +84,10 @@ struct CONSOLE_NODE {
   struct Node base;
   struct EXP_NODE *expNode;
 };
-struct Connect_to_NODE {
+struct CONNECT_TO_NODE {
   struct Node base;
-  struct VariableNode *lhs;
-  struct VariableNode *rhs;
+  char *lhs;
+  char *rhs;
 };
 
 // Function to initialize VariableNode
@@ -108,9 +108,7 @@ struct ELSE_NODE *new_else_node(struct CmpndStatement *stmt, int line_no);
 struct CONDITIONAL_NODE *new_con_node(struct IF_NODE *if_node,
                                       struct ELSE_NODE *else_node,
                                       enum NODE_TYPE type);
-struct Connect_to_NODE *new_Connect_to_NODE(struct VariableNode *lhs,
-                                            struct VariableNode *rhs,
-                                            int line_no);
+struct CONNECT_TO_NODE *new_CONNECT_TO_NODE(char *lhs, char *rhs, int line_no);
 struct INCLUDE_NODE *new_INCLUDE_NODE(char *lib_name);
 struct CONSOLE_NODE *new_CONSOLE_NODE(struct EXP_NODE *exp_node);
 
@@ -123,7 +121,7 @@ void free_DECL_NODE(struct DECL_NODE *node);
 void free_ASSIGN_NODE(struct ASSIGN_NODE *node);
 void free_INCLUDE_NODE(struct INCLUDE_NODE *node);
 void free_CONSOLE_NODE(struct CONSOLE_NODE *node);
-void free_Connect_to_NODE(struct Connect_to_NODE *node);
+void free_CONNECT_TO_NODE(struct CONNECT_TO_NODE *node);
 
 void semanticCheck(struct CmpndStatement *stmt, struct SymbolTable *table);
 void semantic_check(struct SymbolTable *table, void *ptr);
@@ -134,18 +132,21 @@ void variable_semantic(struct SymbolTable *table, struct VariableNode *ptr);
 void include_semantic(struct SymbolTable *table, struct INCLUDE_NODE *ptr);
 void console_semantic(struct SymbolTable *table, struct CONSOLE_NODE *ptr);
 void connectTo_semantic(struct SymbolTable *table,
-                        struct Connect_to_NODE *node);
+                        struct CONNECT_TO_NODE *node);
 
 enum TYPE typeResolution(enum TYPE type1, enum TYPE type2);
 void add_dec_node(struct SymbolTable *symTable, struct DECL_NODE node);
 
+enum TYPE get_type_from_st(struct SymbolTable *table, char *name);
 enum TYPE getType(struct SymbolTable *table, void *ptr);
 const char *type_to_string(enum TYPE t);
 
 const char *operand_to_string(enum OPERAND op);
 
 const char *node_type_to_string(enum NODE_TYPE nt);
+const char *reservedTypeToString(enum TYPE type);
 
+const char *get_func_name(enum TYPE type);
 void transpile_cmpd(struct SymbolTable *table, struct CmpndStatement *stmt);
 
 void transpile_stmt(struct SymbolTable *table, void *ptr);
@@ -156,9 +157,10 @@ void transpile_decl(struct SymbolTable *table, struct DECL_NODE declNode);
 void transpile_assign(struct SymbolTable *table, struct ASSIGN_NODE assignNode);
 void transpile_if(struct SymbolTable *table, struct IF_NODE if_node);
 void transpile_include(struct SymbolTable *table,
-                       struct INCLUDE_NODE includeNode);
+                       struct INCLUDE_NODE *includeNode);
 void transpile_console(struct SymbolTable *table,
                        struct CONSOLE_NODE consoleNode);
-void transpile_connectTo(struct Connect_to_NODE *node);
+void transpile_connectTo(struct SymbolTable *table,
+                         struct CONNECT_TO_NODE *node);
 #endif // AST_H
        //

@@ -36,10 +36,10 @@ extern int lineno;
 %token IF ELSE ELSE_IF
 %token ASSIGN GREATER_THAN LESS_THAN NOT_EQUAL_TO EQUAL_TO LESS_THAN_EQUAL_TO GREATER_THAN_EQUAL_TO SUBTRACT_COMPOUND_ASSIGNMENT ADD_COMPOUND_ASSIGNMENT MULTIPLY_COMPOUND_ASSIGNMENT DIVIDE_COMPOUND_ASSIGNMENT COMMA
 %token  INTEGER DOUBLE CHAR MUL_OP ADD_OP SUB_OP DIV_OP POW_OP LEFT_PAREN RIGHT_PAREN EOL INT_TYPE DOUBLE_TYPE  CHAR_TYPE VAR INVALID_CHAR 
-%type<nodePtr> ARTH_EXP MUL_EXP  TERM STATEMENT DECLERATION  ASSIGN_STATEMENT POW_EXP RELATIONAL_EXP CONDITIONAL_STATEMENT IF_STATEMENT ELSE_STATEMENT CMPD_STATEMENT CONSOLE_STATEMENT INCLUDE_STATEMENT
+%type<nodePtr> ARTH_EXP MUL_EXP  TERM STATEMENT DECLERATION  ASSIGN_STATEMENT POW_EXP RELATIONAL_EXP CONDITIONAL_STATEMENT IF_STATEMENT ELSE_STATEMENT CMPD_STATEMENT CONSOLE_STATEMENT INCLUDE_STATEMENT CONNECT_TO_STATEMENT
 %type<var_list> VAR_LIST
 %type<stringval> VAR INTEGER DOUBLE INT_TYPE DOUBLE_TYPE CHAR_TYPE CHAR 
-%type<type> VAR_TYPE 
+%type<type> VAR_TYPE RESERVED_TYPE
 %type<op> ASSIGN_OP ADD_OP SUB_OP MUL_OP DIV_OP POW_OP RELATIONAL_OP GREATER_THAN LESS_THAN EQUAL_TO NOT_EQUAL_TO LESS_THAN_EQUAL_TO GREATER_THAN_EQUAL_TO
 %%
 
@@ -60,14 +60,13 @@ CMPD_STATEMENT: CMPD_STATEMENT STATEMENT {
           | DECLERATION {$$=$1;}
           | ASSIGN_STATEMENT {$$=$1;}
           | CONDITIONAL_STATEMENT{$$=$1;}
-          | RESERVED_TYPE_DECLARATION
           | CONNECT_TO_STATEMENT
           |INCLUDE_STATEMENT
           |CONSOLE_STATEMENT
 INCLUDE_STATEMENT: HASH INCLUDE LESS_THAN CHAR GREATER_THAN { 
                   struct INCLUDE_NODE* inc_node= (struct INCLUDE_NODE*)malloc(sizeof(struct INCLUDE_NODE));
-
-                 $$ = cons_node;
+                inc_node = new_INCLUDE_NODE($4);
+                $$ = inc_node;
 
                  };
 CONSOLE_STATEMENT: CONSOLE LEFT_PAREN ARTH_EXP RIGHT_PAREN {
@@ -75,7 +74,12 @@ CONSOLE_STATEMENT: CONSOLE LEFT_PAREN ARTH_EXP RIGHT_PAREN {
                   cons_node = new_CONSOLE_NODE($3);
                  $$ = cons_node;
                  };
-CONNECT_TO_STATEMENT: VAR JOIN_OPERATOR CONNECT_TO LEFT_PAREN VAR RIGHT_PAREN ;
+CONNECT_TO_STATEMENT: VAR JOIN_OPERATOR CONNECT_TO LEFT_PAREN VAR RIGHT_PAREN {
+
+                 struct CONNECT_TO_NODE * cons_node = (struct CONNECT_TO_NODE *)malloc(sizeof(struct CONNECT_TO_NODE));
+                  cons_node = new_CONNECT_TO_NODE($1,$5,lineno);
+                 $$ = cons_node;
+                    }; 
 CONDITIONAL_STATEMENT: IF_STATEMENT {
                      struct CONDITIONAL_NODE *conNodePtr= (struct CONDITIONAL_NODE*)malloc(sizeof(struct CONDITIONAL_NODE));
                 conNodePtr = new_con_node($1,NULL,NODE_TYPE_COND_IF);
@@ -180,7 +184,7 @@ TERM : INTEGER  { struct  ConstNode *nodePtr = ( struct ConstNode*)malloc(sizeof
                 $$=var;
      }
      | LEFT_PAREN ARTH_EXP RIGHT_PAREN { 
-     printf("%d here\n",node_type_to_string(((struct Node *)($2))->node_type));
+     /*printf("%d here\n",node_type_to_string(((struct Node *)($2))->node_type));*/
      $$ = $2;
      }
      ;
@@ -219,7 +223,7 @@ VAR_LIST :  VAR_LIST COMMA VAR {
 VAR_TYPE : INT_TYPE { $$ = INTEGER_ENUM;}
          | DOUBLE_TYPE { $$ =DOUBLE_ENUM;} 
          | CHAR_TYPE {$$ = CHAR_ENUM;}
-
+        | RESERVED_TYPE {$$ = $1;}
 
 ASSIGN_OP : ASSIGN   {$$ = ASSIGN_ENUM;}
           | ADD_COMPOUND_ASSIGNMENT {$$=ADD_CMPND_ENUM;}
@@ -227,14 +231,16 @@ ASSIGN_OP : ASSIGN   {$$ = ASSIGN_ENUM;}
           | MULTIPLY_COMPOUND_ASSIGNMENT {$$=MUL_CMPND_ENUM;}
           | DIVIDE_COMPOUND_ASSIGNMENT {$$=DIV_CMPND_ENUM;}
 
-
-RESERVED_TYPE_DECLARATION: RESERVED_TYPE RESERVED_TYPE_STATEMENTS {}
-RESERVED_TYPE_STATEMENTS:RESERVED_TYPE_STATEMENTS COMMA RESERVED_TYPE_STATEMENT
-                         | RESERVED_TYPE_STATEMENT{}
-                         ;
-RESERVED_TYPE_STATEMENT: VAR {} | VAR ASSIGN_OP ARTH_EXP;
-RESERVED_TYPE: MASS {}| INIT_VEL | FINAL_VEL |ACCL | INIT_POS | FINAL_POS | INIT_TIME
-                |FINAL_TIME |BODY {};
+RESERVED_TYPE: MASS         { $$ = MASS_ENUM; }
+             | INIT_VEL     { $$ = INIT_VEL_ENUM; }
+             | FINAL_VEL    { $$ = FINAL_VEL_ENUM; }
+             | ACCL         { $$ = ACCL_ENUM; }
+             | INIT_POS     { $$ = INIT_POS_ENUM; }
+             | FINAL_POS    { $$ = FINAL_POS_ENUM; }
+             | INIT_TIME    { $$ = INIT_TIME_ENUM; }
+             | FINAL_TIME   { $$ = FINAL_TIME_ENUM; }
+             | BODY         { $$ = BODY_ENUM; }
+             ;
 %%
 
 void yyerror(char * s){

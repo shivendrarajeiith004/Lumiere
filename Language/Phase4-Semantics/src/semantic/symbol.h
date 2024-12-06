@@ -3,7 +3,20 @@
 
 #include <stddef.h> // For size_t
 #include <string.h> // For strcpy and strlen
-enum TYPE { INTEGER_ENUM, DOUBLE_ENUM, CHAR_ENUM };
+enum TYPE {
+  INTEGER_ENUM,
+  DOUBLE_ENUM,
+  CHAR_ENUM,
+  MASS_ENUM,
+  INIT_VEL_ENUM,
+  FINAL_VEL_ENUM,
+  ACCL_ENUM,
+  INIT_POS_ENUM,
+  FINAL_POS_ENUM,
+  INIT_TIME_ENUM,
+  FINAL_TIME_ENUM,
+  BODY_ENUM
+};
 enum OPERAND {
   ADD,
   SUB,
@@ -21,7 +34,6 @@ enum OPERAND {
   EQUAL_TO_ENUM,
   LESS_THAN_EQUAL_TO_ENUM,
   GREATER_THAN_EQUAL_TO_ENUM,
- 
 
 };
 
@@ -36,7 +48,7 @@ enum NODE_TYPE {
   NODE_TYPE_CONNECT_TO,
   NODE_TYPE_ELSE,
   NODE_TYPE_IF,
-   NODE_TYPE_INCLUDE,
+  NODE_TYPE_INCLUDE,
   NODE_TYPE_CONSOLE,
 }; //  Union to hold different types of values
 union value {
