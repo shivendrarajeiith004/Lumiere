@@ -6,9 +6,10 @@ CC = gcc
 LEX_SRC = src.l
 LEX_OUT = lex.yy.c
 EXEC = lex
-INPUT = ../test/inp.txt
-OUTPUT = ../test/out.txt
-
+PASS_INPUT = ../test/inp1.txt
+FAIL_INPUT = ../test/inp2.txt
+PASS_OUTPUT = ../test/out1.txt
+FAIL_OUTPUT = ../test/out2.txt
 # Default target
 all: $(EXEC)
 
@@ -22,9 +23,10 @@ $(LEX_OUT): $(LEX_SRC)
 
 # Run the program
 run: $(EXEC)
-	./$(EXEC) $(INPUT) $(OUTPUT)
+	./$(EXEC) $(PASS_INPUT) $(PASS_OUTPUT)
+	./$(EXEC) $(FAIL_INPUT) $(FAIL_OUTPUT)
 
 # Clean generated files
 clean:
-	rm -f $(LEX_OUT) $(EXEC) $(OUTPUT)
+	rm -f $(LEX_OUT) $(EXEC) $(FAIL_OUTPUT) $(PASS_OUTPUT)
 

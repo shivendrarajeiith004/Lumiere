@@ -13,8 +13,10 @@ YACC_SRC = src.y
 LEX_OUTPUT = lex.yy.c
 YACC_OUTPUT = y.tab.c
 EXEC = parser
-INPUT_FILE = ../test/inp.txt
-OUTPUT_FILE = ../test/out.txt
+PASS_INPUT = ../test/inp1.txt
+PASS_OUTPUT = ../test/out1.txt
+FAIL_INPUT = ../test/inp2.txt
+FAIL_OUTPUT = ../test/out2.txt
 
 # Targets
 
@@ -30,8 +32,9 @@ $(YACC_OUTPUT): $(YACC_SRC)
 	$(YACC) -d $(YACC_SRC)
 
 run: $(EXEC)
-	./$(EXEC) $(INPUT_FILE) $(OUTPUT_FILE)
+	./$(EXEC) $(PASS_INPUT) $(PASS_OUTPUT)
+	./$(EXEC) $(FAIL_INPUT) $(FAIL_OUTPUT)
 
 clean:
-	rm -f *.c $(EXEC) $(OUTPUT_FILE) y.tab.h
+	rm -f *.c $(EXEC) $(PASS_OUTPUT) $(FAIL_OUTPUT) y.tab.h
 

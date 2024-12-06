@@ -1,0 +1,23 @@
+#include<library>
+#include <library>
+#include    <    library    >  
+int function(){
+    /*This is a comment*/
+    /*This is a multiline comment*/
+    mass m1,init_vel = 3;
+    #include<library>
+    if(2){
+    mass m1,m3=12;
+    }
+    else_if(2){
+    mass m1= (m2+2)/(m2-14)*2;
+    mass m2=1;
+    }
+    else{
+    m1.connectTo(b1);
+    }
+    variable v1, v2 = -5, v3 = m1;
+    console("this is a string");
+    
+    return 0;
+}

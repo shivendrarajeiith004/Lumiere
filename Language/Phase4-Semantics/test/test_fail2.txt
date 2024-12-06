@@ -1,14 +1,15 @@
-#include<"motion">
 body a 
 init_vel    b   
 final_vel   c   
 accl        d  
 init_pos    e 
 mass m
-a.connectTo(b)
-a.connectTo(c)
-a.connectTo(d)
+int  new, old
+a.connectTo(new)
+a.connectTo(old)
+a.connectTo(random)
 a.connectTo(e)
 a.connectTo(m)
 int val, next_val
+val = a + val
 console(val+next_val) 
