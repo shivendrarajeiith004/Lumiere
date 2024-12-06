@@ -82,7 +82,7 @@ struct INCLUDE_NODE {
 };
 struct CONSOLE_NODE {
   struct Node base;
-  char *string;
+  struct EXP_NODE *expNode;
 };
 struct Connect_to_NODE {
   struct Node base;
@@ -112,7 +112,7 @@ struct Connect_to_NODE *new_Connect_to_NODE(struct VariableNode *lhs,
                                             struct VariableNode *rhs,
                                             int line_no);
 struct INCLUDE_NODE *new_INCLUDE_NODE(char *lib_name);
-struct CONSOLE_NODE *new_CONSOLE_NODE(char *console_string);
+struct CONSOLE_NODE *new_CONSOLE_NODE(struct EXP_NODE *exp_node);
 
 void free_cmpndStatement(struct CmpndStatement *stmt);
 void free_node(void *ptr);
@@ -131,8 +131,8 @@ void exp_semantic(struct SymbolTable *table, struct EXP_NODE *ptr);
 void assign_semantic(struct SymbolTable *table, struct ASSIGN_NODE *ptr);
 void decl_semantic(struct SymbolTable *table, struct DECL_NODE *ptr);
 void variable_semantic(struct SymbolTable *table, struct VariableNode *ptr);
-void include_semantic(struct INCLUDE_NODE *ptr);
-void console_semantic(struct CONSOLE_NODE *ptr);
+void include_semantic(struct SymbolTable *table, struct INCLUDE_NODE *ptr);
+void console_semantic(struct SymbolTable *table, struct CONSOLE_NODE *ptr);
 void connectTo_semantic(struct SymbolTable *table,
                         struct Connect_to_NODE *node);
 
@@ -155,8 +155,10 @@ void transpile_const(struct SymbolTable *table, struct ConstNode constNode);
 void transpile_decl(struct SymbolTable *table, struct DECL_NODE declNode);
 void transpile_assign(struct SymbolTable *table, struct ASSIGN_NODE assignNode);
 void transpile_if(struct SymbolTable *table, struct IF_NODE if_node);
-void transpile_include(struct INCLUDE_NODE includeNode);
-void transpile_console(struct CONSOLE_NODE consoleNode);
+void transpile_include(struct SymbolTable *table,
+                       struct INCLUDE_NODE includeNode);
+void transpile_console(struct SymbolTable *table,
+                       struct CONSOLE_NODE consoleNode);
 void transpile_connectTo(struct Connect_to_NODE *node);
 #endif // AST_H
        //

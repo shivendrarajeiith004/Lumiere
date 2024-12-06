@@ -166,7 +166,7 @@ struct INCLUDE_NODE *new_INCLUDE_NODE(char *lib_name) {
   includeNode->base.node_type = NODE_TYPE_INCLUDE;
   return includeNode;
 }
-struct CONSOLE_NODE *new_CONSOLE_NODE(char *console_string) {
+struct CONSOLE_NODE *new_CONSOLE_NODE(struct EXP_NODE *expNode) {
   struct CONSOLE_NODE *ConstNode =
       (struct CONSOLE_NODE *)malloc(sizeof(struct CONSOLE_NODE));
   if (ConstNode == NULL) {
@@ -174,7 +174,7 @@ struct CONSOLE_NODE *new_CONSOLE_NODE(char *console_string) {
     exit(1);
   }
   ConstNode->base.node_type = NODE_TYPE_CONSOLE;
-  ConstNode->string = console_string;
+  ConstNode->expNode = expNode;
   return ConstNode;
 }
 struct Connect_to_NODE *new_Connect_to_NODE(struct VariableNode *lhs,
@@ -286,7 +286,9 @@ void free_VariableNode(struct VariableNode *node) {
   memset(node->name, 0, sizeof(node->name));
 }
 void free_INCLUDE_NODE(struct INCLUDE_NODE *node) { free(node->lib_name); }
-void free_CONSOLE_NODE(struct CONSOLE_NODE *node) { free(node->string); };
+void free_CONSOLE_NODE(struct CONSOLE_NODE *node) {
+  free_EXP_NODE(node->expNode);
+};
 void free_Connect_to_NODE(struct Connect_to_NODE *node) {
   if (node->lhs != NULL) {
     free_VariableNode(node->lhs);
@@ -332,7 +334,7 @@ void semantic_check(struct SymbolTable *table, void *ptr) {
   }
   case NODE_TYPE_CONSOLE: {
     struct CONSOLE_NODE *console_node = (struct CONSOLE_NODE *)node;
-    console_semantic(console_node);
+    console_semantic(table, console_node);
     break;
   }
   case NODE_TYPE_CONNECT_TO: {
@@ -401,16 +403,15 @@ void variable_semantic(struct SymbolTable *table, struct VariableNode *ptr) {
   }
 }
 
-void include_semantic(struct INCLUDE_NODE *ptr) {
-  if (ptr->lib_name == NULL) {
+void include_semantic(struct SymbolTable *table, struct INCLUDE_NODE *ptr) {
+
+  if (strcmp(ptr->lib_name, "motion")) {
     printf("Error! Library Resolution Failed.\n");
   }
 }
 
-void console_semantic(struct CONSOLE_NODE *ptr) {
-  if (ptr->string == NULL) {
-    printf("Error! Library Resolution Failed.\n");
-  }
+void console_semantic(struct SymbolTable *table, struct CONSOLE_NODE *ptr) {
+  semantic_check(table, ptr->expNode);
 }
 
 void connectTo_semantic(struct SymbolTable *table,
@@ -642,11 +643,11 @@ void transpile_stmt(struct SymbolTable *table, void *ptr) {
   /*  transpile_include(*includeNode);*/
   /*  break;*/
   /*}*/
-  /*case NODE_TYPE_CONSOLE: {*/
-  /*  struct CONSOLE_NODE *console_node = (struct CONSOLE_NODE *)node;*/
-  /*  transpile_console(*console_node);*/
-  /*  break;*/
-  /*}*/
+  case NODE_TYPE_CONSOLE: {
+    struct CONSOLE_NODE *console_node = (struct CONSOLE_NODE *)node;
+    transpile_console(table, *console_node);
+    break;
+  }
   /*case NODE_TYPE_CONNECT_TO: {*/
   /*  struct Connect_to_NODE *connect_to_node = (struct Connect_to_NODE
    * *)node;*/
@@ -709,12 +710,16 @@ void transpile_if(struct SymbolTable *table, struct IF_NODE if_node) {
   transpile_cmpd(table, if_node.stmt);
 }
 
-void transpile_include(struct INCLUDE_NODE includeNode) {
+void transpile_include(struct SymbolTable *table,
+                       struct INCLUDE_NODE includeNode) {
   printf("#include<%s>", includeNode.lib_name);
 }
 
-void transpile_console(struct CONSOLE_NODE consoleNode) {
-  printf("printf(%s)", consoleNode.string);
+void transpile_console(struct SymbolTable *table,
+                       struct CONSOLE_NODE consoleNode) {
+  printf("printf(");
+  transpile_stmt(table, consoleNode.expNode);
+  printf(")");
 }
 
 void transpile_connectTo(struct Connect_to_NODE *node) {
