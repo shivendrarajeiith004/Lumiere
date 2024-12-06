@@ -4,7 +4,7 @@ int function(){
     /*No need for any function calls*/
     mass m1 = 67, m2,m3;
     body b1;
-    m3.connectTo(b1);
+    b1.connectTo(m1);
     variable b = mass;
     b += 3;
     if(b > c && d == e){
@@ -13,5 +13,6 @@ int function(){
         v2 = get_final_vel_at_time(3);
     }
     console("printing output");
+    mass afhsfkafja;
     return 0;
 }
